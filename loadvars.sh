@@ -305,6 +305,7 @@ if [ -z "$lademodus" ] ; then
 	lademodus=$bootmodus
 fi
 llalt=$(cat /var/www/html/openWB/ramdisk/llsoll)
+llaltlp1=$llalt
 #PV Leistung ermitteln
 if [[ $pvwattmodul != "none" ]]; then
 	pvwatt=$(modules/$pvwattmodul/main.sh || true)
@@ -319,6 +320,7 @@ fi
 if [[ $speichermodul != "none" ]] ; then
 	timeout 5 modules/$speichermodul/main.sh || true
 	speicherleistung=$(</var/www/html/openWB/ramdisk/speicherleistung)
+	speicherleistung=$(echo $speicherleistung | sed 's/\..*$//')
 	speichersoc=$(</var/www/html/openWB/ramdisk/speichersoc)
 	speichersoc=$(echo $speichersoc | sed 's/\..*$//')
 	speichervorhanden="1"
@@ -555,19 +557,21 @@ if [[ $wattbezugmodul != "none" ]]; then
 	fi
 	#evu glaettung
 	if (( evuglaettungakt == 1 )); then
-		ganzahl=$(( evuglaettung / 10 ))
-		for ((i=ganzahl;i>=1;i--)); do
-			i2=$(( i + 1 ))
-			cp ramdisk/glaettung$i ramdisk/glaettung$i2
-		done
-		echo $wattbezug > ramdisk/glaettung1
-		for ((i=1;i<=ganzahl;i++)); do
-			glaettung=$(<ramdisk/glaettung$i)
-			glaettungw=$(( glaettung + glaettungw))
-		done
-		glaettungfinal=$((glaettungw / ganzahl))
-		echo $glaettungfinal > ramdisk/glattwattbezug
-		wattbezug=$glaettungfinal
+		if (( evuglaettung > 20 )); then
+			ganzahl=$(( evuglaettung / 10 ))
+			for ((i=ganzahl;i>=1;i--)); do
+				i2=$(( i + 1 ))
+				cp ramdisk/glaettung$i ramdisk/glaettung$i2
+			done
+			echo $wattbezug > ramdisk/glaettung1
+			for ((i=1;i<=ganzahl;i++)); do
+				glaettung=$(<ramdisk/glaettung$i)
+				glaettungw=$(( glaettung + glaettungw))
+			done
+			glaettungfinal=$((glaettungw / ganzahl))
+			echo $glaettungfinal > ramdisk/glattwattbezug
+			wattbezug=$glaettungfinal
+		fi
 	fi
 	#uberschuss zur berechnung
 	wattbezugint=$(printf "%.0f\n" $wattbezug)
