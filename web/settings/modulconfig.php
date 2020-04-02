@@ -7,7 +7,7 @@
 		<meta charset="UTF-8">
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
-		<title>openWB</title>
+		<title>openWB Einstellungen</title>
 		<meta name="description" content="Control your charge" />
 		<meta name="author" content="Michael Ortenstein" />
 		<!-- Favicons (created with http://realfavicongenerator.net/)-->
@@ -34,18 +34,26 @@
 	</head>
 
 	<body>
-		<script>
-			var r=confirm("Nach einmaliger Einrichtung ist in der Modulkonfiguration grundsätzlich keine weitere Einstellung nötig. Fortfahren?");
-			if (r!=true) {
-				window.location.href = './index.php';
-			}
-		</script>
 
 		<?php
-			include '/var/www/html/openWB/web/settings/navbar.php';
 
 			$lines = file('/var/www/html/openWB/openwb.conf');
 			foreach($lines as $line) {
+				if(strpos($line, "soc_bluelink_interval=") !== false) {
+					list(, $soc_bluelink_intervalold) = explode("=", $line);
+				}
+				if(strpos($line, "soc_bluelink_email=") !== false) {
+					list(, $soc_bluelink_emailold) = explode("=", $line);
+				}
+				if(strpos($line, "soc_bluelink_password=") !== false) {
+					list(, $soc_bluelink_passwordold) = explode("=", $line);
+				}
+				if(strpos($line, "soc_bluelink_pin=") !== false) {
+					list(, $soc_bluelink_pinold) = explode("=", $line);
+				}
+				if(strpos($line, "solarworld_emanagerip=") !== false) {
+					list(, $solarworld_emanageripold) = explode("=", $line);
+				}
 				if(strpos($line, "femsip=") !== false) {
 					list(, $femsipold) = explode("=", $line);
 				}
@@ -1146,6 +1154,8 @@
 			$zoelp2passwortold = str_replace( "'", "", $zoelp2passwortold);
 		?>
 
+		<div id="nav"></div> <!-- placeholder for navbar -->
+
 		<div role="main" class="container" style="margin-top:20px">
 			<div class="col-sm-12">
 				<form action="./tools/savemodul.php" method="POST">
@@ -1666,6 +1676,7 @@
 							<option <?php if($socmodulold == "soc_zerong\n") echo "selected" ?> value="soc_zerong">SoC Zero NG</option>
 							<option <?php if($socmodulold == "soc_audi\n") echo "selected" ?> value="soc_audi">SoC Audi</option>
 							<option <?php if($socmodulold == "soc_mqtt\n") echo "selected" ?> value="soc_mqtt">MQTT</option>
+							<option <?php if($socmodulold == "soc_bluelink\n") echo "selected" ?> value="soc_bluelink">Hyundai Bluelink</option>
 						</select>
 					</div>
 					<b><label for="stopsocnotpluggedlp1">SoC nur Abfragen wenn Auto angesteckt:</label></b>
@@ -1682,7 +1693,7 @@
 							<div class="row">Keine Konfiguration erforderlich</div>
 							<div class="row">Per MQTT zu schreiben:</div>
 							<div class="row"><b>"openWB/set/lp/1/%Soc"</b></div>
-							<div class="row">Ladezustand in %, int, 0-100</div>		
+							<div class="row">Ladezustand in %, int, 0-100</div>
 					</div>
 					<div id="socmnone">
 					</div>
@@ -1725,6 +1736,39 @@
 							Wie oft der Tesla abgefragt wird während geladen wird. Angabe in Minuten.
 						</div>
 					</div>
+					<div id="socmbluelink">
+						<div class="row bg-info">
+						</div>
+						<div class="row bg-info">
+							<b><label for="soc_bluelink_email">Email Adresse:</label></b>
+							<input type="text" name="soc_bluelink_email" id="soc_bluelink_email" value="<?php echo $soc_bluelink_emailold ?>">
+						</div>
+						<div class="row bg-info">
+							Email Adresse des Hyundai Bluelink Logins
+						</div>
+						<div class="row bg-info">
+							<b><label for="soc_bluelink_password">Passwort:</label></b>
+							<input type="password" name="soc_bluelink_password" id="soc_bluelink_password" value="<?php echo $soc_bluelink_passwordold ?>">
+						</div>
+						<div class="row bg-info">
+							Password des Logins
+						</div>
+						<div class="row bg-info">
+							<b><label for="soc_bluelink_pin">PIN:</label></b>
+							<input type="text" name="soc_bluelink_pin" id="soc_bluelink_pin" value="<?php echo $soc_bluelink_pinold ?>">
+						</div>
+						<div class="row bg-info">
+							PIN des Accounts.
+						</div>
+						<div class="row bg-info">
+							<b><label for="soc_bluelink_interval">Abfrageintervall:</label></b>
+							<input type="text" name="soc_bluelink_interval" id="soc_bluelink_interval" value="<?php echo $soc_bluelink_intervalold ?>">
+						</div>
+						<div class="row bg-info">
+							Wie oft abgefragt wird. Angabe in Minuten.
+						</div>
+					</div>
+
 					<div id="socmzerong">
 						<div class="row bg-info">
 						</div>
@@ -1949,10 +1993,14 @@
 							$('#socmzerong').hide();
 							$('#socmaudi').hide();
 							$('#socmqtt').hide();
+							$('#socmbluelink').hide();
 
 							$('#socmyrenault').hide();
 							if($('#socmodul').val() == 'soc_mqtt') {
 								$('#socmqtt').show();
+							}
+							if($('#socmodul').val() == 'soc_bluelink') {
+								$('#socmbluelink').show();
 							}
 
 							if($('#socmodul').val() == 'soc_audi') {
@@ -2361,7 +2409,7 @@
 							<div class="row">Keine Konfiguration erforderlich</div>
 							<div class="row">Per MQTT zu schreiben:</div>
 							<div class="row"><b>"openWB/set/lp/2/%Soc"</b></div>
-							<div class="row">Ladezustand in %, int, 0-100</div>		
+							<div class="row">Ladezustand in %, int, 0-100</div>
 						</div>
 						<div id="socmnone1">
 						</div>
@@ -3410,6 +3458,7 @@
 							<option <?php if($wattbezugmodulold == "bezug_mqtt\n") echo "selected" ?> value="bezug_mqtt">MQTT</option>
 							<option <?php if($wattbezugmodulold == "bezug_sonneneco\n") echo "selected" ?> value="bezug_sonneneco">Sonnen eco</option>
 							<option <?php if($wattbezugmodulold == "bezug_fems\n") echo "selected" ?> value="bezug_fems">Fenecon FEMS</option>
+							<option <?php if($wattbezugmodulold == "bezug_solarworld\n") echo "selected" ?> value="bezug_solarworld">Solarworld</option>
 						</select>
 					</div>
 					<div id="wattbezugsonneneco">
@@ -3429,7 +3478,7 @@
 						<div class="row"><b>"openWB/set/evu/APhase3"</b></div>
 						<div class="row">Strom in Ampere für Phase 3, float, Punkt als Trenner, positiv Bezug, negativ Einspeisung</div>
 						<div class="row"><b>"openWB/set/evu/WhImported"</b></div>
-						<div class="row">Bezogene Energie in Wh, float, Punkt als Trenner, nur positiv</div>	
+						<div class="row">Bezogene Energie in Wh, float, Punkt als Trenner, nur positiv</div>
 						<div class="row"><b>"openWB/set/evu/WhExported"</b></div>
 						<div class="row">Eingespeiste Energie in Wh, float, Punkt als Trenner, nur positiv</div>
 						<div class="row"><b>"openWB/set/evu/VPhase1"</b></div>
@@ -3462,7 +3511,7 @@
 					</div>
 					<div id="wattbezugpowerwall">
 						<div class="row">
-							Keine Konfiguration erforderlich. Mit diesem Modul ist kein Lastmanagement / Hausanschlussüberwachung möglich. 
+							Keine Konfiguration erforderlich. Mit diesem Modul ist kein Lastmanagement / Hausanschlussüberwachung möglich.
 						</div>
 					</div>
 					<div id="wattbezugvictrongx">
@@ -3481,6 +3530,15 @@
 						</div>
 						<div class="row" style="background-color:#febebe">
 							Gültige Werte IP. IP Adresse des Fenecon FEMS.
+						</div>
+					</div>
+					<div id="wattbezugsolarworld">
+						<div class="row" style="background-color:#febebe">
+							<b><label for="solarworld_emanagerip">Solarworld IP:</label></b>
+							<input type="text" name="solarworld_emanagerip" id="solarworld_emanagerip" value="<?php echo $solarworld_emanageripold ?>">
+						</div>
+						<div class="row" style="background-color:#febebe">
+							Gültige Werte IP. IP Adresse des Solarworld eManager.
 						</div>
 					</div>
 
@@ -3595,7 +3653,7 @@
 							<input type="text" name="vzloggerip" id="vzloggerip" value="<?php echo $vzloggeripold ?>">
 						</div>
 						<div class="row" style="background-color:#febebe">
-							Gültige Werte IP:Port z.B. 192.168.0.12:8080. 
+							Gültige Werte IP:Port z.B. 192.168.0.12:8080.
 						</div>
 						<div class="row" style="background-color:#febebe">
 							<b><label for="vzloggerline">Vzlogger Watt Zeile:</label></b>
@@ -3603,7 +3661,7 @@
 						</div>
 						<div class="row" style="background-color:#febebe">
 							Gültige Werte z.B. Zahl. Bitte auf der Shell ausführen: "curl -s IPdesVZLogger:Port/ | jq ."<br>
-							Nun zählen in welcher Zeile die aktullen Watt stehen und diesen hier eintragen. 
+							Nun zählen in welcher Zeile die aktullen Watt stehen und diesen hier eintragen.
 						</div>
 						<div class="row" style="background-color:#febebe">
 							<b><label for="vzloggerline">Vzlogger Bezug kWh Zeile:</label></b>
@@ -3854,6 +3912,7 @@
 							$('#wattbezugnone').hide();
 							$('#wattbezughttp').hide();
 							$('#wattbezugsma').hide();
+							$('#wattbezugsolarworld').hide();
 							$('#wattbezugfronius').hide();
 							$('#wattbezugjson').hide();
 							$('#wattbezugmpm3pm').hide();
@@ -3880,10 +3939,13 @@
 							// Auswahl PV-Modul generell erlauben
 							enable_pv_selector();
 							if($('#wattbezugmodul').val() == 'bezug_sonneneco') {
-								$('#wattbezugsonneneco').show(); 
+								$('#wattbezugsonneneco').show();
 							}
 							if($('#wattbezugmodul').val() == 'bezug_fems') {
-								$('#wattbezugfems').show(); 
+								$('#wattbezugfems').show();
+							}
+							if($('#wattbezugmodul').val() == 'bezug_solarworld') {
+								$('#wattbezugsolarworld').show();
 							}
 
 							if($('#wattbezugmodul').val() == 'bezug_solarview') {
@@ -4015,7 +4077,7 @@
 							<option <?php if($pvwattmodulold == "wr_mqtt\n") echo "selected" ?> value="wr_mqtt">MQTT</option>
 							<option <?php if($pvwattmodulold == "wr_sunways\n") echo "selected" ?> value="wr_sunways">Sunways</option>
 							<option <?php if($pvwattmodulold == "wr_fems\n") echo "selected" ?> value="wr_fems">Fenecon FEMS</option>
-
+							<option <?php if($pvwattmodulold == "wr_solarworld\n") echo "selected" ?> value="wr_solarworld">Solarworld</option>
 						</select>
 					</div>
 
@@ -4027,7 +4089,7 @@
 							<div class="row"><b>"openWB/set/pv/W"</b></div>
 							<div class="row">PVleistung in Watt, int, negativ</div>
 							<div class="row"><b>"openWB/set/pv/WhCounter"</b></div>
-							<div class="row">Erzeugte Energie in Wh, float, nur positiv</div>	
+							<div class="row">Erzeugte Energie in Wh, float, nur positiv</div>
 					</div>
 					<div id="pvlgessv1">
 						<div class="row">
@@ -4037,6 +4099,11 @@
 					<div id="pvfems">
 						<div class="row">
 							Konfiguration im zugehörigen EVU Modul des FEMS erforderlich.
+						</div>
+					</div>
+					<div id="pvsolarworld">
+						<div class="row">
+							Konfiguration im zugehörigen EVU Modul des Solarworld erforderlich.
 						</div>
 					</div>
 
@@ -4388,7 +4455,7 @@
 							<input type="text" name="vzloggerpvip" id="vzloggerpvip" value="<?php echo $vzloggerpvipold ?>">
 						</div>
 						<div class="row" style="background-color:#BEFEBE">
-							Gültige Werte IP:Port z.B. 192.168.0.12:8080. 
+							Gültige Werte IP:Port z.B. 192.168.0.12:8080.
 						</div>
 						<div class="row" style="background-color:#BEFEBE">
 							<b><label for="vzloggerpvline">Vzloggerpv Zeile:</label></b>
@@ -4453,9 +4520,13 @@
 							$('#pvmqtt').hide();
 							$('#pvsunways').hide();
 							$('#pvfems').hide();
+							$('#pvsolarworld').hide();
 
 							if($('#pvwattmodul').val() == 'wr_fems') {
 								$('#pvfems').show();
+							}
+							if($('#pvwattmodul').val() == 'wr_solarworld') {
+								$('#pvsolarworld').show();
 							}
 
 							if($('#pvwattmodul').val() == 'wr_sunways') {
@@ -4606,11 +4677,11 @@
 						<div class="row" style="background-color:#fcbe1e"><b>"openWB/set/Housebattery/W"</b></div>
 						<div class="row" style="background-color:#fcbe1e">Speicherleistung in Watt, int, positiv Ladung, negativ Entladung</div>
 						<div class="row" style="background-color:#fcbe1e"><b>"openWB/set/Housebattery/WhImported"</b></div>
-						<div class="row" style="background-color:#fcbe1e">Geladene Energie in Wh, float, nur positiv</div>	
+						<div class="row" style="background-color:#fcbe1e">Geladene Energie in Wh, float, nur positiv</div>
 						<div class="row" style="background-color:#fcbe1e"><b>"openWB/set/Housebattery/WhExported"</b></div>
-						<div class="row" style="background-color:#fcbe1e">Entladene Energie in Wh, float, nur positiv</div>	
+						<div class="row" style="background-color:#fcbe1e">Entladene Energie in Wh, float, nur positiv</div>
 						<div class="row" style="background-color:#fcbe1e"><b>"openWB/set/Housebattery/%Soc"</b></div>
-						<div class="row" style="background-color:#fcbe1e">Ladestand des Speichers, int, 0-100</div>			
+						<div class="row" style="background-color:#fcbe1e">Ladestand des Speichers, int, 0-100</div>
 					</div>
 					<div id="divspeichervictron">
 							<div class="row" style="background-color:#fcbe1e">
@@ -4924,5 +4995,17 @@
 			  <small>Sie befinden sich hier: Einstellungen/Modulkonfiguration</small>
 			</div>
 		</footer>
-	</body>
+
+
+		<script type="text/javascript">
+
+			$.get("settings/navbar.php", function(data){
+				$("#nav").replaceWith(data);
+				// disable navbar entry for current page
+				$('#navModulkonfiguration').addClass('disabled');
+			});
+
+		</script>
+
+
 </html>

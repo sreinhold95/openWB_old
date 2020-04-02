@@ -7,7 +7,7 @@
 		<meta charset="UTF-8">
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
-		<title>OpenWB</title>
+		<title>openWB Einstellungen</title>
 		<meta name="description" content="Control your charge" />
 		<meta name="author" content="Kevin Wieland, Michael Ortenstein" />
 		<!-- Favicons (created with http://realfavicongenerator.net/)-->
@@ -35,8 +35,6 @@
 
 	<body>
 		<?php
-
-			include '/var/www/html/openWB/web/settings/navbar.php';
 
 			$lines = file('/var/www/html/openWB/openwb.conf');
 			foreach($lines as $line) {
@@ -179,6 +177,9 @@
 			$verbraucher2_urlwold = str_replace( "'", "", $verbraucher2_urlwold);
 			$verbraucher2_urlhold = str_replace( "'", "", $verbraucher2_urlhold);
 		?>
+
+		<div id="nav"></div> <!-- placeholder for navbar -->
+
 		<div role="main" class="container" style="margin-top:20px">
 			<div class="col-sm-12">
 				<form action="./tools/savesmarthome.php" method="POST">
@@ -744,5 +745,17 @@
 				<small>Sie befinden sich hier: Einstellungen/Smart Home</small>
 			</div>
 		</footer>
+
+
+		<script type="text/javascript">
+
+			$.get("settings/navbar.php", function(data){
+				$("#nav").replaceWith(data);
+				// disable navbar entry for current page
+				$('#navSmartHome').addClass('disabled');
+			});
+
+		</script>
+
 	</body>
 </html>

@@ -7,7 +7,7 @@
 		<meta charset="UTF-8">
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
-		<title>OpenWB</title>
+		<title>openWB Einstellungen</title>
 		<meta name="description" content="Control your charge" />
 		<meta name="author" content="Kevin Wieland, Michael Ortenstein" />
 		<!-- Favicons (created with http://realfavicongenerator.net/)-->
@@ -35,11 +35,13 @@
 
 	<body>
 		<?php
-		include './navbar.php';
 		$authfile = $_SERVER['DOCUMENT_ROOT'].'/openWB/web/settings/.htaccess';
 		$passwordfile = $_SERVER['DOCUMENT_ROOT'].'/openWB/web/settings/.passwd';
 		$tempfile = $_SERVER['DOCUMENT_ROOT'].'/openWB/web/settings/temppassword';
 		?>
+
+		<div id="nav"></div> <!-- placeholder for navbar -->
+
 		<div role="main" class="container" style="margin-top:20px">
 			<div class="col-sm-12">
 				<div class="row">
@@ -72,7 +74,7 @@ AuthUserFile $passwordfile
 AuthName "openWB Einstellungen"
 require valid-user
 
-<Files ".passwd">  
+<Files ".passwd">
   Require all denied
 </Files>
 AUTHEND
@@ -149,10 +151,28 @@ AUTHEND
 			</div>
 		</div>  <!-- container -->
 
+		<script type="text/javascript">
+ 			$(document).ready(function(){
+ 				// disable navbar entry for current page
+				$('#navPasswortschutz').addClass('disabled');
+				});
+		</script>
+
 		<footer class="footer bg-dark text-light font-small">
 			<div class="container text-center">
 				<small>Sie befinden sich hier: Einstellungen/Passwortschutz</small>
 			</div>
 		</footer>
+
+		<script type="text/javascript">
+
+			$.get("settings/navbar.php", function(data){
+				$("#nav").replaceWith(data);
+				// disable navbar entry for current page
+				$('#navPasswort').addClass('disabled');
+			});
+			
+		</script>
+
 	</body>
 </html>

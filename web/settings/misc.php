@@ -7,7 +7,7 @@
 		<meta charset="UTF-8">
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
-		<title>OpenWB</title>
+		<title>openWB Einstellungen</title>
 		<meta name="description" content="Control your charge" />
 		<meta name="keywords" content="html template, css, free, one page, gym, fitness, web design" />
 		<meta name="author" content="Kevin Wieland, Michael Ortenstein" />
@@ -37,8 +37,6 @@
 	<body>
 
 		<?php
-
-			include '/var/www/html/openWB/web/settings/navbar.php';
 
 			$lines = file('/var/www/html/openWB/openwb.conf');
 			foreach($lines as $line) {
@@ -574,6 +572,8 @@
 			$pushovertokenold = str_replace( "'", "", $pushovertokenold);
 			$lastrfid = file_get_contents('/var/www/html/openWB/ramdisk/rfidlasttag');
 		?>
+
+		<div id="nav"></div> <!-- placeholder for navbar -->
 
 		<div role="main" class="container" style="margin-top:20px">
 			<div class="col-sm-12">
@@ -1274,18 +1274,7 @@
 						</select>
 					</div>
 
-					<div class="row">
-						Wenn Interaktiver Graph auf der Haupseite deaktiviert: je länger das Zeitintervall des Live Graphen, desto länger die Ladezeit der Hauptseite.<br>
-						Empfehlung maximal 60 Minuten.<br>
-						Beim interaktiven Graph bis 120 Minuten
-					</div>
-					<div class="row">
-						<b><label for="graphliveam">Interaktiver Graph auf der Hauptseite (nicht bei jedem Theme):</label></b>
-						<select name="graphliveam" id="graphliveam">
-							<option <?php if($graphliveamold == 0) echo "selected" ?> value="0">Aus</option>
-							<option <?php if($graphliveamold == 1) echo "selected" ?> value="1">Ein</option>
-						</select>
-					</div>
+
 					<!--
 					<div class="row">
 						<b><label for="chartlegendmain">Legende auf der Hauptseite anzeigen (nur für interaktivem Graph):</label></b>
@@ -1295,13 +1284,6 @@
 						</select>
 					</div>
 					-->
-					<div class="row">
-						<b><label for="grapham">Interaktiver Graph im Logging:</label></b>
-						<select name="grapham" id="grapham">
-							<option <?php if($graphamold == 0) echo "selected" ?> value="0">Aus</option>
-							<option <?php if($graphamold == 1) echo "selected" ?> value="1">Ein</option>
-						</select>
-					</div>
 					<div id="nonintdaily">
 					<!--
 						<div class="row">
@@ -1361,5 +1343,18 @@
 				<small>Sie befinden sich hier: Verschiedenes</small>
 			</div>
 		</footer>
+
+
+		<script type="text/javascript">
+
+			$.get("settings/navbar.php", function(data){
+				$("#nav").replaceWith(data);
+				// disable navbar entry for current page
+				$('#navVerschiedenes').addClass('disabled');
+			});
+			
+		</script>
+
+
 	</body>
 </html>

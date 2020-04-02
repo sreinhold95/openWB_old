@@ -82,7 +82,7 @@
 
 			$isConfiguredLp = array_fill(1, $maxQuantityLp, false); // holds boolean for configured lp
 			// due to inconsitent variable naming need individual lines
-			$isConfiguredLp[1] = true;  // lp1 always configured
+			$isConfiguredLp[1] = 1;  // lp1 always configured
 			$isConfiguredLp[2] = ($settingsArray['lastmanagement'] == 1) ? 1 : 0;
 			$isConfiguredLp[3] = ($settingsArray['lastmanagements2'] == 1) ? 1 : 0;
 			for ($lp=4; $lp<=$maxQuantityLp; $lp++) {
@@ -216,7 +216,7 @@ ECHODAYROWTAIL;
 
 <!-- begin of html body -->
 
-		<?php include "/var/www/html/openWB/web/settings/navbar.php"; ?>
+		<div id="nav"></div> <!-- placeholder for navbar -->
 
 		<div role="main" class="container" style="margin-top:20px">
 			<div class="row justify-content-center">
@@ -298,7 +298,13 @@ ECHOFORMGROUPTAIL;
 			</div>
 		</footer>
 
-		<script>
+		<script type="text/javascript">
+
+			$.get("settings/navbar.php", function(data){
+				$("#nav").replaceWith(data);
+				// disable navbar entry for current page
+				$('#navAutolock').addClass('disabled');
+			});
 
 			$(document).ready(function(){
 

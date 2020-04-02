@@ -1,3 +1,45 @@
+var awattartime = [];
+var graphawattarprice;
+var initialread = 0;
+var graphloaded = 0;
+var boolDisplayHouseConsumption;
+var boolDisplayLoad1;
+var boolDisplayLp1Soc;
+var boolDisplayLoad2;
+var boolDisplayLp2Soc;
+var boolDisplayLp1;
+var boolDisplayLp2;
+var boolDisplayLp3;
+var boolDisplayLp4;
+var boolDisplayLp5;
+var boolDisplayLp6;
+var boolDisplayLp7;
+var boolDisplayLp8;
+var boolDisplayLpAll;
+var boolDisplaySpeicherSoc;
+var boolDisplaySpeicher;
+var boolDisplayEvu;
+var boolDisplayPv;
+var boolDisplayLegend;
+var boolDisplayLiveGraph;
+var all1 = 0;
+var all2 = 0;
+var all3 = 0;
+var all4 = 0;
+var all5 = 0;
+var all6 = 0;
+var all7 = 0;
+var all8 = 0;
+var all1p;
+var all2p;
+var all3p;
+var all4p;
+var all5p;
+var all6p;
+var all7p;
+var all8p;
+var hidehaus;
+
 function loadgraph() {
 	var lineChartData = {
 		labels: atime,
@@ -5,20 +47,20 @@ function loadgraph() {
 			label: 'Lp1',
 			borderColor: "rgba(0, 0, 255, 0.7)",
 			backgroundColor: "rgba(0, 0, 255, 0.7)",
-			borderWidth: 1,
+			borderWidth: 2,
 			hidden: boolDisplayLp1,
 			fill: false,
 			data: alp1,
-			yAxisID: 'y-axis-1',
+			yAxisID: 'y-axis-1'
 		} , {
 			label: 'Lp2',
 			borderColor: "rgba(50, 30, 105, 0.7)",
 			backgroundColor: "rgba(50, 30, 105, 0.7)",
-			borderWidth: 1,
+			borderWidth: 2,
 			hidden: boolDisplayLp2,
 			fill: false,
 			data: alp2,
-			yAxisID: 'y-axis-1',
+			yAxisID: 'y-axis-1'
 		} , {
 			label: 'Bezug',
 			borderColor: "rgba(255, 0, 0, 0.7)",
@@ -27,7 +69,7 @@ function loadgraph() {
 			fill: true,
 			data: abezug,
 			hidden: boolDisplayEvu,
-			yAxisID: 'y-axis-1',
+			yAxisID: 'y-axis-1'
 		} , {
 			label: 'PV',
 			borderColor: 'green',
@@ -36,7 +78,7 @@ function loadgraph() {
 			hidden: boolDisplayPv,
 			borderWidth: 1,
 			data: apv,
-			yAxisID: 'y-axis-1',
+			yAxisID: 'y-axis-1'
 		}  , {
 			label: 'Speicherleistung',
 			borderColor: 'orange',
@@ -45,7 +87,7 @@ function loadgraph() {
 			borderWidth: 1,
 			data: aspeicherl,
 			hidden: boolDisplaySpeicher,
-			yAxisID: 'y-axis-1',
+			yAxisID: 'y-axis-1'
 		} , {
 			label: 'Speicher SoC',
 			borderColor: 'orange',
@@ -53,9 +95,9 @@ function loadgraph() {
 			borderDash: [10,5],
 			hidden: boolDisplaySpeicherSoc,
 			fill: false,
-			borderWidth: 1,
+			borderWidth: 2,
 			data: aspeichersoc,
-			yAxisID: 'y-axis-2',
+			yAxisID: 'y-axis-2'
 		} , {
 			label: 'LP1 SoC',
 			borderColor: "rgba(0, 0, 255, 0.5)",
@@ -64,7 +106,7 @@ function loadgraph() {
 			hidden: boolDisplayLp1Soc,
 			fill: false,
 			data: asoc,
-			yAxisID: 'y-axis-2',
+			yAxisID: 'y-axis-2'
 		} , {
 			label: 'LP2 SoC',
 			borderColor: "rgba(50, 50, 55, 0.5)",
@@ -73,16 +115,16 @@ function loadgraph() {
 			borderWidth: 2,
 			hidden: boolDisplayLp2Soc,
 			data: asoc1,
-			yAxisID: 'y-axis-2',
+			yAxisID: 'y-axis-2'
 		} , {
 			label: 'Hausverbrauch',
-			borderColor: "rgba(150, 150, 150, 0.7)",
+			borderColor: "rgba(255,255,204,0.7)",
 			backgroundColor: "rgba(200, 255, 13, 0.3)",
 			fill: false,
 			borderWidth: 2,
 			hidden: boolDisplayHouseConsumption,
 			data: ahausverbrauch,
-			yAxisID: 'y-axis-1',
+			yAxisID: 'y-axis-1'
 		} , {
 			label: 'Verbraucher 1',
 			borderColor: "rgba(0, 150, 150, 0.7)",
@@ -91,7 +133,7 @@ function loadgraph() {
 			borderWidth: 2,
 			hidden: boolDisplayLoad1,
 			data: averbraucher1,
-			yAxisID: 'y-axis-1',
+			yAxisID: 'y-axis-1'
 		} , {
 			label: 'Verbraucher 2',
 			borderColor: "rgba(150, 150, 0, 0.7)",
@@ -100,7 +142,7 @@ function loadgraph() {
 			borderWidth: 2,
 			data: averbraucher2,
 			hidden: boolDisplayLoad2,
-			yAxisID: 'y-axis-1',
+			yAxisID: 'y-axis-1'
 		} , {
 			label: 'LP Gesamt',
 			borderColor: "rgba(50, 50, 55, 0.1)",
@@ -109,7 +151,7 @@ function loadgraph() {
 			borderWidth: 2,
 			data: alpa,
 			hidden: boolDisplayLpAll,
-			yAxisID: 'y-axis-1',
+			yAxisID: 'y-axis-1'
 		} , {
 			label: 'Lp3',
 			borderColor: "rgba(50, 50, 55, 0.7)",
@@ -118,7 +160,7 @@ function loadgraph() {
 			borderWidth: 2,
 			data: alp3,
 			yAxisID: 'y-axis-1',
-			hidden: boolDisplayLp3,
+			hidden: boolDisplayLp3
 		} , {
 			label: 'Lp4',
 			borderColor: "rgba(50, 50, 55, 0.7)",
@@ -127,7 +169,7 @@ function loadgraph() {
 			data: alp4,
 			borderWidth: 2,
 			yAxisID: 'y-axis-1',
-			hidden: boolDisplayLp4,
+			hidden: boolDisplayLp4
 		} , {
 			label: 'Lp5',
 			borderColor: "rgba(50, 50, 55, 0.7)",
@@ -136,7 +178,7 @@ function loadgraph() {
 			borderWidth: 2,
 			data: alp5,
 			yAxisID: 'y-axis-1',
-			hidden: boolDisplayLp5,
+			hidden: boolDisplayLp5
 		} , {
 			label: 'Lp6',
 			borderColor: "rgba(50, 50, 55, 0.7)",
@@ -145,7 +187,7 @@ function loadgraph() {
 			borderWidth: 2,
 			data: alp6,
 			yAxisID: 'y-axis-1',
-			hidden: boolDisplayLp6,
+			hidden: boolDisplayLp6
 		} , {
 			label: 'Lp7',
 			borderColor: "rgba(50, 50, 55, 0.7)",
@@ -154,7 +196,7 @@ function loadgraph() {
 			borderWidth: 2,
 			data: alp7,
 			yAxisID: 'y-axis-1',
-			hidden: boolDisplayLp7,
+			hidden: boolDisplayLp7
 		} , {
 			label: 'Lp8',
 			borderColor: "rgba(50, 50, 55, 0.7)",
@@ -163,13 +205,62 @@ function loadgraph() {
 			borderWidth: 2,
 			data: alp8,
 			yAxisID: 'y-axis-1',
-			hidden: boolDisplayLp8,
+			hidden: boolDisplayLp8
 		}]
+	}
+
+	function getMaxTicksLimit(width) {
+		if ( width < 350 ) {
+			return 6;
+		} else if ( width < 470 ) {
+			return 9;
+		} else if ( width < 768 ) {
+			return 12;
+		} else {
+			return 18;
+		}
+	}
+
+	function setGraphLineBorderWidth(theGraph, newWidth) {
+		// sets borderWidth attribute for all single lines without fill
+		for ( var index = 0; index < theGraph.config.data.datasets.length; index++) {
+			if ( !theGraph.config.data.datasets[index].fill ) {
+				theGraph.config.data.datasets[index].borderWidth = newWidth;
+			}
+		}
+	}
+
+	function doGraphResponsive(chartInstance) {
+		// changes graph resonding to screen size
+		// quantity of x-axis labels
+		chartInstance.config.options.scales.xAxes[0].ticks.maxTicksLimit = getMaxTicksLimit(chartInstance.width);
+		// other settings
+		if ( chartInstance.width > 390 ) {
+			setGraphLineBorderWidth(chartInstance, 2);
+			chartInstance.config.options.scales.xAxes[0].ticks.fontSize = 12;
+			chartInstance.config.options.scales.yAxes[0].ticks.fontSize = 12;
+			chartInstance.config.options.scales.yAxes[0].scaleLabel.fontSize = 12;
+			chartInstance.config.options.scales.yAxes[1].ticks.fontSize = 12;
+			chartInstance.config.options.scales.yAxes[1].scaleLabel.fontSize = 12;
+		} else {
+			setGraphLineBorderWidth(chartInstance, 1);
+			chartInstance.config.options.scales.xAxes[0].ticks.fontSize = 10;
+			chartInstance.config.options.scales.yAxes[0].ticks.fontSize = 9;
+			chartInstance.config.options.scales.yAxes[0].scaleLabel.fontSize = 10;
+			chartInstance.config.options.scales.yAxes[1].ticks.fontSize = 9;
+			chartInstance.config.options.scales.yAxes[1].scaleLabel.fontSize = 10;
+		}
+
+		chartInstance.update();
 	}
 
 	var ctx = document.getElementById('canvas').getContext('2d');
 
 	window.myLine = new Chart.Line(ctx, {
+		plugins: {
+        	afterInit: doGraphResponsive,
+        	resize: doGraphResponsive
+		},
 		data: lineChartData,
 		options: {
 			tooltips: {
@@ -202,7 +293,8 @@ function loadgraph() {
 				xAxes: [
 					{
          				ticks: {
-							fontColor: "rgba(255, 255, 255, 0.82)"
+							fontColor: "rgba(255, 255, 255, 0.82)",
+							maxTicksLimit: 15
          				}
       				}],
 				yAxes: [
@@ -214,16 +306,17 @@ function loadgraph() {
 						display: true,
 						scaleLabel: {
 		        			display: true,
-		        			labelString: 'Leistung [W]',
+		        			labelString: 'Leistung [kW]',
 							fontColor: "rgba(255, 255, 255, 0.82)"
 		      			},
 						gridLines: {
 							color: "rgba(255, 255, 255, 0.82)"
 						},
 						ticks: {
+							stepSize: 0.2,
+							maxTicksLimit: 10,
 							fontColor: "rgba(255, 255, 255, 0.82)"
 						}
-
 					},{
 						// horizontal line for values displayed on the right side (SoC)
 						position: 'right',
@@ -240,7 +333,7 @@ function loadgraph() {
 							color: "rgba(0, 0, 0, 0)",
 						},
 						ticks: {
-							min: 1,
+							min: 0,
 							suggestedMax: 100,
 							fontColor: "rgba(255, 255, 255, 0.82)"
 						}
@@ -253,20 +346,92 @@ function loadgraph() {
 	$('#waitforgraphloadingdiv').hide();
 }  // end loadgraph
 
+function putgraphtogether() {
+	if ( (all1 == 1) && (all2 == 1) && (all3 == 1) && (all4 == 1) && (all5 == 1) && (all6 == 1) && (all7 == 1) && (all8 == 1) ){
+		var alldata = all1p + "\n" + all2p + "\n" + all3p + "\n" + all4p + "\n" + all5p + "\n" + all6p + "\n" + all7p + "\n" + all8p;
+		alldata = alldata.replace(/^\s*[\n]/gm, "");
+		alldata = alldata.replace(/^\s*-[\n]/gm, "");
+		var csvData = [];
+		var rawcsv = alldata.split(/\r?\n|\r/);
+		for (var i = 0; i < rawcsv.length; i++) {
+			  csvData.push(rawcsv[i].split(","));
+		}
+		csvData.pop();
+		// Retrived data from csv file content
+		var splittime = [];
+		getCol(csvData, 0).forEach(function(zeit){
+			splittime.push(zeit.substring(0, zeit.length -3));
+		});
+		atime = splittime;
+		//atime = getCol(csvData, 0);
+		abezug = convertToKw(getCol(csvData, 1));
+		alpa = convertToKw(getCol(csvData, 2));
+		apv = convertToKw(getCol(csvData, 3));
+		alp1 = convertToKw(getCol(csvData, 4));
+		alp2 = convertToKw(getCol(csvData, 5));
+		aspeicherl = convertToKw(getCol(csvData, 7));
+		aspeichersoc = getCol(csvData, 8);
+		asoc = getCol(csvData, 9);
+		asoc1 = getCol(csvData, 10);
+		ahausverbrauch = convertToKw(getCol(csvData, 11));
+		averbraucher1 = convertToKw(getCol(csvData, 12));
+		averbraucher2 = convertToKw(getCol(csvData, 13));
+		alp3 = convertToKw(getCol(csvData, 14));
+		alp4 = convertToKw(getCol(csvData, 15));
+		alp5 = convertToKw(getCol(csvData, 16));
+		alp6 = convertToKw(getCol(csvData, 17));
+		alp7 = convertToKw(getCol(csvData, 18));
+		alp8 = convertToKw(getCol(csvData, 19));
+		initialread = 1 ;
+
+		// after receipt of all 8 first data segments, unsubscribe from these topics to save bandwidth
+		unsubscribeMqttGraphSegments();
+
+		checkgraphload();
+	}
+}  // end putgraphtogether
+
+
+$(window).focus(function() {
+    // if the browser window gets focus again after being blurred,
+    // check if mqtt segments for graph need to be subsribed again
+    if ( initialread == 0 ) {
+		subscribeMqttGraphSegments();
+	}
+});
+
 function checkgraphload(){
-	if ( graphloaded == 1) {
+	if ( graphloaded == 1 ) {
        	myLine.destroy();
 		loadgraph();
-	} else {
-		if (( boolDisplayHouseConsumption == true  ||  boolDisplayHouseConsumption == false) && (boolDisplayLoad1 == true || boolDisplayLoad1 == false ) && (boolDisplayLp1Soc == true || boolDisplayLp1Soc == false ) && (boolDisplayLp2Soc == true || boolDisplayLp2Soc == false ) && (boolDisplayLoad2 == true || boolDisplayLoad2 == false ) && (boolDisplayLp1 == true || boolDisplayLp1 == false ) && (boolDisplayLp2 == true || boolDisplayLp2 == false ) && (boolDisplayLp3 == true || boolDisplayLp3 == false ) && (boolDisplayLp4 == true || boolDisplayLp4 == false ) && (boolDisplayLp5 == true || boolDisplayLp5 == false ) && (boolDisplayLp6 == true || boolDisplayLp6 == false ) && (boolDisplayLp7 == true || boolDisplayLp7 == false ) && (boolDisplayLp8 == true || boolDisplayLp8 == false ) && (boolDisplayLpAll == true || boolDisplayLpAll == false ) && (boolDisplaySpeicherSoc == true || boolDisplaySpeicherSoc == false ) && (boolDisplaySpeicher == true || boolDisplaySpeicher == false ) && (boolDisplayEvu == true || boolDisplayEvu == false ) && (boolDisplayPv == true || boolDisplayPv == false ) && (boolDisplayLegend == true || boolDisplayLegend == false ))  {
-			if ( initialread != 0 ) {
-				if ( graphloaded == 0 ) {
-					graphloaded += 1;
-				} else {
-		       		myLine.destroy();
-				}
-				loadgraph();
-	 		}
+		return;
+	}
+	if ( typeof boolDisplayHouseConsumption === "boolean" &&
+		 typeof boolDisplayLoad1 === "boolean" &&
+		 typeof boolDisplayLp1Soc === "boolean" &&
+		 typeof boolDisplayLp2Soc === "boolean" &&
+		 typeof boolDisplayLoad2 === "boolean" &&
+	 	 typeof boolDisplayLp1 === "boolean" &&
+	 	 typeof boolDisplayLp2 === "boolean" &&
+	 	 typeof boolDisplayLp3 === "boolean" &&
+	 	 typeof boolDisplayLp4 === "boolean" &&
+	 	 typeof boolDisplayLp5 === "boolean" &&
+	 	 typeof boolDisplayLp6 === "boolean" &&
+	 	 typeof boolDisplayLp7 === "boolean" &&
+	 	 typeof boolDisplayLp8 === "boolean" &&
+	 	 typeof boolDisplayLpAll === "boolean" &&
+	 	 typeof boolDisplaySpeicherSoc === "boolean" &&
+	 	 typeof boolDisplaySpeicher === "boolean" &&
+	 	 typeof boolDisplayEvu === "boolean" &&
+	 	 typeof boolDisplayPv === "boolean" &&
+	 	 typeof boolDisplayLegend === "boolean" ) {
+		if ( initialread != 0 ) {
+			if ( graphloaded == 0 ) {
+				graphloaded = 1;
+			} else {
+   				myLine.destroy();
+			}
+			loadgraph();
 		}
 	}
 }
@@ -277,61 +442,61 @@ window.onload = function(){
 
 function forcegraphload() {
 	if ( graphloaded == 0 ) {
-		if ( !( boolDisplayHouseConsumption == true  ||  boolDisplayHouseConsumption == false) ) {
+		if ( !(typeof boolDisplayHouseConsumption === "boolean") ) {
 			showhidedataset('boolDisplayHouseConsumption');
 		}
-		if ( !( boolDisplayLoad1 == true  ||  boolDisplayLoad1 == false) ) {
+		if ( !(typeof boolDisplayLoad1 === "boolean") ) {
 			showhidedataset('boolDisplayLoad1');
 		}
-		if ( !( boolDisplayLp1Soc == true  ||  boolDisplayLp1Soc == false) ) {
+		if ( !(typeof boolDisplayLp1Soc === "boolean") ) {
 			showhidedataset('boolDisplayLp1Soc');
 		}
-		if ( !( boolDisplayLp2Soc == true  ||  boolDisplayLp2Soc == false) ) {
+		if ( !(typeof boolDisplayLp2Soc === "boolean") ) {
 			showhidedataset('boolDisplayLp2Soc');
 		}
-		if ( !( boolDisplayLoad2 == true  ||  boolDisplayLoad2 == false) ) {
+		if ( !(typeof boolDisplayLoad2 === "boolean") ) {
 			showhidedataset('boolDisplayLoad2');
 		}
-		if ( !( boolDisplayLp1 == true  ||  boolDisplayLp1 == false) ) {
+		if ( !(typeof boolDisplayLp1 === "boolean") ) {
 			showhidedataset('boolDisplayLp1');
 		}
-		if ( !( boolDisplayLp2 == true  ||  boolDisplayLp2 == false) ) {
+		if ( !(typeof boolDisplayLp2 === "boolean") ) {
 			showhidedataset('boolDisplayLp2');
 		}
-		if ( !( boolDisplayLp3 == true  ||  boolDisplayLp3 == false) ) {
+		if ( !(typeof boolDisplayLp3 === "boolean") ) {
 			showhidedataset('boolDisplayLp3');
 		}
-		if ( !( boolDisplayLp4 == true  ||  boolDisplayLp4 == false) ) {
+		if ( !(typeof boolDisplayLp4 === "boolean") ) {
 			showhidedataset('boolDisplayLp4');
 		}
-		if ( !( boolDisplayLp5 == true  ||  boolDisplayLp5 == false) ) {
+		if ( !(typeof boolDisplayLp5 === "boolean") ) {
 			showhidedataset('boolDisplayLp5');
 		}
-		if ( !( boolDisplayLp6 == true  ||  boolDisplayLp6 == false) ) {
+		if ( !(typeof boolDisplayLp6 === "boolean") ) {
 			showhidedataset('boolDisplayLp6');
 		}
-		if ( !( boolDisplayLp7 == true  ||  boolDisplayLp7 == false) ) {
+		if ( !(typeof boolDisplayLp7 === "boolean") ) {
 			showhidedataset('boolDisplayLp7');
 		}
-		if ( !( boolDisplayLp8 == true  ||  boolDisplayLp8 == false) ) {
+		if ( !(typeof boolDisplayLp8 === "boolean") ) {
 			showhidedataset('boolDisplayLp8');
 		}
-		if ( !( boolDisplayLpAll == true  ||  boolDisplayLpAll == false)){
+		if ( !(typeof boolDisplayLpAll === "boolean") ) {
 			showhidedataset('boolDisplayLpAll');
 		}
-		if ( !( boolDisplaySpeicherSoc == true  ||  boolDisplaySpeicherSoc == false) ) {
+		if ( !(typeof boolDisplaySpeicherSoc === "boolean") ) {
 			showhidedataset('boolDisplaySpeicherSoc');
 		}
-		if ( !( boolDisplaySpeicher == true  ||  boolDisplaySpeicher == false) ) {
+		if ( !(typeof boolDisplaySpeicher === "boolean") ) {
 			showhidedataset('boolDisplaySpeicher');
 		}
-		if ( !( boolDisplayEvu == true  ||  boolDisplayEvu == false) ) {
+		if ( !(typeof boolDisplayEvu === "boolean") ) {
 			showhidedataset('boolDisplayEvu');
 		}
-		if ( !( boolDisplayPv == true  ||  boolDisplayPv == false) ) {
+		if ( !(typeof boolDisplayPv === "boolean") ) {
 			showhidedataset('boolDisplayPv');
 		}
-		if ( !( boolDisplayLegend == true  ||  boolDisplayLegend == false) ) {
+		if ( !(typeof boolDisplayLegend === "boolean") ) {
 			showhidedataset('boolDisplayLegend');
 		}
 		checkgraphload();
@@ -365,5 +530,19 @@ function showhide(thedataset) {
 		publish("0","openWB/graph/"+thedataset);
 	} else {
 		publish("1","openWB/graph/"+thedataset);
+	}
+}
+
+function subscribeMqttGraphSegments() {
+	for (var segments = 1; segments < 9; segments++) {
+		topic = "openWB/graph/" + segments + "alllivevalues";
+		client.subscribe(topic, {qos: 0});
+	}
+}
+
+function unsubscribeMqttGraphSegments() {
+	for (var segments = 1; segments < 9; segments++) {
+		topic = "openWB/graph/" + segments + "alllivevalues";
+		client.unsubscribe(topic);
 	}
 }

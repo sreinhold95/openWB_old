@@ -7,7 +7,7 @@
 		<meta charset="UTF-8">
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
-		<title>OpenWB</title>
+		<title>openWB Einstellungen</title>
 		<meta name="description" content="Control your charge" />
 		<meta name="author" content="Kevin Wieland, Michael Ortenstein" />
 		<!-- Favicons (created with http://realfavicongenerator.net/)-->
@@ -35,8 +35,6 @@
 
 	<body>
 		<?php
-
-			include '/var/www/html/openWB/web/settings/navbar.php';
 
 			$lines = file('/var/www/html/openWB/openwb.conf');
 			foreach($lines as $line) {
@@ -148,6 +146,8 @@
 			$wr_http_w_urlold = str_replace( "'", "", $wr_http_w_urlold);
 			$wr_http_kwh_urlold = str_replace( "'", "", $wr_http_kwh_urlold);
 		?>
+
+		<div id="nav"></div> <!-- placeholder for navbar -->
 
 		<div role="main" class="container" style="margin-top:20px">
 			<div class="col-sm-12">
@@ -306,7 +306,7 @@
 					</div>
 					<div class="row" style="background-color:#befebe">
 						Definiert einen Mindest-SoC-Wert (EV) bis zu welchem im "Nur PV" Modus immer geladen wird, auch, wenn keine PV Leistung zur Verfügung steht.<br>
-						Ist nur aktiv, wenn nur ein Ladepunkt konfiguriert ist!  
+						Ist nur aktiv, wenn nur ein Ladepunkt konfiguriert ist!
 					</div>
 
 					<div class="row" style="background-color:#befebe">
@@ -323,11 +323,13 @@
 							<option <?php if($maxnurpvsoclp1old == 90) echo "selected" ?> value="90">90</option>
 							<option <?php if($maxnurpvsoclp1old == 95) echo "selected" ?> value="95">95</option>
 							<option <?php if($maxnurpvsoclp1old == 100) echo "selected" ?> value="100">100</option>
+							<option <?php if($maxnurpvsoclp1old == 101) echo "selected" ?> value="101">Deaktiviert</option>
+
 						</select>
 					</div>
 					<div class="row" style="background-color:#befebe">
 						Definiert einen Maximal-SoC-Wert bis zu welchem im "Nur PV" Modus geladen wird.<br>
-						Ist nur aktiv, wenn nur ein Ladepunkt konfiguriert ist! 
+						Ist nur aktiv, wenn nur ein Ladepunkt konfiguriert ist!
 					</div>
 					<div class="row" style="background-color:#befebe">
 						<b><label for="minnurpvsocll">Stromstärke fuer den Nur PV Laden Modus wenn Mindest SoC noch nicht erreicht:</label></b>
@@ -363,7 +365,7 @@
 					</div>
 					<div class="row" style="background-color:#befebe">
 						Definiert die Ladeleistung, wenn Mindest-SoC im "Nur PV Laden" Modus noch nicht erreicht ist.<br>
-						Ist nur aktiv, wenn nur ein Ladepunkt konfiguriert ist! 
+						Ist nur aktiv, wenn nur ein Ladepunkt konfiguriert ist!
 					</div>
 
 					<div class="row" style="background-color:#befebe">
@@ -547,5 +549,17 @@
 				<small>Sie befinden sich hier: Einstellungen/PV-Ladeeinstellungen</small>
 			</div>
 		</footer>
+
+
+		<script type="text/javascript">
+
+			$.get("settings/navbar.php", function(data){
+				$("#nav").replaceWith(data);
+				// disable navbar entry for current page
+				$('#navPVLadeeinstellungen').addClass('disabled');
+			});
+
+		</script>
+
 	</body>
 </html>
