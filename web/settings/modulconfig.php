@@ -39,6 +39,22 @@
 
 			$lines = file('/var/www/html/openWB/openwb.conf');
 			foreach($lines as $line) {
+				if(strpos($line, "pv2wattmodul=") !== false) {
+					list(, $pv2wattmodulold) = explode("=", $line);
+				}
+				if(strpos($line, "pv2id=") !== false) {
+					list(, $pv2idold) = explode("=", $line);
+				}
+				if(strpos($line, "pv2ip=") !== false) {
+					list(, $pv2ipold) = explode("=", $line);
+				}
+				if(strpos($line, "pv2user=") !== false) {
+					list(, $pv2userold) = explode("=", $line);
+				}
+				if(strpos($line, "pv2pass=") !== false) {
+					list(, $pv2passold) = explode("=", $line);
+				}
+
 				if(strpos($line, "soc_bluelink_interval=") !== false) {
 					list(, $soc_bluelink_intervalold) = explode("=", $line);
 				}
@@ -811,6 +827,9 @@
 				}
 				if(strpos($line, "soc_teslalp2_username=") !== false) {
 					list(, $socteslalp2usernameold) = explode("=", $line);
+				}
+				if(strpos($line, "soc_teslalp2_carnumber=") !== false) {
+					list(, $socteslalp2carnumberold) = explode("=", $line);
 				}
 				if(strpos($line, "soc_teslalp2_password=") !== false) {
 					list(, $socteslalp2pwold) = explode("=", $line);
@@ -2463,6 +2482,13 @@
 								Password des Tesla Logins
 							</div>
 							<div class="row bg-info">
+								<b><label for="teslasoclp2carnumber">Auto im Account:</label></b>
+								<input type="text" name="teslasoclp2carnumber" id="teslasoclp2carnumber" value="<?php echo $socteslalp2carnumberold ?>">
+							</div>
+							<div class="row bg-info">
+								Im Normalfall hier 0 eintragen. Sind mehrere Teslas im Account für den zweiten Tesla eine 1 eintragen.
+							</div>
+							<div class="row bg-info">
 								<b><label for="teslasoclp2intervall">Abfrageintervall Standby:</label></b>
 								<input type="text" name="teslasoclp2intervall" id="teslasoclp2intervall" value="<?php echo $socteslalp2intervallold ?>">
 							</div>
@@ -3574,11 +3600,10 @@
 					</div>
 					<div id="wattbezugplentihaus">
 						<div class="row" style="background-color:#febebe">
-							Dieses Modul erfordert einen am Plenticore angeschlossenen EM300 bzw. KSEM. Nach Wahl dieses Moduls ist die Auswahl des PV-Moduls fest auf Kostal Plenticore eingestellt.
-							Alle relevanten Daten werden aus dem Wechselrichter gelesen. Die IP des WR ist im PV-Modul anzugeben. Ein am Plenticore angeschlossener Speicher wird ebenfalls ohne weitere
-							Einstellung ausgelesen, das Speicher-Modul wird dazu entsprechend voreingestellt. Ein zusätzlicher und nicht am Plenticore angeschlossener Speicher kann im Speicher-Modul
-							extra konfiguriert werden.<br>
-							Bitte einstellen: EM300/KSEM verbaut im Hausverbrauchs-Zweig (Pos. 1) oder Netzanschluss-Zweig (Pos. 2).
+							Dieses Modul erfordert als 1. PV-Modul das Modul "Kostal Plenticore". Dieses wird automatisch fest eingestellt. Der EM300 bzw. das KSEM muss am 1. Plenticore angeschlossen sein.
+							Ein am 1. Plenticore angeschlossener Speicher wird ebenfalls ohne weitere Einstellung ausgelesen, das Speicher-Modul wird dazu entsprechend voreingestellt.
+							Am 2. Plenticore darf kein Speicher angeschlossen sein, da dies die weiteren Berechnungen verfälscht.
+							Die Einbauposition des EM300/KSEM (Hausverbrauchs-Zweig = Pos. 1 oder Netzanschluss-Zweig = Pos. 2) ist anzugeben.
 						</div>
 						<input type='hidden' value='0' name='kostalplenticorehaus'>
 						<input id="kostalplenticorehaus" name="kostalplenticorehaus" value="1" type="checkbox" <?php if ( $kostalplenticorehausold == 1){ echo "checked"; } ?> >
@@ -4189,7 +4214,7 @@
 							<input type="text" name="kostalplenticoreip" id="kostalplenticoreip" value="<?php echo $kostalplenticoreipold ?>">
 						</div>
 						<div class="row" style="background-color:#befebe">
-							Gültige Werte: IP-Adresse. IP-Adresse des ersten Kostal Plenticore. An diesem sollte (wenn vorhanden) der EM300/KSEM und ggf. Speicher angeschlossen sein. Modbus/Sunspec (TCP) muss im WR aktiviert sein (Port 1502, Unit-ID 71).
+							Gültige Werte: IP-Adresse des 1. Kostal Plenticore. An diesem muss (wenn vorhanden) der EM300/das KSEM und ggf. Speicher angeschlossen sein. Modbus/Sunspec (TCP) muss im WR aktiviert sein (Port 1502, Unit-ID 71).
 						</div>
 						<div class="row" style="background-color:#befebe">
 							<b><label for="name_wechselrichter1">Bezeichnung des 1. Kostal Plenticore:</label></b>
@@ -4199,11 +4224,11 @@
 							Gültige Werte: Freie Bezeichnung des Wechselrichters zu Anzeigezwecken, kann leer bleiben.
 						</div>
 						<div class="row" style="background-color:#befebe">
-							<b><label for="kostalplenticoreip2">IP Adresse des weiteren Kostal Plenticore:</label></b>
+							<b><label for="kostalplenticoreip2">IP Adresse des 2. Kostal Plenticore:</label></b>
 							<input type="text" name="kostalplenticoreip2" id="kostalplenticoreip2" value="<?php echo $kostalplenticoreip2old ?>">
 						</div>
 						<div class="row" style="background-color:#befebe">
-							Gültige Werte: IP-Adresse oder "none". IP-Adresse des weiteren Kostal Plenticore. Bei diesem wird nur die PV-Leistung und ggf. ein angeschlossener Speicher ausgelesen. Wenn nur ein WR genutzt wird, muss der Wert "none" gesetzt werden, ansonsten muss Modbus/Sunspec (TCP) im WR aktiviert sein (Port 1502, Unit-ID 71).
+							Gültige Werte: IP-Adresse des 2. Kostal Plenticore oder "none". An diesem WR darf kein Speicher angeschlossen sein. Wenn nur ein WR genutzt wird, muss der Wert "none" gesetzt werden, ansonsten muss Modbus/Sunspec (TCP) im WR aktiviert sein (Port 1502, Unit-ID 71).
 						</div>
 						<div class="row" style="background-color:#befebe">
 							<b><label for="name_wechselrichter2">Bezeichnung des 2. Kostal Plenticore:</label></b>
@@ -4613,6 +4638,63 @@
 					</script>
 
 					<div class="row">
+						<h3> Zweites PV-Modul </h3>
+					</div>
+					<div class="row">
+						<b><label for="pv2wattmodul">Zweites PV-Modul:</label></b>
+						<select name="pv2wattmodul" id="pv2wattmodul">
+							<option <?php if($pv2wattmodulold == "none\n") echo "selected" ?> value="none">Nicht vorhanden</option>
+							<option <?php if($pv2wattmodulold == "wr2_ethlovatoaevu\n") echo "selected" ?> value="wr2_ethlovatoaevu">Lovato an openWB EVU Kit</option>
+							<option <?php if($pv2wattmodulold == "wr2_ethlovato\n") echo "selected" ?> value="wr2_ethlovato">openWB PV Kit v2</option>
+							<option <?php if($pv2wattmodulold == "wr2_smamodbus\n") echo "selected" ?> value="wr2_smamodbus">SMA Wechselrichter</option>
+
+						</select>
+					</div>
+
+					<div id="pv2none">
+					</div>
+					<div id="pv2noconfig">
+						Keine Konfiguration erforderlich.
+					</div>
+					<div id="pv2ipdiv">
+						<div class="row" style="background-color:#BEFEBE">
+							<b><label for="pv2ip">Wechselrichter IP:</label></b>
+							<input type="text" name="pv2ip" id="pv2ip" value="<?php echo $pv2ipold ?>">
+						</div>
+						<div class="row" style="background-color:#BEFEBE">
+							Gültige Werte: IPs. IP Adresse des Wechselrichters, ggf. muss modbusTCP im WR noch aktiviert werden.
+						</div>
+					</div>
+
+
+					<script>
+						function display_pv2wattmodul() {
+							$('#pv2none').hide();
+							$('#pv2noconfig').hide();
+							$('#pv2ipdiv').hide();
+
+							if($('#pv2wattmodul').val() == 'none') {
+								$('#pv2none').show();
+							}
+							if($('#pv2wattmodul').val() == 'wr2_ethlovatoaevu') {
+								$('#pv2noconfig').show();
+							}
+							if($('#pv2wattmodul').val() == 'wr2_ethlovato') {
+								$('#pv2noconfig').show();
+							}
+							if($('#pv2wattmodul').val() == 'wr2_smamodbus') {
+								$('#pv2ipdiv').show();
+							}
+
+						}
+						$(function() {
+							display_pv2wattmodul();
+							$('#pv2wattmodul').change( function(){
+								display_pv2wattmodul();
+							} );
+						});
+					</script>
+					<div class="row">
 						<h3> Speicher-Modul </h3>
 					</div>
 					<div class="row">
@@ -4789,7 +4871,7 @@
 					</div>
 					<div id="divspeicherplenti">
 						<div class="row" style="background-color:#fcbe1e">
-							Ein am Kostal Plenticore angeschlossener Speicher setzt einen EM300/KSEM voraus. Nach entsprechender Auswahl im Strombezugsmessmodul und Konfiguration der IP des WR im PV-Modul erfolgt das Auslesen des Speichers über den WR ohne weitere Einstellungen.
+							Ein am 1. Kostal Plenticore angeschlossener Speicher setzt einen EM300/KSEM voraus. Nach entsprechender Auswahl im Strombezugsmessmodul und Konfiguration der IP des WR im PV-Modul erfolgt das Auslesen des Speichers über den WR ohne weitere Einstellungen.
 						</div>
 					</div>
 					<div id="divspeicherfronius">

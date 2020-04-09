@@ -41,15 +41,8 @@ function processGraphMessages(mqttmsg, mqttpayload) {
 		if ( mqttpayload == 1) {
 			boolDisplayHouseConsumption = false;
 			hidehaus = "foo";
-			document.getElementById("graphhausdiv").setAttribute("style", "color: green;");
-			graphhausdiv.classList.remove("fa-toggle-off");
-			graphhausdiv.classList.add("fa-toggle-on");
-
 		} else {
 			boolDisplayHouseConsumption = true;
-			document.getElementById("graphhausdiv").setAttribute("style", "color: red;");
-			graphhausdiv.classList.remove("fa-toggle-on");
-			graphhausdiv.classList.add("fa-toggle-off");
 			hidehaus = "Hausverbrauch";
 		}
 		checkgraphload();
@@ -57,15 +50,8 @@ function processGraphMessages(mqttmsg, mqttpayload) {
 	else if ( mqttmsg == "openWB/graph/boolDisplayLegend" ) {
 		if ( mqttpayload == 0) {
 			boolDisplayLegend = false;
-			document.getElementById("graphlegenddiv").setAttribute("style", "color: red;");
-			graphlegenddiv.classList.remove("fa-toggle-on");
-			graphlegenddiv.classList.add("fa-toggle-off");
 		} else {
 			boolDisplayLegend = true;
-			document.getElementById("graphlegenddiv").setAttribute("style", "color: green;");
-			graphlegenddiv.classList.remove("fa-toggle-off");
-			graphlegenddiv.classList.add("fa-toggle-on");
-
 		}
 		checkgraphload();
 	}
@@ -73,32 +59,18 @@ function processGraphMessages(mqttmsg, mqttpayload) {
 		if ( mqttpayload == 0) {
 			$("#thegraph").hide();
 			boolDisplayLiveGraph = false;
-			document.getElementById("graphgraphdiv").setAttribute("style", "color: red;");
-			graphgraphdiv.classList.remove("fa-toggle-on");
-			graphgraphdiv.classList.add("fa-toggle-off");
 		} else {
 			$("#thegraph").show();
 			boolDisplayLiveGraph = true;
-			document.getElementById("graphgraphdiv").setAttribute("style", "color: green;");
-			graphgraphdiv.classList.remove("fa-toggle-off");
-			graphgraphdiv.classList.add("fa-toggle-on");
 		}
 	}
 	else if ( mqttmsg == "openWB/graph/boolDisplayEvu" ) {
 		if ( mqttpayload == 1) {
 			boolDisplayEvu = false;
 			hideevu = "foo";
-			document.getElementById("graphevudiv").setAttribute("style", "color: green;");
-			graphevudiv.classList.remove("fa-toggle-off");
-			graphevudiv.classList.add("fa-toggle-on");
-
 		} else {
 			boolDisplayEvu = true;
 			hideevu = "Bezug";
-			document.getElementById("graphevudiv").setAttribute("style", "color: red;");
-			graphevudiv.classList.remove("fa-toggle-on");
-			graphevudiv.classList.add("fa-toggle-off");
-
 		}
 		checkgraphload();
 	}
@@ -106,15 +78,9 @@ function processGraphMessages(mqttmsg, mqttpayload) {
 		if ( mqttpayload == 1) {
 			boolDisplayPv = false;
 			hidepv = "foo";
-			document.getElementById("graphpvdiv").setAttribute("style", "color: green;");
-			graphpvdiv.classList.remove("fa-toggle-off");
-			graphpvdiv.classList.add("fa-toggle-on");
 		} else {
 			boolDisplayPv = true;
 			hidepv = "PV";
-			document.getElementById("graphpvdiv").setAttribute("style", "color: red;");
-			graphpvdiv.classList.remove("fa-toggle-on");
-			graphpvdiv.classList.add("fa-toggle-off");
 		}
 		checkgraphload();
 	}
@@ -127,15 +93,9 @@ function processGraphMessages(mqttmsg, mqttpayload) {
 		if ( mqttpayload == 1) {
 			window["boolDisplayLp"+index] = false;
 			window["hidelp"+index] = "foo";
-			document.getElementById("graphlp"+index+"div").setAttribute("style", "color: green;");
-			window["graphlp"+index+"div"].classList.remove("fa-toggle-off");
-			window["graphlp"+index+"div"].classList.add("fa-toggle-on");
 		} else {
 			window["boolDisplayLp"+index] = true;
 			window["hidelp"+index] = "Lp" + index;
-			document.getElementById("graphlp"+index+"div").setAttribute("style", "color: red;");
-			window["graphlp"+index+"div"].classList.remove("fa-toggle-on");
-			window["graphlp"+index+"div"].classList.add("fa-toggle-off");
 		}
 		checkgraphload();
 	}
@@ -143,18 +103,9 @@ function processGraphMessages(mqttmsg, mqttpayload) {
 		if ( mqttpayload == 1) {
 			boolDisplayLpAll = false;
 			hidelpa = "foo";
-			var element = document.getElementById("graphlpalldiv");
-			graphlpalldiv.classList.remove("fa-toggle-off");
-			graphlpalldiv.classList.add("fa-toggle-on");
-			element.setAttribute("style", "color: green;");
 		} else {
 			boolDisplayLpAll = true;
 			hidelpa = "LP Gesamt";
-			var element = document.getElementById("graphlpalldiv");
-			graphlpalldiv.classList.remove("fa-toggle-on");
-			graphlpalldiv.classList.add("fa-toggle-off");
-			element.setAttribute("style", "color: red;");
-
 		}
 		checkgraphload();
 	}
@@ -162,16 +113,9 @@ function processGraphMessages(mqttmsg, mqttpayload) {
 		if ( mqttpayload == 1) {
 			boolDisplaySpeicher = false;
 			hidespeicher = "foo";
-			document.getElementById("graphspeicherdiv").setAttribute("style", "color: green;");
-			graphspeicherdiv.classList.remove("fa-toggle-off");
-			graphspeicherdiv.classList.add("fa-toggle-on");
 		} else {
 			hidespeicher = "Speicherleistung";
 			boolDisplaySpeicher = true;
-			document.getElementById("graphspeicherdiv").setAttribute("style", "color: red;");
-			graphspeicherdiv.classList.remove("fa-toggle-on");
-			graphspeicherdiv.classList.add("fa-toggle-off");
-
 		}
 		checkgraphload();
 	}
@@ -179,16 +123,9 @@ function processGraphMessages(mqttmsg, mqttpayload) {
 		if ( mqttpayload == 1) {
 			hidespeichersoc = "foo";
 			boolDisplaySpeicherSoc = false;
-			document.getElementById("graphspeichersocdiv").setAttribute("style", "color: green;");
-			graphspeichersocdiv.classList.remove("fa-toggle-off");
-			graphspeichersocdiv.classList.add("fa-toggle-on");
 		} else {
 			hidespeichersoc = "Speicher SoC";
 			boolDisplaySpeicherSoc = true;
-			document.getElementById("graphspeichersocdiv").setAttribute("style", "color: red;");
-			graphspeichersocdiv.classList.remove("fa-toggle-on");
-			graphspeichersocdiv.classList.add("fa-toggle-off");
-
 		}
 		checkgraphload();
 	}
@@ -201,16 +138,10 @@ function processGraphMessages(mqttmsg, mqttpayload) {
 			$("#socenabledlp"+index).show();
 			window["boolDisplayLp"+index+"Soc"] = false;
 			window["hidelp"+index+"soc"] = "foo";
-			document.getElementById("graphlp"+index+"socdiv").setAttribute("style", "color: green;");
-			window["graphlp"+index+"socdiv"].classList.remove("fa-toggle-off");
-			window["graphlp"+index+"socdiv"].classList.add("fa-toggle-on");
 		} else {
 			$("#socenabledlp"+index).hide();
 			window["boolDisplayLp"+index+"Soc"] = true;
 			window["hidelp"+index+"soc"] = "LP"+index+" SoC";
-			document.getElementById("graphlp"+index+"socdiv").setAttribute("style", "color: red;");
-			window["graphlp"+index+"socdiv"].classList.remove("fa-toggle-on");
-			window["graphlp"+index+"socdiv"].classList.add("fa-toggle-off");
 		}
 		checkgraphload();
 	}
@@ -223,15 +154,9 @@ function processGraphMessages(mqttmsg, mqttpayload) {
 		if ( mqttpayload == 1) {
 			window["hideload"+index] = "foo";
 			window["boolDisplayLoad"+index] = false;
-			document.getElementById("graphload"+index+"div").setAttribute("style", "color: green;");
-			window["graphload"+index+"div"].classList.remove("fa-toggle-off");
-			window["graphload"+index+"div"].classList.add("fa-toggle-on");
 		} else {
 			window["hideload"+index] = "Verbraucher " + index;
 			window["boolDisplayLoad"+index] = true;
-			document.getElementById("graphload"+index+"div").setAttribute("style", "color: red;");
-			window["graphload"+index+"div"].classList.remove("fa-toggle-on");
-			window["graphload"+index+"div"].classList.add("fa-toggle-off");
 		}
 		checkgraphload();
 	}
@@ -249,52 +174,7 @@ function processGraphMessages(mqttmsg, mqttpayload) {
 	}
 	else if ( mqttmsg == "openWB/graph/lastlivevalues" ) {
 		if ( initialread > 0) {
-			var lines = mqttpayload.split("\n");
-			for (var i = 0; i < lines.length; i++) {
-				var ldate = lines[i].split(",")[0];
-				var lbezug = lines[i].split(",")[1];
-				var lpv = lines[i].split(",")[3];
-				var llp2 = lines[i].split(",")[5];
-				var lspeicherl = lines[i].split(",")[7];
-				var lsoc = lines[i].split(",")[9];
-				var lspeichersoc = lines[i].split(",")[8];
-				var lpa = lines[i].split(",")[2];
-				var llp1 = lines[i].split(",")[4];
-				var lsoc1 = lines[i].split(",")[10];
-				var lhausverbrauch = lines[i].split(",")[11];
-				var lverbraucher1 = lines[i].split(",")[12];
-				var lverbraucher2 = lines[i].split(",")[13];
-				var lp3 = lines[i].split(",")[14];
-				var lp4 = lines[i].split(",")[15];
-				var lp5 = lines[i].split(",")[16];
-				var lp6 = lines[i].split(",")[17];
-				var lp7 = lines[i].split(",")[18];
-				var lp8 = lines[i].split(",")[19];
-			}
-			myLine.data.labels.push(ldate.substring(0, ldate.length -3));
-			myLine.data.datasets[2].data.push(lbezug / 1000);
-			myLine.data.datasets[3].data.push(lpv / 1000);
-			myLine.data.datasets[4].data.push(lspeicherl / 1000);
-			myLine.data.datasets[5].data.push(lspeichersoc);
-			myLine.data.datasets[6].data.push(lsoc);
-			myLine.data.datasets[0].data.push(llp1 / 1000);
-			myLine.data.datasets[1].data.push(llp2 / 1000);
-			myLine.data.datasets[7].data.push(lsoc1);
-			myLine.data.datasets[8].data.push(lhausverbrauch / 1000);
-			myLine.data.datasets[9].data.push(lverbraucher1 / 1000);
-			myLine.data.datasets[10].data.push(lverbraucher2 / 1000);
-			myLine.data.datasets[11].data.push(lpa / 1000);
-			myLine.data.datasets[12].data.push(lp3 / 1000);
-			myLine.data.datasets[13].data.push(lp4 / 1000);
-			myLine.data.datasets[14].data.push(lp5 / 1000);
-			myLine.data.datasets[15].data.push(lp6 / 1000);
-			myLine.data.datasets[16].data.push(lp7 / 1000);
-			myLine.data.datasets[17].data.push(lp8 / 1000);
-			myLine.data.labels.splice(0, 1);
-			myLine.data.datasets.forEach(function(dataset) {
-				dataset.data.splice(0, 1);
-			});
-			myLine.update();
+			updateGraph(mqttpayload);
 		}
 	}
 }  // end processGraphMessages
@@ -323,7 +203,7 @@ function processEvuMessages(mqttmsg, mqttpayload) {
 				powerEvu += " W Einspeisung";
 			}
     	}
-	    $("#bezugdiv").text(powerEvu);
+	    $("#bezug").text(powerEvu);
 	 }
 }
 
@@ -340,28 +220,39 @@ function processGlobalMessages(mqttmsg, mqttpayload) {
 		} else {
 			powerHouse += " W";
 		}
-		$("#hausverbrauchdiv").text(powerHouse);
+		$("#hausverbrauch").text(powerHouse);
 	}
 	else if ( mqttmsg == "openWB/global/WAllChargePoints") {
-		var powerAllLp = parseInt(mqttpayload, 10);
-		if ( isNaN(powerAllLp) ) {
-			powerAllLp = 0;
+		var isAnyEvPlugged = false;
+		// show charging power only if ev is/are plugged
+		for ( index = 1; index <= 8; index++) {
+			if ( $("#plugstatlp" + index).is(':visible') ) {
+				isAnyEvPlugged = true;
+				break;
+			}
 		}
-		if (powerAllLp > 999) {
-			powerAllLp = (powerAllLp / 1000).toFixed(2) + " kW";
+		if ( isAnyEvPlugged ) {
+			var powerAllLp = parseInt(mqttpayload, 10);
+			if ( isNaN(powerAllLp) ) {
+				powerAllLp = 0;
+			}
+			if (powerAllLp > 999) {
+				powerAllLp = (powerAllLp / 1000).toFixed(2) + " kW";
+			} else {
+				powerAllLp += " W";
+			}
 		} else {
-			powerAllLp += " W";
+			var powerAllLp = "0 W";
 		}
-		$("#powerAllLpspan").text(powerAllLp);
+		$("#powerAllLp").text(powerAllLp);
 	}
 	else if ( mqttmsg == "openWB/global/strLastmanagementActive" ) {
-		$("#lastregelungaktivdiv").text(mqttpayload);
 		if ( mqttpayload.length >= 5 ) {
-			// if there is info-text in payload for topic, show the div
-			$("#lastregelungaktivdiv").show();
+			// if there is info-text in payload for topic, show the text
+			$("#lastregelungaktiv").text(mqttpayload);
 		} else {
-			// if there is no text, hide the div
-			$("#lastregelungaktivdiv").hide();
+			// if there is no text, show nothing (hides row)
+			$("#lastregelungaktiv").text("");
 		}
 	}
 	else if ( mqttmsg == "openWB/global/awattar/pricelist" ) {
@@ -386,62 +277,43 @@ function processGlobalMessages(mqttmsg, mqttpayload) {
 		switch (mqttpayload) {
 			case "0":
 				// mode sofort
-				$("#targetChargingProgressDiv").show();
-				$("#sofortladenEinstellungenDiv").show();
-				$("#sofortBtn").addClass("btn-green").removeClass("btn-red");
-				$("#minUndPvBtn").addClass("btn-red").removeClass("btn-green");
-				$("#pvBtn").addClass("btn-red").removeClass("btn-green");
-				$("#stopBtn").addClass("btn-red").removeClass("btn-green");
-				$("#standbyBtn").addClass("btn-red").removeClass("btn-green");
-				$("#vorrangButtonDiv").hide();
+				$("#chargeModeSelect").text(">> Sofortladen <<");
+				$(".chargeModeBtn").removeClass("btn-green");
+				$("#chargeModeSofortBtn").addClass("btn-green");
+				$("#targetChargingProgress").show();
+				$("#sofortladenEinstellungen").show();
 				break;
 			case "1":
 				// mode min+pv
-				$("#targetChargingProgressDiv").hide();
-				$("#sofortladenEinstellungenDiv").hide();
-				$("#sofortBtn").addClass("btn-red").removeClass("btn-green");
-				$("#minUndPvBtn").addClass("btn-green").removeClass("btn-red");
-				$("#pvBtn").addClass("btn-red").removeClass("btn-green");
-				$("#stopBtn").addClass("btn-red").removeClass("btn-green");
-				$("#standbyBtn").addClass("btn-red").removeClass("btn-green");
-				$("#vorrangButtonDiv").hide();
+				$("#chargeModeSelect").text(">> Min+PV-Laden <<");
+				$(".chargeModeBtn").removeClass("btn-green");
+				$("#chargeModeMinPVBtn").addClass("btn-green");
+				$("#targetChargingProgress").hide();
+				$("#sofortladenEinstellungen").hide();
 				break;
 			case "2":
 				// mode pv
-				$("#targetChargingProgressDiv").hide();
-				$("#sofortladenEinstellungenDiv").hide();
-				$("#sofortBtn").addClass("btn-red").removeClass("btn-green");
-				$("#minUndPvBtn").addClass("btn-red").removeClass("btn-green");
-				$("#pvBtn").addClass("btn-green").removeClass("btn-red");
-				$("#stopBtn").addClass("btn-red").removeClass("btn-green");
-				$("#standbyBtn").addClass("btn-red").removeClass("btn-green");
-				if ( $("#vorrangButtonDiv").attr("value") == "1" ) {
-					$("#vorrangButtonDiv").show();
-				} else {
-					$("#vorrangButtonDiv").hide();
-				}
+				$("#chargeModeSelect").text(">> PV-Laden <<");
+				$(".chargeModeBtn").removeClass("btn-green");
+				$("#chargeModePVBtn").addClass("btn-green");
+				$("#targetChargingProgress").hide();
+				$("#sofortladenEinstellungen").hide();
 				break;
 			case "3":
 				// mode stop
-				$("#targetChargingProgressDiv").hide();
-				$("#sofortladenEinstellungenDiv").hide();
-				$("#sofortBtn").addClass("btn-red").removeClass("btn-green");
-				$("#minUndPvBtn").addClass("btn-red").removeClass("btn-green");
-				$("#pvBtn").addClass("btn-red").removeClass("btn-green");
-				$("#stopBtn").addClass("btn-green").removeClass("btn-red");
-				$("#standbyBtn").addClass("btn-red").removeClass("btn-green");
-				$("#vorrangButtonDiv").hide();
+				$("#chargeModeSelect").text(">> Stop <<");
+				$(".chargeModeBtn").removeClass("btn-green");
+				$("#chargeModeStopBtn").addClass("btn-green");
+				$("#targetChargingProgress").hide();
+				$("#sofortladenEinstellungen").hide();
 				break;
 			case "4":
 				// mode standby
-				$("#targetChargingProgressDiv").hide();
-				$("#sofortladenEinstellungenDiv").hide();
-				$("#sofortBtn").addClass("btn-red").removeClass("btn-green");
-				$("#minUndPvBtn").addClass("btn-red").removeClass("btn-green");
-				$("#pvBtn").addClass("btn-red").removeClass("btn-green");
-				$("#stopBtn").addClass("btn-red").removeClass("btn-green");
-				$("#standbyBtn").addClass("btn-green").removeClass("btn-red");
-				$("#vorrangButtonDiv").hide();
+				$("#chargeModeSelect").text(">> Standby <<");
+				$(".chargeModeBtn").removeClass("btn-green");
+				$("#chargeModeStdbyBtn").addClass("btn-green");
+				$("#targetChargingProgress").hide();
+				$("#sofortladenEinstellungen").hide();
 		}
 	}
 }
@@ -473,7 +345,7 @@ function processHousebatteryMessages(mqttmsg, mqttpayload) {
 				speicherwatt = speicherwatt + " W Entladung";
 			}
 		}
-		$("#speicherleistungdiv").text(speicherwatt);
+		$("#speicherleistung").text(speicherwatt);
 	}
 	else if ( mqttmsg == "openWB/housebattery/%Soc" ) {
 		var speicherSoc = parseInt(mqttpayload, 10);
@@ -481,12 +353,12 @@ function processHousebatteryMessages(mqttmsg, mqttpayload) {
 			speicherSoc = 0;
 		}
 		speichersoc = ", " + speicherSoc + " % SoC";
-		$("#speichersocdiv").text(speichersoc);
+		$("#speichersoc").text(speichersoc);
 	}
 	else if ( mqttmsg == "openWB/housebattery/boolHouseBatteryConfigured" ) {
 		if ( mqttpayload == 1 ) {
 			// if housebattery is configured, show div
-			$("#speicherdiv").show();
+			$("#speicher").show();
 		}
 	}
 }
@@ -508,8 +380,8 @@ function processSystemMessages(mqttmsg, mqttpayload) {
 			var dayOfWeek = dateObject.toLocaleDateString('de-DE', { weekday: 'short'});
 			date = dayOfWeek + ", " + dd + "." + mm + "." + dateObject.getFullYear();
 		}
-		$("#timeSpan").text(time);
-		$("#dateSpan").text(date);
+		$("#time").text(time);
+		$("#date").text(date);
 	}
 }
 
@@ -532,19 +404,15 @@ function processPvMessages(mqttmsg, mqttpayload) {
 				pvwatt += " W";
 			}
 		}
-		$("#pvdiv").text(pvwatt);
+		$("#pvleistung").text(pvwatt);
 	}
 	else if ( mqttmsg == "openWB/pv/DailyYieldKwh") {
 		var pvDailyYield = parseFloat(mqttpayload);
 		if ( isNaN(pvDailyYield) ) {
 			pvDailyYield = 0;
 		}
-		var pvDailyYieldStr = "";
-		if ( pvDailyYield > 0 ) {
-			// display only if > 0
-			pvDailyYieldStr = " (" + pvDailyYield.toFixed(2) + " kWh)";
-		}
-		$("#pvdailyyielddiv").text(pvDailyYieldStr);
+		var pvDailyYieldStr = " (" + pvDailyYield.toFixed(2) + " kWh)";
+		$("#pvdailyyield").text(pvDailyYieldStr);
 	}
 }
 
@@ -567,13 +435,9 @@ function processLpMessages(mqttmsg, mqttpayload) {
 		// search is case insensitive
 		var index = mqttmsg.match(/\d/g)[0];  // extract first match = number from mqttmsg
 		if ( mqttpayload == 0 ) {
-			$("#nameLp" + index).css("color", "#A30000");
-			$("#nameLp" + index).css("text-decoration", "line-through");
-			$("#lpEnableSpanLp" + index).attr("isEnabled", "0");
+			$("#nameLp" + index).removeClass("lpEnabledStyle").addClass("lpDisabledStyle");
 		} else {
-			$("#nameLp" + index).css("color", "#006515");
-			$("#nameLp" + index).css("text-decoration", "none");
-			$("#lpEnableSpanLp" + index).attr("isEnabled", "1");
+			$("#nameLp" + index).removeClass("lpDisabledStyle").addClass("lpEnabledStyle");
 		}
 	}
 	else if ( mqttmsg.match( /^openwb\/lp\/[1-9][0-9]*\/autolockconfigured$/i ) ) {
@@ -583,10 +447,10 @@ function processLpMessages(mqttmsg, mqttpayload) {
 		var index = mqttmsg.match(/\d/g)[0];  // extract first match = number from mqttmsg
 		if ( mqttpayload == 0 ) {
 			// hide icon
-			$("#lp" + index + "AutolockConfiguredSpan").hide();
+			$("#lp" + index + "AutolockConfigured").hide();
 		} else {
 			// show icon
-			$("#lp" + index + "AutolockConfiguredSpan").show();
+			$("#lp" + index + "AutolockConfigured").show();
 		}
 	}
 	else if ( mqttmsg.match( /^openwb\/lp\/[1-9][0-9]*\/autolockstatus$/i ) ) {
@@ -600,27 +464,27 @@ function processLpMessages(mqttmsg, mqttpayload) {
 		// 3 = auto-unlock performed
 
 		var index = mqttmsg.match(/\d/g)[0];  // extract first match = number from mqttmsg
-		var element = "#lp" + index + "AutolockConfiguredSpan";  // element to manipulate
+		var element = "#lp" + index + "AutolockConfigured";  // element to manipulate
 		switch ( mqttpayload ) {
 			case "0":
 				// remove animation from span and set standard colored key icon
-				$(element).removeClass("fa-lock fa-lock-open animate-alertPulsation text-danger text-success");
+				$(element).removeClass("fa-lock fa-lock-open animate-alertPulsation text-red text-green");
 				$(element).addClass("fa-key");
 				break;
 			case "1":
 				// add animation to standard icon
-				$(element).removeClass("fa-lock fa-lock-open text-danger text-success");
+				$(element).removeClass("fa-lock fa-lock-open text-red text-green");
 				$(element).addClass("fa-key animate-alertPulsation");
 				break;
 			case "2":
 				// add red locked icon
-				$(element).removeClass("fa-lock-open fa-key animate-alertPulsation text-success");
-				$(element).addClass("fa-lock text-danger");
+				$(element).removeClass("fa-lock-open fa-key animate-alertPulsation text-green");
+				$(element).addClass("fa-lock text-red");
 				break;
 			case "3":
 				// add green unlock icon
-				$(element).removeClass("fa-lock fa-key animate-alertPulsation text-danger");
-				$(element).addClass("fa-lock-open text-success");
+				$(element).removeClass("fa-lock fa-key animate-alertPulsation text-red");
+				$(element).addClass("fa-lock-open text-green");
 				break;
 		}
 	}
@@ -630,9 +494,9 @@ function processLpMessages(mqttmsg, mqttpayload) {
 		// search is case insensitive
 		var index = mqttmsg.match(/\d/g)[0];  // extract first match = number from mqttmsg
 		if ( mqttpayload == 1 ) {
-			$("#nachtladenaktivlp" + index + "div").show();
+			$("#nachtladenaktivlp" + index).show();
 		} else {
-			$("#nachtladenaktivlp" + index + "div").hide();
+			$("#nachtladenaktivlp" + index).hide();
 		}
 	}
 	else if ( mqttmsg.match( /^openwb\/lp\/[1-9][0-9]*\/kWhactualcharged$/i ) ) {
@@ -644,7 +508,7 @@ function processLpMessages(mqttmsg, mqttpayload) {
 		if ( isNaN(energyCharged) ) {
 			energyCharged = 0;
 		}
-		$("#aktgeladen" + index + "div").text(energyCharged+" kWh");
+		$("#aktgeladen" + index).text(energyCharged+" kWh");
 		$("prog" + index).val(energyCharged);
 	}
 	else if ( mqttmsg.match( /^openwb\/lp\/[1-9][0-9]*\/w$/i ) ) {
@@ -653,41 +517,59 @@ function processLpMessages(mqttmsg, mqttpayload) {
 		// where # is an integer > 0
 		// search is case insensitive
 		var index = mqttmsg.match(/\d/g)[0];  // extract first match = number from mqttmsg
-		var actualPower = parseInt(mqttpayload, 10);
-		if ( isNaN(actualPower) ) {
-			actualPower = 0;
-		}
-		if (actualPower > 999) {
-			actualPower = (actualPower / 1000).toFixed(2);
-			actualPower += " kW";
+		if ( $("#plugstatlp" + index).is(':visible') ) {
+			// only show value if ev is plugged in
+			var actualPower = parseInt(mqttpayload, 10);
+			if ( isNaN(actualPower) ) {
+				actualPower = 0;
+			}
+			if (actualPower > 999) {
+				actualPower = (actualPower / 1000).toFixed(2);
+				actualPower += " kW";
+			} else {
+				actualPower += " W";
+			}
 		} else {
-			actualPower += " W";
+			var actualPower = "0 W"
 		}
-		$("#actualPowerLp" + index + "span").text(actualPower);
+		$("#actualPowerLp" + index).text(actualPower);
 	}
 	else if ( mqttmsg.match( /^openwb\/lp\/[1-9][0-9]*\/kWhchargedsinceplugged$/i ) ) {
 		// energy charged since ev was plugged in
-		// matches to all messages containing "openwb/lp/#/kWhchargedsinceplugged"
-		// where # is an integer > 0
-		// search is case insensitive
+		// also calculates and displays km charged
 		var index = mqttmsg.match(/\d/g)[0];  // extract first match = number from mqttmsg
-		var energyCharged = parseFloat(mqttpayload, 10).toFixed(2);
+		var energyCharged = parseFloat(mqttpayload, 10);
 		if ( isNaN(energyCharged) ) {
 			energyCharged = 0;
 		}
-		$("#energyChargedLp" + index + "span").text(energyCharged + " kWh");
-	}
-	else if ( mqttmsg.match( /^openwb\/lp\/[1-9][0-9]*\/kmcharged$/i ) ) {
-		// km charged at current charging segment
-		// matches to all messages containing "openwb/lp/#/timeremaining"
-		// where # is an integer > 0
-		// search is case insensitive
-		var index = mqttmsg.match(/\d/g)[0];  // extract first match = number from mqttmsg
-		var kmCharged = parseInt(mqttpayload, 10);
-		if ( isNaN(kmCharged) ) {
-			kmCharged = 0;
+		$("#energyChargedLp" + index).text(energyCharged.toFixed(1) + " kWh");
+		var consumption = $("#kmChargedLp" + index).attr("consumption");
+		var kmCharged = "";
+		if ( !isNaN(consumption) && consumption > 0 ) {
+			kmCharged = (energyCharged / consumption) * 100;
+			kmCharged = " / " + kmCharged.toFixed(1) + " km";
 		}
-		$("#gelrlp" + index + "div").text(kmCharged + " km");
+		$("#kmChargedLp" + index).text(kmCharged);
+	}
+	else if ( mqttmsg.match( /^openwb\/lp\/[1-9][0-9]*\/energyconsumptionper100km$/i ) ) {
+		// store configured value in element attribute
+		// to calculate charged km upon receipt of charged energy
+		var index = mqttmsg.match(/\d/g)[0];  // extract first match = number from mqttmsg
+		var consumption = parseFloat(mqttpayload);
+		if ( isNaN(consumption) ) {
+			consumption = 0;
+		}
+		$("#kmChargedLp" + index).attr("consumption", consumption);
+
+		// if already energyCharged-displayed, update kmCharged
+		var energyCharged = parseFloat($("#energyChargedLp" + index).text());
+		var kmCharged = "";
+		if ( !isNaN(energyCharged) && consumption > 0 ) {
+			kmCharged = (energyCharged / consumption) * 100;
+			kmCharged = " / " + kmCharged.toFixed(1) + " km";
+		}
+		$("#kmChargedLp" + index).text(kmCharged);
+
 	}
 	else if ( mqttmsg.match( /^openwb\/lp\/[1-9][0-9]*\/timeremaining$/i ) ) {
 		// time remaining for charging to target value
@@ -695,19 +577,7 @@ function processLpMessages(mqttmsg, mqttpayload) {
 		// where # is an integer > 0
 		// search is case insensitive
 		var index = mqttmsg.match(/\d/g)[0];  // extract first match = number from mqttmsg
-		$("#restzeitlp" + index + "div").text(mqttpayload);
-	}
-	else if ( mqttmsg.match( /^openwb\/lp\/[1-9][0-9]*\/aconfigured$/i ) ) {
-		// target current value at charge point
-		// matches to all messages containing "openwb/lp/#/aconfigured"
-		// where # is an integer > 0
-		// search is case insensitive
-		var index = mqttmsg.match(/\d/g)[0];  // extract first match = number from mqttmsg
-		var current = parseInt(mqttpayload, 10);
-		if ( isNaN(current) ) {
-			current = 0;
-		}
-		$("#targetCurrentLp" + index + "span").text(" / " + current + " A");
+		$("#restzeitlp" + index).text(mqttpayload);
 	}
 	else if ( mqttmsg.match( /^openwb\/lp\/[1-9][0-9]*\/boolplugstat$/i ) ) {
 		// matches to all messages containing "openwb/lp/#/boolplugstat"
@@ -715,32 +585,9 @@ function processLpMessages(mqttmsg, mqttpayload) {
 		// search is case insensitive
 		var index = mqttmsg.match(/\d/g)[0];  // extract first match = number from mqttmsg
 		if ( mqttpayload == 1 ) {
-			$("#plugstatlp" + index + "div").show();
-			$("#actualPowerLp" + index + "span").show();
-			$("#targetCurrentLp" + index + "span").show();
-			$("#actualPowerTargetCurrentUnpluggedLp" + index + "span").hide();
+			$("#plugstatlp" + index).show();
 		} else {
-			$("#plugstatlp" + index + "div").css("color", "white").hide();
-			$("#actualPowerLp" + index + "span").hide();
-			$("#targetCurrentLp" + index + "span").hide();
-			$("#actualPowerTargetCurrentUnpluggedLp" + index + "span").text("- / -");
-			$("#actualPowerTargetCurrentUnpluggedLp" + index + "span").show();
-			var isAnyEvPlugged = false;
-			// show total values only if ev is/are plugged
-			for ( index = 1; index <= 8; index++) {
-				if ( $("#plugstatlp" + index + "div").is(':visible') ) {
-					isAnyEvPlugged = true;
-					break;
-				}
-			}
-			if ( isAnyEvPlugged ) {
-				$("#powerAllLpspan").show();
-				$("#powerAllLpInactivespan").hide();
-			} else {
-				$("#powerAllLpspan").hide();
-				$("#powerAllLpInactivespan").text("-");
-				$("#powerAllLpInactivespan").show();
-			}
+			$("#plugstatlp" + index).addClass("text-white").hide();
 		}
 	}
 	else if ( mqttmsg.match( /^openwb\/lp\/[1-9][0-9]*\/boolchargestat$/i ) ) {
@@ -749,11 +596,11 @@ function processLpMessages(mqttmsg, mqttpayload) {
 		// search is case insensitive
 		var index = mqttmsg.match(/\d/g)[0];  // extract first match = number from mqttmsg
 		if ( mqttpayload == 1 ) {
-			$("#plugstatlp" + index + "div:visible").css("color", "green");
-			$("#socstatlp" + index).css("color", "green");
+			$("#plugstatlp" + index + ":visible").removeClass("text-white").addClass("text-green");
+			$("#socstatlp" + index).removeClass("text-black").addClass("text-green");
 		} else {
-			$("#plugstatlp" + index + "div:visible").css("color", "white");
-			$("#socstatlp" + index).css("color", "black");
+			$("#plugstatlp" + index + ":visible").removeClass("text-green").addClass("text-white");
+			$("#socstatlp" + index).removeClass("text-green").addClass("text-black");
 		}
 	}
 	else if ( mqttmsg.match( /^openwb\/lp\/[1-9][0-9]*\/\%soc$/i ) ) {
@@ -776,9 +623,9 @@ function processLpMessages(mqttmsg, mqttpayload) {
 		var index = mqttmsg.match(/\d/g)[0];  // extract first match = number from mqttmsg
 		if ($("#stationlp" + index).length > 0) {
 			if (mqttpayload == 1) {
-				$("#stationlp" + index).css("color", "green");
+				$("#stationlp" + index).removeClass("text-blue").addClass("text-green");
 			} else {
-				$("#stationlp" + index).css("color", "blue");
+				$("#stationlp" + index).removeClass("text-green").addClass("text-blue");
 			}
 		}
 	}
@@ -814,8 +661,8 @@ function processLpMessages(mqttmsg, mqttpayload) {
 		var index = mqttmsg.match(/\d/g)[0];  // extract first match = number from mqttmsg
 		// change visibility of div
 		if (mqttpayload == 1) {
-			$("#socNotConfiguredLp" + index + "div").hide();
-			$("#socConfiguredLp" + index + "div").show();
+			$("#socNotConfiguredLp" + index).hide();
+			$("#socConfiguredLp" + index).show();
 		}
 	}
 }

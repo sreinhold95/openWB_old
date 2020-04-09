@@ -83,8 +83,10 @@ client.onMessageArrived = function (message) {
 var retries = 0;
 
 //Connect Options
+var isSSL = location.protocol == 'https:';
 var options = {
 	timeout: 5,
+	useSSL: isSSL,
 	//Gets Called if the connection has sucessfully been established
 	onSuccess: function () {
 		retries = 0;
@@ -547,7 +549,7 @@ function loadgraph() {
 			lineTension: 0.2,
             toolTipData: getCol(lpCounterValues, 16)  // custom added field, holds counter values or empty string
 		} , {
-			label: 'Speicher in ' + totalValues[17].toFixed(2) + ' kWh',
+			label: 'Speicherladung ' + totalValues[17].toFixed(2) + ' kWh',
 			borderColor: 'orange',
 			backgroundColor: "rgba(200, 255, 13, 0.3)",
 			fill: true,
@@ -557,7 +559,7 @@ function loadgraph() {
 			lineTension: 0.2,
             toolTipData: getCol(lpCounterValues, 17)  // custom added field, holds counter values or empty string
 		} , {
-			label: 'Speicher out ' + totalValues[18].toFixed(2) + ' kWh',
+			label: 'Speicherentladung ' + totalValues[18].toFixed(2) + ' kWh',
 			borderColor: 'orange',
 			backgroundColor: "rgba(255, 155, 13, 0.3)",
 			fill: true,
@@ -625,6 +627,39 @@ function loadgraph() {
 			   			return xLabel + counter + yLabel;
                     }
 				}
+			},
+			plugins: {
+			    zoom: {
+					// Container for pan options
+					pan: {
+					    // Boolean to enable panning
+					    enabled: true,
+
+					    // Panning directions. Remove the appropriate direction to disable
+					    // Eg. 'y' would only allow panning in the y direction
+					    mode: 'x',
+					    rangeMin: {
+						    x: null
+					    },
+					    rangeMax: {
+						    x: null
+					    },
+					    speed: 1000
+					},
+
+					// Container for zoom options
+					zoom: {
+					    // Boolean to enable zooming
+					    enabled: true,
+
+					    // Zooming directions. Remove the appropriate direction to disable
+					    // Eg. 'y' would only allow zooming in the y direction
+					    mode: 'x',
+
+					    sensitivity: 0.01
+
+					}
+				    }
 			},
 			responsive: true,
 			maintainAspectRatio: false,

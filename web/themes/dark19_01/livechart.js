@@ -39,6 +39,7 @@ var all6p;
 var all7p;
 var all8p;
 var hidehaus;
+var myLine;
 
 function loadgraph() {
 	var lineChartData = {
@@ -50,6 +51,7 @@ function loadgraph() {
 			borderWidth: 2,
 			hidden: boolDisplayLp1,
 			fill: false,
+			lineTension: 0.2,
 			data: alp1,
 			yAxisID: 'y-axis-1'
 		} , {
@@ -59,14 +61,16 @@ function loadgraph() {
 			borderWidth: 2,
 			hidden: boolDisplayLp2,
 			fill: false,
+			lineTension: 0.2,
 			data: alp2,
 			yAxisID: 'y-axis-1'
 		} , {
-			label: 'Bezug',
+			label: 'EVU',
 			borderColor: "rgba(255, 0, 0, 0.7)",
 			backgroundColor: "rgba(255, 10, 13, 0.3)",
 			borderWidth: 1,
 			fill: true,
+			lineTension: 0.2,
 			data: abezug,
 			hidden: boolDisplayEvu,
 			yAxisID: 'y-axis-1'
@@ -75,15 +79,17 @@ function loadgraph() {
 			borderColor: 'green',
 			backgroundColor: "rgba(10, 255, 13, 0.3)",
 			fill: true,
+			lineTension: 0.2,
 			hidden: boolDisplayPv,
 			borderWidth: 1,
 			data: apv,
 			yAxisID: 'y-axis-1'
 		}  , {
-			label: 'Speicherleistung',
+			label: 'Speicher',
 			borderColor: 'orange',
 			backgroundColor: "rgba(200, 255, 13, 0.3)",
 			fill: true,
+			lineTension: 0.2,
 			borderWidth: 1,
 			data: aspeicherl,
 			hidden: boolDisplaySpeicher,
@@ -95,6 +101,7 @@ function loadgraph() {
 			borderDash: [10,5],
 			hidden: boolDisplaySpeicherSoc,
 			fill: false,
+			lineTension: 0.2,
 			borderWidth: 2,
 			data: aspeichersoc,
 			yAxisID: 'y-axis-2'
@@ -105,6 +112,7 @@ function loadgraph() {
 			borderWidth: 2,
 			hidden: boolDisplayLp1Soc,
 			fill: false,
+			lineTension: 0.2,
 			data: asoc,
 			yAxisID: 'y-axis-2'
 		} , {
@@ -112,6 +120,7 @@ function loadgraph() {
 			borderColor: "rgba(50, 50, 55, 0.5)",
 			borderDash: [10,5],
 			fill: false,
+			lineTension: 0.2,
 			borderWidth: 2,
 			hidden: boolDisplayLp2Soc,
 			data: asoc1,
@@ -121,6 +130,7 @@ function loadgraph() {
 			borderColor: "rgba(255,255,204,0.7)",
 			backgroundColor: "rgba(200, 255, 13, 0.3)",
 			fill: false,
+			lineTension: 0.2,
 			borderWidth: 2,
 			hidden: boolDisplayHouseConsumption,
 			data: ahausverbrauch,
@@ -130,6 +140,7 @@ function loadgraph() {
 			borderColor: "rgba(0, 150, 150, 0.7)",
 			backgroundColor: "rgba(200, 255, 13, 0.3)",
 			fill: false,
+			lineTension: 0.2,
 			borderWidth: 2,
 			hidden: boolDisplayLoad1,
 			data: averbraucher1,
@@ -139,6 +150,7 @@ function loadgraph() {
 			borderColor: "rgba(150, 150, 0, 0.7)",
 			backgroundColor: "rgba(200, 255, 13, 0.3)",
 			fill: false,
+			lineTension: 0.2,
 			borderWidth: 2,
 			data: averbraucher2,
 			hidden: boolDisplayLoad2,
@@ -148,6 +160,7 @@ function loadgraph() {
 			borderColor: "rgba(50, 50, 55, 0.1)",
 			backgroundColor: "rgba(0, 0, 255, 0.1)",
 			fill: true,
+			lineTension: 0.2,
 			borderWidth: 2,
 			data: alpa,
 			hidden: boolDisplayLpAll,
@@ -157,6 +170,7 @@ function loadgraph() {
 			borderColor: "rgba(50, 50, 55, 0.7)",
 			backgroundColor: 'blue',
 			fill: false,
+			lineTension: 0.2,
 			borderWidth: 2,
 			data: alp3,
 			yAxisID: 'y-axis-1',
@@ -166,6 +180,7 @@ function loadgraph() {
 			borderColor: "rgba(50, 50, 55, 0.7)",
 			backgroundColor: 'blue',
 			fill: false,
+			lineTension: 0.2,
 			data: alp4,
 			borderWidth: 2,
 			yAxisID: 'y-axis-1',
@@ -175,6 +190,7 @@ function loadgraph() {
 			borderColor: "rgba(50, 50, 55, 0.7)",
 			backgroundColor: 'blue',
 			fill: false,
+			lineTension: 0.2,
 			borderWidth: 2,
 			data: alp5,
 			yAxisID: 'y-axis-1',
@@ -184,6 +200,7 @@ function loadgraph() {
 			borderColor: "rgba(50, 50, 55, 0.7)",
 			backgroundColor: 'blue',
 			fill: false,
+			lineTension: 0.2,
 			borderWidth: 2,
 			data: alp6,
 			yAxisID: 'y-axis-1',
@@ -193,6 +210,7 @@ function loadgraph() {
 			borderColor: "rgba(50, 50, 55, 0.7)",
 			backgroundColor: 'blue',
 			fill: false,
+			lineTension: 0.2,
 			borderWidth: 2,
 			data: alp7,
 			yAxisID: 'y-axis-1',
@@ -202,6 +220,7 @@ function loadgraph() {
 			borderColor: "rgba(50, 50, 55, 0.7)",
 			backgroundColor: 'blue',
 			fill: false,
+			lineTension: 0.2,
 			borderWidth: 2,
 			data: alp8,
 			yAxisID: 'y-axis-1',
@@ -292,6 +311,9 @@ function loadgraph() {
 			scales: {
 				xAxes: [
 					{
+						gridLines: {
+							color: "rgba(255, 255, 255, 0.1)"
+						},
          				ticks: {
 							fontColor: "rgba(255, 255, 255, 0.82)",
 							maxTicksLimit: 15
@@ -391,14 +413,54 @@ function putgraphtogether() {
 	}
 }  // end putgraphtogether
 
-
-$(window).focus(function() {
-    // if the browser window gets focus again after being blurred,
-    // check if mqtt segments for graph need to be subsribed again
-    if ( initialread == 0 ) {
-		subscribeMqttGraphSegments();
+function updateGraph(dataset) {
+	var lines = dataset.split("\n");
+	for (var i = 0; i < lines.length; i++) {
+		var ldate = lines[i].split(",")[0];
+		var lbezug = lines[i].split(",")[1];
+		var lpv = lines[i].split(",")[3];
+		var llp2 = lines[i].split(",")[5];
+		var lspeicherl = lines[i].split(",")[7];
+		var lsoc = lines[i].split(",")[9];
+		var lspeichersoc = lines[i].split(",")[8];
+		var lpa = lines[i].split(",")[2];
+		var llp1 = lines[i].split(",")[4];
+		var lsoc1 = lines[i].split(",")[10];
+		var lhausverbrauch = lines[i].split(",")[11];
+		var lverbraucher1 = lines[i].split(",")[12];
+		var lverbraucher2 = lines[i].split(",")[13];
+		var lp3 = lines[i].split(",")[14];
+		var lp4 = lines[i].split(",")[15];
+		var lp5 = lines[i].split(",")[16];
+		var lp6 = lines[i].split(",")[17];
+		var lp7 = lines[i].split(",")[18];
+		var lp8 = lines[i].split(",")[19];
 	}
-});
+	myLine.data.labels.push(ldate.substring(0, ldate.length -3));
+	myLine.data.datasets[2].data.push(lbezug / 1000);
+	myLine.data.datasets[3].data.push(lpv / 1000);
+	myLine.data.datasets[4].data.push(lspeicherl / 1000);
+	myLine.data.datasets[5].data.push(lspeichersoc);
+	myLine.data.datasets[6].data.push(lsoc);
+	myLine.data.datasets[0].data.push(llp1 / 1000);
+	myLine.data.datasets[1].data.push(llp2 / 1000);
+	myLine.data.datasets[7].data.push(lsoc1);
+	myLine.data.datasets[8].data.push(lhausverbrauch / 1000);
+	myLine.data.datasets[9].data.push(lverbraucher1 / 1000);
+	myLine.data.datasets[10].data.push(lverbraucher2 / 1000);
+	myLine.data.datasets[11].data.push(lpa / 1000);
+	myLine.data.datasets[12].data.push(lp3 / 1000);
+	myLine.data.datasets[13].data.push(lp4 / 1000);
+	myLine.data.datasets[14].data.push(lp5 / 1000);
+	myLine.data.datasets[15].data.push(lp6 / 1000);
+	myLine.data.datasets[16].data.push(lp7 / 1000);
+	myLine.data.datasets[17].data.push(lp8 / 1000);
+	myLine.data.labels.splice(0, 1);
+	myLine.data.datasets.forEach(function(dataset) {
+		dataset.data.splice(0, 1);
+	});
+	myLine.update();
+}
 
 function checkgraphload(){
 	if ( graphloaded == 1 ) {
