@@ -217,10 +217,10 @@
 				}
 
 				$(function getAllVersions() {
-					displayVersion("Stable", 'https://raw.githubusercontent.com/snaptec/openWB/stable17/web/version');
-					displayVersion("Stableold", 'https://raw.githubusercontent.com/snaptec/openWB/stable/web/version');
-					displayVersion("Beta", 'https://raw.githubusercontent.com/snaptec/openWB/beta/web/version');
-					displayVersion("Nightly", 'https://raw.githubusercontent.com/snaptec/openWB/master/web/version');
+					displayVersion("Stable", 'https://raw.githubusercontent.com/sreinhold95/openWB/stable17/web/version');
+					displayVersion("Stableold", 'https://raw.githubusercontent.com/sreinhold95/openWB/stable/web/version');
+					displayVersion("Beta", 'https://raw.githubusercontent.com/sreinhold95/openWB/beta/web/version');
+					displayVersion("Nightly", 'https://raw.githubusercontent.com/sreinhold95/openWB/master/web/version');
 				});
 
 				$.get("/openWB/web/version")
