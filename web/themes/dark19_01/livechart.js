@@ -136,9 +136,9 @@ function loadgraph() {
 			data: ahausverbrauch,
 			yAxisID: 'y-axis-1'
 		} , {
-			label: 'Verbraucher 1',
-			borderColor: "rgba(0, 150, 150, 0.7)",
-			backgroundColor: "rgba(200, 255, 13, 0.3)",
+			label: 'Wärmepumpe',
+			borderColor: "yellow",
+			backgroundColor: "yellow",
 			fill: false,
 			lineTension: 0.2,
 			borderWidth: 2,
