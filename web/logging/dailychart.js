@@ -474,18 +474,18 @@ function loadgraph() {
 			yAxisID: 'y-axis-1',
 			hidden: boolDisplayLp8
 		} , {
-			label: 'Verbraucher 1 I ' + overallload1i + ' kWh',
-			borderColor: "rgba(0, 150, 150, 0.7)",
-			backgroundColor: "rgba(200, 255, 13, 0.3)",
+			label: 'Wärmepumpe I ' + overallload1i + ' kWh',
+			borderColor: "yellow",
+			backgroundColor: "yellow",
 			fill: false,
 			borderWidth: 2,
 			hidden: boolDisplayLoad1,
 			data: averbraucher1i,
 			yAxisID: 'y-axis-1'
 		} , {
-			label: 'Verbraucher 1 E ' + overallload1e + ' kWh',
-			borderColor: "rgba(0, 150, 150, 0.7)",
-			backgroundColor: "rgba(200, 255, 13, 0.3)",
+			label: 'Wärmepumpe 1 E ' + overallload1e + ' kWh',
+			borderColor: "yellow",
+			backgroundColor: "yellow",
 			fill: false,
 			borderWidth: 2,
 			hidden: boolDisplayLoad1,
