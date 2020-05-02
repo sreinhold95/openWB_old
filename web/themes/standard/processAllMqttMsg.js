@@ -5,7 +5,9 @@
  * @author Michael Ortenstein
  */
 var awattartime = new Array();
+var lademodus;
 var nurpv70status;
+var nurpv70active = 0;
 var graphawattarprice;
 var doInterval;
 var do2Interval;
@@ -668,6 +670,7 @@ function processGlobalMessages(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 		document.getElementById("awattar1l").innerHTML = mqttpayload;
 	}
 	else if ( mqttmsg == "openWB/global/ChargeMode" ) {
+		lademodus = mqttpayload;
 		// set button colors depending on charge mode
 		switch (mqttpayload) {
 			case "0":
@@ -678,6 +681,7 @@ function processGlobalMessages(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 				$('#pvBtn').addClass("btn-red").removeClass("btn-green");
 				$('#stopBtn').addClass("btn-red").removeClass("btn-green");
 				$('#standbyBtn').addClass("btn-red").removeClass("btn-green");
+				$('#nurpv70div').hide();
 				break;
 			case "1":
 				// mode min+pv
@@ -687,6 +691,7 @@ function processGlobalMessages(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 				$('#pvBtn').addClass("btn-red").removeClass("btn-green");
 				$('#stopBtn').addClass("btn-red").removeClass("btn-green");
 				$('#standbyBtn').addClass("btn-red").removeClass("btn-green");
+				$('#nurpv70div').hide();
 				break;
 			case "2":
 				// mode pv
@@ -696,6 +701,10 @@ function processGlobalMessages(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 				$('#pvBtn').addClass("btn-green").removeClass("btn-red");
 				$('#stopBtn').addClass("btn-red").removeClass("btn-green");
 				$('#standbyBtn').addClass("btn-red").removeClass("btn-green");
+				if ( nurpv70active == 1 ) {
+					$('#nurpv70div').show();
+				}
+
 				break;
 			case "3":
 				// mode stop
@@ -705,6 +714,7 @@ function processGlobalMessages(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 				$('#pvBtn').addClass("btn-red").removeClass("btn-green");
 				$('#stopBtn').addClass("btn-green").removeClass("btn-red");
 				$('#standbyBtn').addClass("btn-red").removeClass("btn-green");
+				$('#nurpv70div').hide();
 				break;
 			case "4":
 				// mode standby
@@ -714,6 +724,8 @@ function processGlobalMessages(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 				$('#pvBtn').addClass("btn-red").removeClass("btn-green");
 				$('#stopBtn').addClass("btn-red").removeClass("btn-green");
 				$('#standbyBtn').addClass("btn-green").removeClass("btn-red");
+				$('#nurpv70div').hide();
+
 		}
 		loaddivs();
 	}
@@ -790,7 +802,10 @@ function processPvMessages(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 	}
 	if ( mqttmsg == "openWB/pv/bool70PVDynActive") {
 		if ( mqttpayload == 1 ) {
-			$('#nurpv70div').show();
+			nurpv70active = 1;
+			if ( lademodus == 2 ) {
+				$('#nurpv70div').show();
+			}	
 		}
 	}
 	if ( mqttmsg == "openWB/pv/bool70PVDynStatus") {
@@ -980,13 +995,23 @@ function processLpMessages(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
 		//console.log('mqttmsg-W: '+index+'   load='+mqttpayload);
 		$("#restzeitlp"+index+"div").html(mqttpayload);
 	}
+        else if ( mqttmsg.match( /^openwb\/lp\/[1-9][0-9]*\/countphasesinuse/i ) ) {
+                 var index = mqttmsg.match(/\d/g)[0];  // extract first match = number from mqttmsg
+                 var phasesInUse = parseInt(mqttpayload, 10);
+                 if ( isNaN(phasesInUse) || phasesInUse < 1 || phasesInUse > 3 ) {
+			$("#phasesInUse"+index+"div").html(" / ");
+                 } else {
+                         var phaseSymbols = ['&#x2460','&#x2461','&#x2462'];
+			$("#phasesInUse"+index+"div").html(" / " + phaseSymbols[ phasesInUse ] + " * ");
+                 }
+         }
 	else if ( mqttmsg.match( /^openwb\/lp\/[1-9][0-9]*\/aconfigured$/i ) ) {
 		// target current value at charge point
 		// matches to all messages containing "openwb/lp/#/aconfigured"
 		// where # is an integer > 0
 		// search is case insensitive
 		var index = mqttmsg.match(/\d/g)[0];  // extract first match = number from mqttmsg
-		var targetCurrent = " / " + parseInt(mqttpayload, 10) + " A";
+		var targetCurrent =  parseInt(mqttpayload, 10) + " A";
 		$("#targetCurrentLp"+index+"div").html(targetCurrent);
 	}
 	else if ( mqttmsg.match( /^openwb\/lp\/[1-9][0-9]*\/boolplugstat$/i ) ) {
@@ -1138,6 +1163,7 @@ var retries = 0;
 
 var isSSL = location.protocol == 'https:'
 //Connect Options
+var isSSL = location.protocol == 'https:'
 var options = {
 	timeout: 5,
 	useSSL: isSSL,

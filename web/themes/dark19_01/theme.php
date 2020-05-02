@@ -58,6 +58,31 @@
 
 <body>
 
+	<!-- Preloader with Progress Bar -->
+	<div class="loader bg-white">
+		<div class="loader-container regularTextSize">
+		  	<div class="row text-black">
+			  	<div class="mx-auto d-block justify-content-center">
+					<img src="img/favicons/preloader-image.png" style="max-width: 300px" alt="openWB">
+			  	</div>
+			</div>
+			<div class="row text-grey justify-content-center mt-2">
+				<div class="col-10 col-sm-6">
+					Bitte warten, während die Seite aufgebaut wird.
+				</div>
+			</div>
+			<div class="row justify-content-center mt-2">
+				<div class="col-10 col-sm-6">
+					<div class="progress active">
+						<div class="progress-bar progress-bar-success progress-bar-striped progress-bar-animated" id="preloaderbar" role="progressbar">
+						</div>
+					</div>
+				</div>
+  			</div>
+		</div>
+	</div>
+
+	<!-- Landing Page -->
 	<div class="container">
 
 		<div class="row">
@@ -66,14 +91,17 @@
 			</div>
 		</div>
 
-		<div class="row verySmallTextSize text-black bg-darkgrey">
+		<div class="row py-1 verySmallTextSize text-black bg-darkgrey">
 			<div id="date" class="col text-left">
 				&nbsp;
 			</div>
-			<div class="col-5 cursor-pointer regularTextSize font-weight-bold text-center text-red">
-				<span id="chargeModeSelect">
-					>> Lademodus <<
-				</span>
+			<div class="col-5 text-center">
+				<button type="button" class="btn btn-sm btn-secondary cursor-pointer regularTextSize" id="chargeModeSelectBtn">
+					<span id="chargeModeSelectBtnText">Lademodus</span>
+					<span id="priorityEvBattery">
+						<span class="fas fa-car" id="priorityEvBatteryIcon">&nbsp;</span>
+					</span>
+				</button>
 			</div>
 			<div id="time" class="col text-right">
 				&nbsp;
@@ -82,61 +110,107 @@
 
 		<div class="row justify-content-center regularTextSize font-weight-bold text-center text-black">
 			<div class="col-sm bg-lightgreen">
-				PV: <span id="pvleistung">0 W</span><span id="pvdailyyield"></span>
+				PV: <span id="pvleistung">lade Daten</span><span id="pvdailyyield"></span>
 			</div>
 			<div id="evudiv" class="col-sm bg-rose">
-				EVU: <span id="bezug">0 W</span>
+				EVU: <span id="bezug">lade Daten</span>
 			</div>
 		</div>
 
-<?php
-	echo '<div class="row justify-content-center regularTextSize font-weight-bold text-center text-black">';
-
-	if ( $hausverbrauchstatold == 1 ) {
-echo <<<HAUSVERBRAUCHDIV
-		<div class="col-sm bg-apricot">
-			Hausverbrauch: <span id="hausverbrauch">0 W</span>
+		<div class="row justify-content-center regularTextSize font-weight-bold text-center text-black">
+			<div class="col-sm bg-apricot">
+				Hausverbrauch: <span id="hausverbrauch">lade Daten</span>
+			</div>
+			<div class="col-sm bg-lightgrey">
+				Ladeleistung: <span id="powerAllLp">lade Daten</span>
+			</div>
 		</div>
-HAUSVERBRAUCHDIV;
-	}
-	echo '<div class="col-sm bg-lightgrey">';
-	echo 'Ladeleistung: <span id="powerAllLp">lade Daten</span>';
-	echo '    </div>';
-	echo '</div>';
-	// if speichermodul is not "none", show the info
-	if ( strcmp(trim($speicherstatold),"none") != 0 ) {
-echo <<<SPEICHERDIV
-<div id="speicher" class="row justify-content-center regularTextSize font-weight-bold text-center text-black">
-	<div class="col-sm bg-orange">
-		Speicher: <span id="speicherleistung">0 W</span><span id="speichersoc"></span>
-	</div>
-</div>
-SPEICHERDIV;
-	}  // end if speichervorhanden
+		<div id="speicher" class="row justify-content-center regularTextSize font-weight-bold text-center text-black">
+			<div class="col-sm bg-orange">
+				Speicher: <span id="speicherleistung">lade Daten</span><span id="speichersoc"></span>
+			</div>
+		</div>
+		<div class="row justify-content-center regularTextSize font-weight-bold text-center text-black">
+			<div class="hide col-sm bg-lightblue SmartHome" dev="1">
+				 <span class="nameDevice">Device Name</span> <span class="actualPowerDevice">lade Daten</span>
+			</div>
+			<div class="hide col-sm bg-lightblue SmartHome" dev="2">
+				 <span class="nameDevice">Device Name</span> <span class="actualPowerDevice">lade Daten</span>
+			</div>
+		</div>
+		<div class="row justify-content-center regularTextSize font-weight-bold text-center text-black">
+			<div class="hide col-sm bg-lightblue SmartHome" dev="3">
+				 <span class="nameDevice">Device Name</span> <span class="actualPowerDevice">lade Daten</span>
+			</div>
+			<div class="hide col-sm bg-lightblue SmartHome" dev="4">
+				 <span class="nameDevice">Device Name</span> <span class="actualPowerDevice">lade Daten</span>
+			</div>
+		</div>
+		<div class="row justify-content-center regularTextSize font-weight-bold text-center text-black">
+			<div class="hide col-sm bg-lightblue SmartHome" dev="5">
+				 <span class="nameDevice">Device Name</span> <span class="actualPowerDevice">lade Daten</span>
+			</div>
+			<div class="hide col-sm bg-lightblue SmartHome" dev="6">
+				 <span class="nameDevice">Device Name</span> <span class="actualPowerDevice">lade Daten</span>
+			</div>
+		</div>
+		<div class="row justify-content-center regularTextSize font-weight-bold text-center text-black">
+			<div class="hide col-sm bg-lightblue SmartHome" dev="7">
+				 <span class="nameDevice">Device Name</span> <span class="actualPowerDevice">lade Daten</span>
+			</div>
+			<div class="hide col-sm bg-lightblue SmartHome" dev="8">
+				 <span class="nameDevice">Device Name</span> <span class="actualPowerDevice">lade Daten</span>
+			</div>
+		</div>
+		<div class="row justify-content-center regularTextSize font-weight-bold text-center text-black">
+			<div class="hide col-sm bg-lightblue SmartHome" dev="9">
+				 <span class="nameDevice">Device Name</span> <span class="actualPowerDevice">lade Daten</span>
+			</div>
 
-	if ( ($hook1_aktivold == 1 || $hook2_aktivold == 1 || $hook3_aktivold == 1) ) {
-	// if hooks for external devices are configured, show div
-		echo '<div id="webhooksdiv" class="row justify-content-center regularTextSize font-weight-bold text-center text-black bg-darkgrey">';
-		// generate code for all configured hooks
-		for($i=1; $i <= 3; $i++) {
-			if (${"hook".$i."_aktivold"} == 1) {
-				$divId = "hook".$i."div";
-echo <<<EXTDEVICEDIVMIDDLE
-	<div id="$divId" class="col-3 m-1">
-		ext. Gerät $i
-	</div>
+		</div>
+		<div class="row justify-content-center regularTextSize font-weight-bold text-center text-black">
+			<div class="hide bg-lightblue col-sm SmartHomeTemp" dev="1">
+				<span class="actualTemp0Device"></span>
+			</div>
+			<div class="hide bg-lightblue col-sm SmartHomeTemp" dev="1">
+				<span class="actualTemp1Device"></span>
+			</div>
+			<div class="hide bg-lightblue col-sm SmartHomeTemp" dev="1">
+				<span class="actualTemp2Device"></span>
+			</div>
+		</div>
+		<div class="row justify-content-center regularTextSize font-weight-bold text-center text-black">
 
-EXTDEVICEDIVMIDDLE;
-			}  // end if
-		}  // end for
-echo '</div>';
-	}  // end if hook configured
-?>
+			<div class="hide bg-lightblue col-sm SmartHomeTemp" dev="2">
+				<span class="actualTemp0Device"></span>
+			</div>
+
+			<div class="hide bg-lightblue col-sm SmartHomeTemp" dev="2">
+				<span class="actualTemp1Device"></span>
+			</div>
+
+			<div class="hide bg-lightblue col-sm SmartHomeTemp" dev="2">
+				<span class="actualTemp2Device"></span>
+			</div>
+		</div>
+
+
+		<div id="webhooks" class="row justify-content-center regularTextSize font-weight-bold text-center text-black bg-darkgrey">
+			<div id="hook1" class="col-3 m-1 bg-danger hide">
+				ext. Gerät 1
+			</div>
+			<div id="hook2" class="col-3 m-1 bg-danger hide">
+				ext. Gerät 2
+			</div>
+			<div id="hook3" class="col-3 m-1 bg-danger hide">
+				ext. Gerät 2
+			</div>
+		</div>
 
 		<!-- interactive chart.js -->
 		<!-- will be refreshed using MQTT (in live.js)-->
 		<div class="row justify-content-center my-2" id="thegraph">
-			<div class="col-sm-12 text-center" style="height: 350px;">
+			<div class="col-sm-12 text-center smallTextSize" style="height: 350px;">
 				<div id="waitforgraphloadingdiv">
 					Graph lädt, bitte warten...
 				</div>
@@ -154,136 +228,327 @@ echo '</div>';
 		</div>
 
 		<!-- chargepoint info header -->
-		<div class="row smallTextSize bg-darkgrey text-grey font-weight-bold text-center px-0 py-1 py-md-0">
-			<div class="col-4">
+		<div class="row no-gutter py-1 py-md-0 smallTextSize text-center bg-darkgrey text-grey font-weight-bold">
+			<div class="col-3 px-0">
 				Ladepunkt
 			</div>
-			<div class="col-3">
-				Ladeleistung
+			<div class="col-3 px-0">
+				Ladeparameter
 			</div>
-			<div class="col-3">
+			<div class="col-4 px-0">
 				geladen
 			</div>
-			<div class="col-2">
+			<div class="col-2 px-0">
 				SoC
 			</div>
 		</div>
 
-		<!-- chargepoint info data -->
-		<?php
-			// generate html code dynamically for all charging points
-			for( $i = 1; $i <= 8; $i++) {
-				if ( $isConfiguredLp[$i] == 0 ) {
-					continue;  // skip if lp not configured
-				}
-				echo '<!-- data-row for charging Point '.$i.' -->'."\n";
-				echo '        <div id="lp'.$i.'div" class="row no-gutter py-1 py-md-0 smallTextSize text-center bg-lightgrey text-grey">'."\n";
-				echo '            <div class="col-4 px-0">'."\n";
-				echo '                <span class="cursor-pointer lpEnableSpan" id="lpEnableSpanLp'.$i.'" lp="'.$i.'">'."\n";
-				echo '                    <span class="fas fa-xs hide" id="lp'.$i.'AutolockConfigured"></span>'."\n"; // placeholder for autolock icons
-				echo '                    <span class="nameLp'.$i.' font-weight-bold" id="nameLp'.$i.'">'.$settingsArray['lp'.$i.'name'].'</span>'."\n";
-				echo '                </span>'."\n";
-				echo '                <span class="fa fa-xs fa-plug text-white hide" id="plugstatlp'.$i.'"></span>'."\n";
-				if ( $zielladenaktivlp1old == 1 ) {
-				echo '                <span class="fa fa-xs fa-flag-checkered"></span>'."\n";
-				}
-				echo '                <span class="fa fa-xs fa-moon hide" id="nachtladenaktivlp'.$i.'"></span>'."\n";
-				echo '            </div>'."\n";
-				echo '            <div class="col-3 px-0">'."\n";
-				echo '                <span id="actualPowerLp'.$i.'">lade Daten</span>'."\n";
-				echo '            </div>'."\n";
-				echo '            <div class="col-3 px-0">'."\n";
-				echo '                <span id="energyChargedLp'.$i.'">lade Daten</span><span id="kmChargedLp'.$i.'" consumption="0"></span>'."\n";
-				echo '            </div>'."\n";
-				// standard: soc not configured for charging point
-				echo '            <div id="socNotConfiguredLp'.$i.'" class="col-2 px-0">'."\n";
-				echo '              --'."\n";
-				echo '            </div>'."\n";
-				echo '            <div id="socConfiguredLp'.$i.'div" class="col-2 px-0 hide">'."\n";
-				echo '                <span id="socLp'.$i.'"></span>'."\n";
-				echo '            </div>'."\n";
-				echo '        </div>'."\n\n";
-				echo '        ';
-			}
-		?>
+		<!-- chargepoint info data lp1-->
+		<div class="row no-gutter py-1 py-md-0 smallTextSize text-center bg-lightgrey text-grey chargePointInfoLp" lp="1">
+			<div class="col-3 px-0">
+				<span class="fas fa-xs hide autolockConfiguredLp"></span>
+				<span class="cursor-pointer font-weight-bold lpDisabledStyle enableLp nameLp">LP Name</span>
+				<span class="fa fa-xs fa-plug text-lightgrey hide plugstatLp"></span>
+			    <span class="fa fa-xs fa-flag-checkered hide targetChargingLp"></span>
+			    <span class="fa fa-xs fa-moon hide nightChargingLp"></span>
+			</div>
+            <div class="col-3 px-0">
+                <span class="actualPowerLp">lade Daten</span><span class="phasesInUseLp"></span><span class="targetCurrentLp"></span>
+            </div>
+            <div class="col-4 px-0">
+                <span class="energyChargedLp">lade Daten</span><span class="kmChargedLp" consumption="0"></span>
+            </div>
+            <div class="col-2 px-0 socNotConfiguredLp text-center">
+              --
+            </div>
+            <div class="col-2 px-0 hide socConfiguredLp text-center">
+                <span class="socLp"></span>
+            </div>
+        </div>
 
-		<!-- removed to see if people miss it
+		<!-- chargepoint info data lp2-->
+		<div class="row no-gutter py-1 py-md-0 smallTextSize text-center bg-lightgrey text-grey chargePointInfoLp" lp="2">
+			<div class="col-3 px-0">
+				<span class="fas fa-xs hide autolockConfiguredLp"></span>
+				<span class="cursor-pointer font-weight-bold lpDisabledStyle enableLp nameLp">LP Name</span>
+				<span class="fa fa-xs fa-plug text-lightgrey hide plugstatLp"></span>
+			    <span class="fa fa-xs fa-flag-checkered hide targetChargingLp"></span>
+			    <span class="fa fa-xs fa-moon hide nightChargingLp"></span>
+			</div>
+            <div class="col-3 px-0">
+                <span class="actualPowerLp">lade Daten</span><span class="phasesInUseLp"></span><span class="targetCurrentLp"></span>
+            </div>
+            <div class="col-4 px-0">
+                <span class="energyChargedLp">lade Daten</span><span class="kmChargedLp" consumption="0"></span>
+            </div>
+            <div class="col-2 px-0 socNotConfiguredLp text-center">
+              --
+            </div>
+            <div class="col-2 px-0 hide socConfiguredLp text-center">
+                <span class="socLp"></span>
+            </div>
+        </div>
 
-		<div class="row justify-content-center">
-			<div class="col-12">
-				<hr color="white">
+		<!-- chargepoint info data lp3-->
+		<div class="row no-gutter py-1 py-md-0 smallTextSize text-center bg-lightgrey text-grey chargePointInfoLp" lp="3">
+			<div class="col-3 px-0">
+				<span class="fas fa-xs hide autolockConfiguredLp"></span>
+				<span class="cursor-pointer font-weight-bold lpDisabledStyle enableLp nameLp">LP Name</span>
+				<span class="fa fa-xs fa-plug text-lightgrey hide plugstatLp"></span>
+			    <span class="fa fa-xs fa-flag-checkered hide targetChargingLp"></span>
+			    <span class="fa fa-xs fa-moon hide nightChargingLp"></span>
 			</div>
-		</div>
+            <div class="col-3 px-0">
+                <span class="actualPowerLp">lade Daten</span><span class="phasesInUseLp"></span><span class="targetCurrentLp"></span>
+            </div>
+            <div class="col-4 px-0">
+                <span class="energyChargedLp">lade Daten</span><span class="kmChargedLp" consumption="0"></span>
+            </div>
+            <div class="col-2 px-0 socNotConfiguredLp text-center">
+              --
+            </div>
+            <div class="col-2 px-0 hide socConfiguredLp text-center">
+                <span class="socLp"></span>
+            </div>
+        </div>
 
-		<div class="row justify-content-center">
-			<h3 class ="text-center font-weight-bold text-lightgrey">letztes zusammenhängendes Ladesegment</h3>
-		</div>
+		<!-- chargepoint info data lp4-->
+		<div class="row no-gutter py-1 py-md-0 smallTextSize text-center bg-lightgrey text-grey chargePointInfoLp" lp="4">
+			<div class="col-3 px-0">
+				<span class="fas fa-xs hide autolockConfiguredLp"></span>
+				<span class="cursor-pointer font-weight-bold lpDisabledStyle enableLp nameLp">LP Name</span>
+				<span class="fa fa-xs fa-plug text-lightgrey hide plugstatLp"></span>
+			    <span class="fa fa-xs fa-flag-checkered hide targetChargingLp"></span>
+			    <span class="fa fa-xs fa-moon hide nightChargingLp"></span>
+			</div>
+            <div class="col-3 px-0">
+                <span class="actualPowerLp">lade Daten</span><span class="phasesInUseLp"></span><span class="targetCurrentLp"></span>
+            </div>
+            <div class="col-4 px-0">
+                <span class="energyChargedLp">lade Daten</span><span class="kmChargedLp" consumption="0"></span>
+            </div>
+            <div class="col-2 px-0 socNotConfiguredLp text-center">
+              --
+            </div>
+            <div class="col-2 px-0 hide socConfiguredLp text-center">
+                <span class="socLp"></span>
+            </div>
+        </div>
 
-		<div class="row justify-content-center regularTextSize">
-			<div class="col-4">
-				LP1 <span class="nameLp1"></span>
+		<!-- chargepoint info data lp5-->
+		<div class="row no-gutter py-1 py-md-0 smallTextSize text-center bg-lightgrey text-grey chargePointInfoLp" lp="5">
+			<div class="col-3 px-0">
+				<span class="fas fa-xs hide autolockConfiguredLp"></span>
+				<span class="cursor-pointer font-weight-bold lpDisabledStyle enableLp nameLp">LP Name</span>
+				<span class="fa fa-xs fa-plug text-lightgrey hide plugstatLp"></span>
+			    <span class="fa fa-xs fa-flag-checkered hide targetChargingLp"></span>
+			    <span class="fa fa-xs fa-moon hide nightChargingLp"></span>
 			</div>
-			<div class="col-4" <?php if($isConfiguredLp[2] != 1) echo 'style="display: none;"' ?>>
-				LP2 <span class="nameLp2"></span>
-			</div>
-			<div class="col-4 " <?php if($isConfiguredLp[3] != 1) echo 'style="display: none;"' ?>>
-				LP3 <span class="nameLp3"></span>
-			</div>
-		</div>
+            <div class="col-3 px-0">
+                <span class="actualPowerLp">lade Daten</span><span class="phasesInUseLp"></span><span class="targetCurrentLp"></span>
+            </div>
+            <div class="col-4 px-0">
+                <span class="energyChargedLp">lade Daten</span><span class="kmChargedLp" consumption="0"></span>
+            </div>
+            <div class="col-2 px-0 socNotConfiguredLp text-center">
+              --
+            </div>
+            <div class="col-2 px-0 hide socConfiguredLp text-center">
+                <span class="socLp"></span>
+            </div>
+        </div>
 
-		<div class="row justify-content-center regularTextSize">
-			<div class="col-4">
-				<span id="gelrlp1div"></span>
+		<!-- chargepoint info data lp6-->
+		<div class="row no-gutter py-1 py-md-0 smallTextSize text-center bg-lightgrey text-grey chargePointInfoLp" lp="6">
+			<div class="col-3 px-0">
+				<span class="fas fa-xs hide autolockConfiguredLp"></span>
+				<span class="cursor-pointer font-weight-bold lpDisabledStyle enableLp nameLp">LP Name</span>
+				<span class="fa fa-xs fa-plug text-lightgrey hide plugstatLp"></span>
+			    <span class="fa fa-xs fa-flag-checkered hide targetChargingLp"></span>
+			    <span class="fa fa-xs fa-moon hide nightChargingLp"></span>
 			</div>
-			<div class="col-4" <?php if($isConfiguredLp[2] != 1) echo 'style="display: none;"' ?>>
-				<span id="gelrlp2div"></span>
-			</div>
-			<div class="col-4" <?php if($isConfiguredLp[3] != 1) echo 'style="display: none;"' ?>>
-				<span id="gelrlp3div"></span>
-			</div>
-		</div>
+            <div class="col-3 px-0">
+                <span class="actualPowerLp">lade Daten</span><span class="phasesInUseLp"></span><span class="targetCurrentLp"></span>
+            </div>
+            <div class="col-4 px-0">
+                <span class="energyChargedLp">lade Daten</span><span class="kmChargedLp" consumption="0"></span>
+            </div>
+            <div class="col-2 px-0 socNotConfiguredLp text-center">
+              --
+            </div>
+            <div class="col-2 px-0 hide socConfiguredLp text-center">
+                <span class="socLp"></span>
+            </div>
+        </div>
 
-		<div class="row justify-content-center regularTextSize">
-			<div class="col-4">
-				<span id="aktgeladen1"></span>
+		<!-- chargepoint info data lp7-->
+		<div class="row no-gutter py-1 py-md-0 smallTextSize text-center bg-lightgrey text-grey chargePointInfoLp" lp="7">
+			<div class="col-3 px-0">
+				<span class="fas fa-xs hide autolockConfiguredLp"></span>
+				<span class="cursor-pointer font-weight-bold lpDisabledStyle enableLp nameLp">LP Name</span>
+				<span class="fa fa-xs fa-plug text-lightgrey hide plugstatLp"></span>
+			    <span class="fa fa-xs fa-flag-checkered hide targetChargingLp"></span>
+			    <span class="fa fa-xs fa-moon hide nightChargingLp"></span>
 			</div>
-			<div class="col-4" <?php if($isConfiguredLp[2] != 1) echo 'style="display: none;"' ?>>
-				<span id="aktgeladen2"></span>
-			</div>
-			<div class="col-4" <?php if($isConfiguredLp[3] != 1) echo 'style="display: none;"' ?>>
-				<span id="aktgeladen3"></span>
-			</div>
-		</div>
--->
+            <div class="col-3 px-0">
+                <span class="actualPowerLp">lade Daten</span><span class="phasesInUseLp"></span><span class="targetCurrentLp"></span>
+            </div>
+            <div class="col-4 px-0">
+                <span class="energyChargedLp">lade Daten</span><span class="kmChargedLp" consumption="0"></span>
+            </div>
+            <div class="col-2 px-0 socNotConfiguredLp text-center">
+              --
+            </div>
+            <div class="col-2 px-0 hide socConfiguredLp text-center">
+                <span class="socLp"></span>
+            </div>
+        </div>
 
-		<div id="targetChargingProgress" class="hide">
-			<div class="row justify-content-center regularTextSize text-center">
-				<div class="col-4" <?php if($lademstatold != 1) echo 'style="display: none;"' ?>>
-					<progress id="prog1" value= "0" max=<?php echo $lademkwhold ?>></progress>
-				</div>
-				<div class="col-4" <?php if($lademstats1old != 1) echo 'style="display: none;"' ?>>
-					<progress id="prog2" value= "0" max=<?php echo $lademkwhs1old ?>></progress>
-				</div>
-				<div class="col-4" <?php if($lademstats2old != 1) echo 'style="display: none;"' ?>>
-					<progress id="prog3" value= "0" max=<?php echo $lademkwhs2old ?>></progress>
-				</div>
+		<!-- chargepoint info data lp8-->
+		<div class="row no-gutter py-1 py-md-0 smallTextSize text-center bg-lightgrey text-grey chargePointInfoLp" lp="8">
+			<div class="col-3 px-0">
+				<span class="fas fa-xs hide autolockConfiguredLp"></span>
+				<span class="cursor-pointer font-weight-bold lpDisabledStyle enableLp nameLp">LP Name</span>
+				<span class="fa fa-xs fa-plug text-lightgrey hide plugstatLp"></span>
+			    <span class="fa fa-xs fa-flag-checkered hide targetChargingLp"></span>
+			    <span class="fa fa-xs fa-moon hide nightChargingLp"></span>
 			</div>
-
-			<div class="row justify-content-center regularTextSize text-center">
-				<div class="col-4" <?php if($lademstatold != 1) echo 'style="display: none;"' ?>>
-					Restzeit <span id="restzeitlp1"></span>
-				</div>
-				<div class="col-4" <?php if($lademstats1old != 1) echo 'style="display: none;"' ?>>
-					Restzeit <span id="restzeitlp2"></span>
-				</div>
-				<div class="col-4" <?php if($lademstats2old != 1) echo 'style="display: none;"' ?>>
-					Restzeit <span id="restzeitlp3"></span>
-				</div>
-			</div>
-		</div>
+            <div class="col-3 px-0">
+                <span class="actualPowerLp">lade Daten</span><span class="phasesInUseLp"></span><span class="targetCurrentLp"></span>
+            </div>
+            <div class="col-4 px-0">
+                <span class="energyChargedLp">lade Daten</span><span class="kmChargedLp" consumption="0"></span>
+            </div>
+            <div class="col-2 px-0 socNotConfiguredLp text-center">
+              --
+            </div>
+            <div class="col-2 px-0 hide socConfiguredLp text-center">
+                <span class="socLp"></span>
+            </div>
+        </div>
 
 		<hr color="white">
+                <!-- SmartHome info header -->
+                <div class="row no-gutter py-1 py-md-0 smallTextSize text-center bg-darkgrey text-grey font-weight-bold shInfoHeader">
+                        <div class="col-3 px-0">
+                                Gerät
+                        </div>
+                        <div class="col-3 px-0">
+                                Verbrauch
+                        </div>
+                        <div class="col-6 px-0">
+                                Modus
+                        </div>
 
+		</div>
+		<!-- SmartHome Device 1 data -->
+                <div class="row no-gutter py-1 py-md-0 smallTextSize text-center bg-lightgrey text-grey SmartHome" dev="1">
+                        <div class="col-3 px-0">
+                                <span class="font-weight-bold lpEnabledStyle enableDevice nameDevice">SmartHomeDevice</span>
+                        </div>
+                	<div class="col-3 px-0">
+                	        <span class="actualPowerDevice">lade Daten</span>
+                	</div>
+                	<div class="col-6 px-0">
+				<span class="cursor-pointer actualModeDevice changeSHMode">lade Daten</span>
+			</div>
+		</div>
+		<!-- SmartHome Device 2 data -->
+                <div class="row no-gutter py-1 py-md-0 smallTextSize text-center bg-lightgrey text-grey SmartHome" dev="2">
+                        <div class="col-3 px-0">
+                                <span class="font-weight-bold lpEnabledStyle enableDevice nameDevice">SmartHomeDevice</span>
+                        </div>
+                	<div class="col-3 px-0">
+                	        <span class="actualPowerDevice">lade Daten</span>
+                	</div>
+                	<div class="col-6 px-0">
+				<span class="cursor-pointer actualModeDevice changeSHMode">lade Daten</span>
+			</div>
+		</div>
+		<!-- SmartHome Device 3 data -->
+                <div class="row no-gutter py-1 py-md-0 smallTextSize text-center bg-lightgrey text-grey SmartHome" dev="3">
+                        <div class="col-3 px-0">
+                                <span class="font-weight-bold lpEnabledStyle enableDevice nameDevice">SmartHomeDevice</span>
+                        </div>
+                	<div class="col-3 px-0">
+                	        <span class="actualPowerDevice">lade Daten</span>
+                	</div>
+                	<div class="col-6 px-0">
+				<span class="cursor-pointer actualModeDevice changeSHMode">lade Daten</span>
+			</div>
+		</div>
+		<!-- SmartHome Device 3 data -->
+                <div class="row no-gutter py-1 py-md-0 smallTextSize text-center bg-lightgrey text-grey SmartHome" dev="4">
+                        <div class="col-3 px-0">
+                                <span class="cursor-pointer font-weight-bold lpEnabledStyle enableDevice nameDevice">SmartHomeDevice</span>
+                        </div>
+                	<div class="col-3 px-0">
+                	        <span class="actualPowerDevice">lade Daten</span>
+                	</div>
+                	<div class="col-6 px-0">
+				<span class="cursor-pointer actualModeDevice changeSHMode">lade Daten</span>
+			</div>
+		</div>
+		<!-- SmartHome Device 3 data -->
+                <div class="row no-gutter py-1 py-md-0 smallTextSize text-center bg-lightgrey text-grey SmartHome" dev="5">
+                        <div class="col-3 px-0">
+                                <span class="cursor-pointer font-weight-bold lpEnabledStyle enableDevice nameDevice">SmartHomeDevice</span>
+                        </div>
+                	<div class="col-3 px-0">
+                	        <span class="actualPowerDevice">lade Daten</span>
+                	</div>
+                	<div class="col-6 px-0">
+				<span class="cursor-pointer actualModeDevice changeSHMode">lade Daten</span>
+			</div>
+		</div>
+		<!-- SmartHome Device 3 data -->
+                <div class="row no-gutter py-1 py-md-0 smallTextSize text-center bg-lightgrey text-grey SmartHome" dev="6">
+                        <div class="col-3 px-0">
+                                <span class="cursor-pointer font-weight-bold lpEnabledStyle enableDevice nameDevice">SmartHomeDevice</span>
+                        </div>
+                	<div class="col-3 px-0">
+                	        <span class="actualPowerDevice">lade Daten</span>
+                	</div>
+                	<div class="col-6 px-0">
+				<span class="cursor-pointer actualModeDevice changeSHMode">lade Daten</span>
+			</div>
+		</div>
+		<!-- SmartHome Device 3 data -->
+                <div class="row no-gutter py-1 py-md-0 smallTextSize text-center bg-lightgrey text-grey SmartHome" dev="7">
+                        <div class="col-3 px-0">
+                                <span class="cursor-pointer font-weight-bold lpEnabledStyle enableDevice nameDevice">SmartHomeDevice</span>
+                        </div>
+                	<div class="col-3 px-0">
+                	        <span class="actualPowerDevice">lade Daten</span>
+                	</div>
+                	<div class="col-6 px-0">
+				<span class="cursor-pointer actualModeDevice changeSHMode">lade Daten</span>
+			</div>
+		</div>
+		<!-- SmartHome Device 3 data -->
+                <div class="row no-gutter py-1 py-md-0 smallTextSize text-center bg-lightgrey text-grey SmartHome" dev="8">
+                        <div class="col-3 px-0">
+                                <span class="cursor-pointer font-weight-bold lpEnabledStyle enableDevice nameDevice">SmartHomeDevice</span>
+                        </div>
+                	<div class="col-3 px-0">
+                	        <span class="actualPowerDevice">lade Daten</span>
+                	</div>
+                	<div class="col-6 px-0">
+				<span class="cursor-pointer actualModeDevice changeSHMode">lade Daten</span>
+			</div>
+		</div>
+		<!-- SmartHome Device 3 data -->
+                <div class="row no-gutter py-1 py-md-0 smallTextSize text-center bg-lightgrey text-grey SmartHome" dev="9">
+                        <div class="col-3 px-0">
+                                <span class="cursor-pointer font-weight-bold lpEnabledStyle enableDevice nameDevice">SmartHomeDevice</span>
+                        </div>
+                	<div class="col-3 px-0">
+                	        <span class="actualPowerDevice">lade Daten</span>
+                	</div>
+                	<div class="col-6 px-0">
+				<span class="cursor-pointer actualModeDevice changeSHMode">lade Daten</span>
+			</div>
+		</div>
 		<!-- depending on charge mode show options -->
 	    <form id="sofortladenEinstellungen" class="hide "name="sofortll" action="./tools/sofortll.php" method="POST">
 		    <div id="awattardiv" class="hide"enabled="<?php echo $settingsArray["awattaraktiv"] ?>">
@@ -322,20 +587,32 @@ echo '</div>';
 			</div> <!--/ awattardiv -->
 
 			<div class="row justify-content-center">
-		   		<h3 class="font-weight-bold text-center text-lightgrey">Sofortladen Ladeziel-Einstellungen</h3>
+		   		<h3 class="font-weight-bold text-center text-lightgrey">Sofortladen Lademengen-Einstellungen</h3>
 		    </div>
+
+			<div class="row justify-content-center text-center regularTextSize">
+				<div class="col-4 targetChargeLp" lp="1">
+					LP1 <span class="nameLp"></span>
+				</div>
+				<div class="col-4 targetChargeLp" lp="2">
+					LP2 <span class="nameLp"></span>
+				</div>
+				<div class="col-4 targetChargeLp" lp="3">
+					LP3 <span class="nameLp"></span>
+				</div>
+			</div>
 
 	        <div class="row justify-content-center">
                 <div class="col-4 regularTextSize text-center">
                     <label for="msmoduslp1"></label>
                     <select class="sofortladenLadezielSelektor" type="text" name="msmoduslp1" id="msmoduslp1">
-                        <option <?php if($msmoduslp1old == 0) echo 'selected' ?> value="0">Aus</option>
-                        <option <?php if($msmoduslp1old == 1) echo 'selected' ?> value="1">Lademenge</option>
+                        <option <?php if($msmoduslp1old == 0) echo 'selected' ?> value="0">unbegrenzt</option>
+                        <option <?php if($msmoduslp1old == 1) echo 'selected' ?> value="1">Energie</option>
                         <option <?php if($msmoduslp1old == 2) echo 'selected' ?> value="2">SoC</option>
                     </select>
                     <span id="msmodusmlp1" <?php if($msmoduslp1old != 1) echo 'style="display: none;"' ?>>
                         <br><br>
-                        <label for="lademlp1">Lademenge</label>
+                        <label for="lademlp1">Energie</label>
                         <select type="text" name="lademlp1" id="lademlp1">
                         	<option <?php if($lademkwhold == 0) echo 'selected' ?> value="0">0</option>
                             <option <?php if($lademkwhold == 2) echo 'selected' ?> value="2">2</option>
@@ -392,13 +669,13 @@ echo '</div>';
 				<div class="col-4 regularTextSize text-center" <?php if($isConfiguredLp[2] != 1) echo 'style="display: none;"' ?>>
                     <label for="msmoduslp2"></label>
                     <select class="sofortladenLadezielSelektor" type="text" name="msmoduslp2" id="msmoduslp2">
-                    	<option <?php if($msmoduslp2old == 0) echo 'selected' ?> value="0">Aus</option>
-                        <option <?php if($msmoduslp2old == 1) echo 'selected' ?> value="1">Lademenge</option>
+                    	<option <?php if($msmoduslp2old == 0) echo 'selected' ?> value="0">unbegrenzt</option>
+                        <option <?php if($msmoduslp2old == 1) echo 'selected' ?> value="1">Energie</option>
                         <option <?php if($msmoduslp2old == 2) echo 'selected' ?> value="2">SoC</option>
                     </select>
 					<div id="msmodusmlp2" <?php if($msmoduslp2old != 1) echo 'style="display: none;"' ?>>
 						<br>
-						<label for="lademlp2">Lademenge</label>
+						<label for="lademlp2">Energie</label>
 						<select type="text" name="lademlp2" id="lademlp2">
 							<option <?php if($lademkwhs1old == 0) echo 'selected' ?> value="0">0</option>
 							<option <?php if($lademkwhs1old == 2) echo 'selected' ?> value="2">2</option>
@@ -455,12 +732,12 @@ echo '</div>';
             	<div class="col-4 regularTextSize text-center" <?php if($isConfiguredLp[3] != 1) echo 'style="display: none;"' ?>>
                     <label for="msmoduslp3"></label>
                     <select class="sofortladenLadezielSelektor" type="text" name="lademlp3check" id="msmoduslp3">
-                    	<option <?php if($lademstats2old == 0) echo 'selected' ?> value="0">Aus</option>
-                        <option <?php if($lademstats2old == 1) echo 'selected' ?> value="1">Lademenge</option>
+                    	<option <?php if($lademstats2old == 0) echo 'selected' ?> value="0">unbegrenzt</option>
+                        <option <?php if($lademstats2old == 1) echo 'selected' ?> value="1">Energie</option>
                     </select>
 					<span id="msmodusmlp3" <?php if($lademstats2old != 1) echo 'style="display: none;"' ?>>
 						<br><br>
-						<label for="lademlp3">Lademenge</label>
+						<label for="lademlp3">Energie</label>
 						<select type="text" name="lademlp3" id="lademlp3">
 							<option <?php if($lademkwhs2old == 0) echo 'selected' ?> value="0">0</option>
 							<option <?php if($lademkwhs2old == 2) echo 'selected' ?> value="2">2</option>
@@ -490,6 +767,33 @@ echo '</div>';
                     <span id="msmodusnlp3" <?php if($lademstats2old != 0) echo 'style="display: none;"' ?>></span>
 				</div>
 	  		</div>
+
+			<div id="targetChargingProgress" class="hide">
+				<div class="row justify-content-center regularTextSize text-center">
+					<div class="col-4 targetChargeLp" lp='1'>
+						<progress id="prog1" value= "0" max=<?php echo $lademkwhold ?>></progress>
+					</div>
+					<div class="col-4 targetChargeLp" lp='2'>
+						<progress id="prog2" value= "0" max=<?php echo $lademkwhs1old ?>></progress>
+					</div>
+					<div class="col-4 targetChargeLp" lp='3'>
+						<progress id="prog3" value= "0" max=<?php echo $lademkwhs2old ?>></progress>
+					</div>
+				</div>
+
+				<div class="row justify-content-center regularTextSize text-center">
+					<div class="col-4 targetChargeLp" lp='1'>
+						Restzeit <span id="restzeitlp1"></span>
+					</div>
+					<div class="col-4 targetChargeLp" lp='2'>
+						Restzeit <span id="restzeitlp2"></span>
+					</div>
+					<div class="col-4 targetChargeLp" lp='3'>
+						Restzeit <span id="restzeitlp3"></span>
+					</div>
+				</div>
+			</div>
+
 			<div class="row justify-content-center">
 				<div class="col-12">
 					<hr color="white">
@@ -700,57 +1004,59 @@ echo '</div>';
 			<div class="modal-content">
 
 				<!-- modal header -->
-				<div class="modal-header btn-green">
-					<h4 class="modal-title">Auswahl</h4>
+				<div class="modal-header bg-success">
+					<h4 class="modal-title">Lademodus-Auswahl</h4>
 				</div>
 
 				<!-- modal body -->
 				<div class="modal-body">
 					<div class="row justify-content-center">
 						<div class="col-sm-5 py-1">
-							<button id="chargeModeSofortBtn" type="button" class="chargeModeBtn btn btn-lg btn-block btn-red" data-dismiss="modal" chargeMode="0">Sofortladen</button>
+							<button id="chargeModeSofortBtn" type="button" class="chargeModeBtn btn btn-lg btn-block btn-secondary" data-dismiss="modal" chargeMode="0">Sofort</button>
 						</div>
 					</div>
 					<div class="row justify-content-center">
 						<div class="col-sm-5 order-first order-sm-last py-1">
-							<button id="chargeModePVBtn" type="button" class="chargeModeBtn btn btn-lg btn-block btn-red" data-dismiss="modal" chargeMode="2">PV</button>
+							<button id="chargeModePVBtn" type="button" class="chargeModeBtn btn btn-lg btn-block btn-secondary" data-dismiss="modal" chargeMode="2">PV</button>
 						</div>
 					</div>
 					<div class="row justify-content-center">
 						<div class="col-sm-5 py-1">
-							<button id="chargeModeMinPVBtn" type="button" class="chargeModeBtn btn btn-lg btn-block btn-red" data-dismiss="modal" chargeMode="1">Min + PV</button>
+							<button id="chargeModeMinPVBtn" type="button" class="chargeModeBtn btn btn-lg btn-block btn-secondary" data-dismiss="modal" chargeMode="1">Min + PV</button>
 						</div>
 					</div>
 					<div class="row justify-content-center">
 						<div class="col-sm-5 py-1">
-							<button id="chargeModeStdbyBtn" type="button" class="chargeModeBtn btn btn-lg btn-block btn-red" data-dismiss="modal" chargeMode="4">Standby</button>
+							<button id="chargeModeStdbyBtn" type="button" class="chargeModeBtn btn btn-lg btn-block btn-secondary" data-dismiss="modal" chargeMode="4">Standby</button>
 						</div>
 					</div>
 					<div class="row justify-content-center">
 						<div class="col-sm-5 py-1">
-							<button id="chargeModeStopBtn" type="button" class="chargeModeBtn btn btn-lg btn-block btn-red" data-dismiss="modal" chargeMode="3">Stop</button>
+							<button id="chargeModeStopBtn" type="button" class="chargeModeBtn btn btn-lg btn-block btn-secondary" data-dismiss="modal" chargeMode="3">Stop</button>
 						</div>
 					</div>
-
-					<hr>
-
-					<div class="row">
-						<div class="col text-center text-grey">
-							Vorrang im Lademodus PV-Laden:
-							<br>
-							derzeit noch nicht implementiert... Einstellung unter "Einstellungen/PV-Ladeeinstellungen"
+					<span id='priorityModeBtns'>
+						<hr>
+						<div class="row">
+							<div class="col text-center text-grey">
+								Vorrang im Lademodus PV-Laden:
+							</div>
 						</div>
-					</div>
-					<div class="row justify-content-center">
-						<div class="col-sm-5 py-1">
-							<button id="evPriorityBtn" type="button" class="priorityModeBtn btn btn-lg btn-block btn-red" data-dismiss="modal" priority="ev">EV</button>
+						<div class="row justify-content-center">
+							<div class="col-sm-5 py-1">
+								<button id="evPriorityBtn" type="button" class="priorityModeBtn btn btn-lg btn-block btn-secondary" data-dismiss="modal" priority="1">
+									EV <span class="fas fa-car">&nbsp;</span>
+								</button>
+							</div>
 						</div>
-					</div>
-					<div class="row justify-content-center">
-						<div class="col-sm-5 py-1">
-							<button id="batteryPriorityBtn" type="button" class="priorityModeBtn btn btn-lg btn-block btn-red" data-dismiss="modal" priority="battery">Speicher</button>
+						<div class="row justify-content-center">
+							<div class="col-sm-5 py-1">
+								<button id="batteryPriorityBtn" type="button" class="priorityModeBtn btn btn-lg btn-block btn-secondary" data-dismiss="modal" priority="0">
+									Speicher <span class="fas fa-car-battery">&nbsp;</span>
+								</button>
+							</div>
 						</div>
-					</div>
+					</span>
 
 				</div> <!-- /modal body -->
 
@@ -767,70 +1073,140 @@ echo '</div>';
 	<script src = "js/mqttws31.js" ></script>
 
 	<!-- load respective Chart.js definition -->
-	<script src="themes/<?php echo $themeCookie ?>/livechart.js?ver=20200403-c"></script>
+	<script src="themes/<?php echo $themeCookie ?>/livechart.js?ver=20200411-a"></script>
 	<script src="themes/<?php echo $themeCookie ?>/awattarchart.js?ver=20200331-a"></script>
 	<!-- Data refresher -->
-	<script src="themes/<?php echo $themeCookie ?>/processAllMqttMsg.js?ver=20200408-a"></script>
+	<script src="themes/<?php echo $themeCookie ?>/processAllMqttMsg.js?ver=20200417-a"></script>
 
 	<!-- some scripts -->
 	<script type="text/javascript">
+
+		var timeOfLastMqttMessage = 0;  // holds timestamp of last received message
+		var landingpageShown = false;  // holds flag for landing page being shown
 
 		function AwattarMaxPriceClick() {
 			publish(document.getElementById("awattar1l").innerHTML,"openWB/set/awattar/MaxPriceForCharging");
 		}
 		function lp1DirectChargeAmpsClick() {
-			publish(document.getElementById("sofortlllp1l").innerHTML,"openWB/set/lp1/DirectChargeAmps");
+			publish(document.getElementById("sofortlllp1l").innerHTML,"openWB/config/set/sofort/lp/1/current");
 		}
 
 		function lp2DirectChargeAmpsClick() {
-			publish(document.getElementById("sofortlllp2l").innerHTML,"openWB/set/lp2/DirectChargeAmps");
+			publish(document.getElementById("sofortlllp2l").innerHTML,"openWB/config/set/sofort/lp/2/current");
 		}
 
 		function lp3DirectChargeAmpsClick() {
-			publish(document.getElementById("sofortlllp3l").innerHTML,"openWB/set/lp3/DirectChargeAmps");
+			publish(document.getElementById("sofortlllp3l").innerHTML,"openWB/config/set/sofort/lp/3/current");
 		}
 
 		function lp4DirectChargeAmpsClick() {
-			publish(document.getElementById("sofortlllp4l").innerHTML,"openWB/set/lp4/DirectChargeAmps");
+			publish(document.getElementById("sofortlllp4l").innerHTML,"openWB/config/set/sofort/lp/4/current");
 		}
 
 		function lp5DirectChargeAmpsClick() {
-			publish(document.getElementById("sofortlllp5l").innerHTML,"openWB/set/lp5/DirectChargeAmps");
+			publish(document.getElementById("sofortlllp5l").innerHTML,"openWB/config/set/sofort/lp/5/current");
 		}
 
 		function lp6DirectChargeAmpsClick() {
-			publish(document.getElementById("sofortlllp6l").innerHTML,"openWB/set/lp6/DirectChargeAmps");
+			publish(document.getElementById("sofortlllp6l").innerHTML,"openWB/config/set/sofort/lp/6/current");
 		}
 
 		function lp7DirectChargeAmpsClick() {
-			publish(document.getElementById("sofortlllp7l").innerHTML,"openWB/set/lp7/DirectChargeAmps");
+			publish(document.getElementById("sofortlllp7l").innerHTML,"openWB/config/set/sofort/lp/7/current");
 		}
 
 		function lp8DirectChargeAmpsClick() {
-			publish(document.getElementById("sofortlllp8l").innerHTML,"openWB/set/lp8/DirectChargeAmps");
+			publish(document.getElementById("sofortlllp8l").innerHTML,"openWB/config/set/sofort/lp/8/current");
+		}
+
+		function processPreloader(mqttTopic) {
+			// sets flag for topic received in topic-array
+			// and updates the preloader progress bar
+			if ( !landingpageShown ) {
+				var countTopicsReceived = 0;
+				for ( var index = 0; index < topicsToSubscribe.length; index ++) {
+					if ( topicsToSubscribe[index][0] == mqttTopic && topicsToSubscribe[index][1] == 0 ) {
+						// topic found in array
+						topicsToSubscribe[index][1] = 1;  // mark topic as received
+					};
+					if ( topicsToSubscribe[index][1] > 0 ) {
+						countTopicsReceived++;
+					}
+				};
+				var percentageReceived = (countTopicsReceived / topicsToSubscribe.length * 100).toFixed(0);
+				var timeBetweenTwoMesagges = Date.now() - timeOfLastMqttMessage;
+				if ( timeBetweenTwoMesagges > 3000 ) {
+					// latest after 3 sec without new messages
+					percentageReceived = 100;
+					// debug output
+					topicsToSubscribe.forEach((item, i) => {
+						if ( item[1] == 0 ) {
+							console.log('not received: ' + item[0]);
+						}
+					});
+
+				}
+				timeOfLastMqttMessage = Date.now();
+				$("#preloaderbar").width(percentageReceived+"%");
+				$("#preloaderbar").text(percentageReceived+" %");
+				if ( percentageReceived == 100 ) {
+					landingpageShown = true;
+					setTimeout(function (){
+						// delay a little bit
+						$(".loader").fadeOut(1000);
+					}, 500);
+				}
+			}
 		}
 
 		$(document).ready(function(){
 
-			$.getScript("themes/<?php echo $themeCookie ?>/setupMqttServices.js?ver=20200401-a");
-			$.getScript("themes/<?php echo $themeCookie ?>/processHooks.js?ver=20200401-a");
+			$.getScript("themes/<?php echo $themeCookie ?>/setupMqttServices.js?ver=20200417-a");
 
-			$('.lpEnableSpan').click(function(event){
+			$('.enableLp').click(function(event){
 				// send mqtt set to enable/disable charge point after click
-				// attribut value is changed at receipt of confirmation mqttmsg
-				var lp = $(this).attr("lp");
-				var isEnabled = $(this).attr("isEnabled");
-				switch ( isEnabled ) {
-					case "1":
+				var lp = parseInt($(this).closest('[lp]').attr('lp'));  // get attribute lp-# of parent element
+				if ( !isNaN(lp) && lp > 0 && lp < 9 ) {
+					var isEnabled = $(this).hasClass("lpEnabledStyle")
+					if ( isEnabled ) {
 						publish("0", "openWB/set/lp" + lp + "/ChargePointEnabled");
-						break;
-					case "0":
+					} else {
 						publish("1", "openWB/set/lp" + lp + "/ChargePointEnabled");
-						break;
+					}
 				}
 			});
+			$('.enableDevice').click(function(event){
+				// send mqtt set to enable/disable Device after click
+				var dev = parseInt($(this).closest('[dev]').attr('dev'));  // get attribute device-# of parent element
+				var isLocked = $(this).hasClass("locked")
+				if ( isLocked ) {
+					if ( !isNaN(dev) && dev > 0 && dev < 9 ) {
+						var isEnabled = $(this).hasClass("lpEnabledStyle")
+						if ( isEnabled ) {
+							publish("0", "openWB/config/set/SmartHome/Device" + dev + "/device_manual_control");
+							$(this).removeClass('lpEnabledStyle').removeClass('lpDisabledStyle').addClass('lpWaitingStyle');
+						} else {
+							publish("1", "openWB/config/set/SmartHome/Device" + dev + "/device_manual_control");
+							$(this).removeClass('lpEnabledStyle').removeClass('lpDisabledStyle').addClass('lpWaitingStyle');
 
-			$('#chargeModeSelect').click(function(event){
+						}
+					}
+				}
+			});
+			$('.changeSHMode').click(function(event){
+				// send mqtt set to enable/disable Device after click
+				var dev = parseInt($(this).closest('[dev]').attr('dev'));  // get attribute device-# of parent element
+
+
+				if ( $(this).text() == "Automatik" ) {
+						publish("1", "openWB/config/set/SmartHome/Devices/" + dev + "/mode");
+					} else {
+						publish("0", "openWB/config/set/SmartHome/Devices/" + dev + "/mode");
+
+				}
+
+			});
+			$('#chargeModeSelectBtn').click(function(event){
 				$("#chargeModeModal").modal("show");
 			});
 
@@ -840,11 +1216,10 @@ echo '</div>';
 			});
 
 			$('.priorityModeBtn').click(function(event){
-				var priority = $(this).attr("priority")
-				if ( priority == "ev" ) {
-					// <a href="./tools/changelademodus.php?pveinbeziehen=1" class="btn btn-lg btn-block btn-green myButtonStyle">Speichervorrang</a>
-				} else {
-					//<a href="./tools/changelademodus.php?pveinbeziehen=0" class="btn btn-lg btn-block btn-green myButtonStyle">EV Vorrang</a>
+				// prio: 0 = battery, 1 = ev
+				var priority = $(this).attr('priority');
+				if ( priority == '0' || priority == '1' ) {
+					publish(priority, 'openWB/set/system/priorityModeEVBattery');
 				}
 			});
 
