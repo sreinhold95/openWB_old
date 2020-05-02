@@ -460,9 +460,9 @@ function loadgraph() {
             toolTipData: getCol(lpCounterValues, 7)  // custom added field, holds counter values or empty string
 		} , {
 			label: 'Verbraucher 1 in ' + totalValues[8].toFixed(2) + ' kWh',
-			borderColor: "rgba(0, 150, 150, 0.7)",
-			backgroundColor: "rgba(200, 255, 13, 0.3)",
-			fill: false,
+			borderColor: "rgba(255, 200, 150, 0.7)",
+			backgroundColor: "rgba(255, 200, 150, 0.3)",
+			fill: true,
 			borderWidth: 2,
 			data: getCol(csvData, 8),
 			yAxisID: 'y-axis-1',
@@ -470,9 +470,9 @@ function loadgraph() {
             toolTipData: getCol(lpCounterValues, 8)  // custom added field, holds counter values or empty string
 		} , {
 			label: 'Verbraucher 1 out ' + totalValues[9].toFixed(2) + ' kWh',
-			borderColor: "rgba(0, 150, 150, 0.7)",
-			backgroundColor: "rgba(200, 255, 13, 0.3)",
-			fill: false,
+			borderColor: "rgba(255, 200, 150, 0.7)",
+			backgroundColor: "rgba(2255, 200, 150, 0.3)",
+			fill: true,
 			borderWidth: 2,
 			data: getCol(csvData, 9),
 			yAxisID: 'y-axis-1',
