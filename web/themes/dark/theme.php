@@ -57,7 +57,7 @@
 </head>
 
 <body>
-
+	<?php include $_SERVER['DOCUMENT_ROOT'].'/openWB/web/themes/standard/navbar.php'; ?>
 	<!-- Preloader with Progress Bar -->
 	<div class="loader bg-white">
 		<div class="loader-container regularTextSize">
@@ -85,11 +85,7 @@
 	<!-- Landing Page -->
 	<div class="container">
 
-		<div class="row">
-			<div class="col gradient">
-				<h1 class="my-3 font-weight-bold text-center">openWB Charge Controller</h1>
-			</div>
-		</div>
+
 
 		<div class="row py-1 verySmallTextSize text-black bg-darkgrey">
 			<div id="date" class="col text-left">
@@ -436,8 +432,11 @@
                         <div class="col-3 px-0">
                                 Verbrauch
                         </div>
-                        <div class="col-6 px-0">
+                        <div class="col-3 px-0">
                                 Modus
+			</div>
+	                <div class="col-3 px-0">
+                                Laufzeit
                         </div>
 
 		</div>
@@ -449,9 +448,12 @@
                 	<div class="col-3 px-0">
                 	        <span class="actualPowerDevice">lade Daten</span>
                 	</div>
-                	<div class="col-6 px-0">
+                	<div class="col-3 px-0">
 				<span class="cursor-pointer actualModeDevice changeSHMode">lade Daten</span>
 			</div>
+                        <div class="col-3 px-0">
+                                <span class="actualRunningTimeDevice">lade Daten</span>
+                        </div>
 		</div>
 		<!-- SmartHome Device 2 data -->
                 <div class="row no-gutter py-1 py-md-0 smallTextSize text-center bg-lightgrey text-grey SmartHome" dev="2">
@@ -461,9 +463,13 @@
                 	<div class="col-3 px-0">
                 	        <span class="actualPowerDevice">lade Daten</span>
                 	</div>
-                	<div class="col-6 px-0">
+                	<div class="col-3 px-0">
 				<span class="cursor-pointer actualModeDevice changeSHMode">lade Daten</span>
 			</div>
+                        <div class="col-3 px-0">
+                                <span class="actualRunningTimeDevice">lade Daten</span>
+                        </div>
+
 		</div>
 		<!-- SmartHome Device 3 data -->
                 <div class="row no-gutter py-1 py-md-0 smallTextSize text-center bg-lightgrey text-grey SmartHome" dev="3">
@@ -473,9 +479,13 @@
                 	<div class="col-3 px-0">
                 	        <span class="actualPowerDevice">lade Daten</span>
                 	</div>
-                	<div class="col-6 px-0">
+                	<div class="col-3 px-0">
 				<span class="cursor-pointer actualModeDevice changeSHMode">lade Daten</span>
 			</div>
+                        <div class="col-3 px-0">
+                                <span class="actualRunningTimeDevice">lade Daten</span>
+                        </div>
+
 		</div>
 		<!-- SmartHome Device 3 data -->
                 <div class="row no-gutter py-1 py-md-0 smallTextSize text-center bg-lightgrey text-grey SmartHome" dev="4">
@@ -485,9 +495,13 @@
                 	<div class="col-3 px-0">
                 	        <span class="actualPowerDevice">lade Daten</span>
                 	</div>
-                	<div class="col-6 px-0">
+                	<div class="col-3 px-0">
 				<span class="cursor-pointer actualModeDevice changeSHMode">lade Daten</span>
 			</div>
+                        <div class="col-3 px-0">
+                                <span class="actualRunningTimeDevice">lade Daten</span>
+                        </div>
+
 		</div>
 		<!-- SmartHome Device 3 data -->
                 <div class="row no-gutter py-1 py-md-0 smallTextSize text-center bg-lightgrey text-grey SmartHome" dev="5">
@@ -497,9 +511,13 @@
                 	<div class="col-3 px-0">
                 	        <span class="actualPowerDevice">lade Daten</span>
                 	</div>
-                	<div class="col-6 px-0">
+                	<div class="col-3 px-0">
 				<span class="cursor-pointer actualModeDevice changeSHMode">lade Daten</span>
 			</div>
+                        <div class="col-3 px-0">
+                                <span class="actualRunningTimeDevice">lade Daten</span>
+                        </div>
+
 		</div>
 		<!-- SmartHome Device 3 data -->
                 <div class="row no-gutter py-1 py-md-0 smallTextSize text-center bg-lightgrey text-grey SmartHome" dev="6">
@@ -509,9 +527,13 @@
                 	<div class="col-3 px-0">
                 	        <span class="actualPowerDevice">lade Daten</span>
                 	</div>
-                	<div class="col-6 px-0">
+                	<div class="col-3 px-0">
 				<span class="cursor-pointer actualModeDevice changeSHMode">lade Daten</span>
 			</div>
+                        <div class="col-3 px-0">
+                                <span class="actualRunningTimeDevice">lade Daten</span>
+                        </div>
+
 		</div>
 		<!-- SmartHome Device 3 data -->
                 <div class="row no-gutter py-1 py-md-0 smallTextSize text-center bg-lightgrey text-grey SmartHome" dev="7">
@@ -521,9 +543,13 @@
                 	<div class="col-3 px-0">
                 	        <span class="actualPowerDevice">lade Daten</span>
                 	</div>
-                	<div class="col-6 px-0">
+                	<div class="col-3 px-0">
 				<span class="cursor-pointer actualModeDevice changeSHMode">lade Daten</span>
 			</div>
+                        <div class="col-3 px-0">
+                                <span class="actualRunningTimeDevice">lade Daten</span>
+                        </div>
+
 		</div>
 		<!-- SmartHome Device 3 data -->
                 <div class="row no-gutter py-1 py-md-0 smallTextSize text-center bg-lightgrey text-grey SmartHome" dev="8">
@@ -533,9 +559,13 @@
                 	<div class="col-3 px-0">
                 	        <span class="actualPowerDevice">lade Daten</span>
                 	</div>
-                	<div class="col-6 px-0">
+                	<div class="col-3 px-0">
 				<span class="cursor-pointer actualModeDevice changeSHMode">lade Daten</span>
 			</div>
+                        <div class="col-3 px-0">
+                                <span class="actualRunningTimeDevice">lade Daten</span>
+                        </div>
+
 		</div>
 		<!-- SmartHome Device 3 data -->
                 <div class="row no-gutter py-1 py-md-0 smallTextSize text-center bg-lightgrey text-grey SmartHome" dev="9">
@@ -545,9 +575,13 @@
                 	<div class="col-3 px-0">
                 	        <span class="actualPowerDevice">lade Daten</span>
                 	</div>
-                	<div class="col-6 px-0">
+                	<div class="col-3 px-0">
 				<span class="cursor-pointer actualModeDevice changeSHMode">lade Daten</span>
 			</div>
+                        <div class="col-3 px-0">
+                                <span class="actualRunningTimeDevice">lade Daten</span>
+                        </div>
+
 		</div>
 		<!-- depending on charge mode show options -->
 	    <form id="sofortladenEinstellungen" class="hide "name="sofortll" action="./tools/sofortll.php" method="POST">
@@ -963,40 +997,7 @@
 
 <!-- end old code-->
 
-		<!-- a few buttons at end of page for options -->
-		<!-- too many cols per row so bootstrap will linebreak -->
-		<!-- and change to appropriate button layout -->
-		<div class="row no-gutters justify-content-center">
-			<div class="col-sm-3 py-1">
-				<a href="ladelog.php"><button id="ladelogBtn" type="button" class="btn btn-lg btn-block btn-blue buttonTextSize">Ladelog</button></a>
-			</div>
-			<div class="d-none d-sm-block">
-				&nbsp
-			</div>
-			<div class="col-sm-4 py-1">
-				<a href="logging/index.php"><button id="loggingBtn" type="button" class="btn btn-lg btn-block btn-blue buttonTextSize">Logging</button></a>
-			</div>
-			<div class="d-none d-sm-block">
-				&nbsp
-			</div>
-			<div class="col-sm-3 py-1">
-				<a href="./status/status.php"><button id="statusBtn" type="button" class="btn btn-lg btn-block btn-blue buttonTextSize">Status</button></a>
-			</div>
-		</div>
-		<div class="row no-gutters justify-content-center">
-			<div class="col-sm-3 order-last order-sm-first py-1">
-				<a href="./hilfe/hilfe.php"><button id="hilfeBtn" type="button" class="btn btn-lg btn-block btn-blue buttonTextSize">Hilfe</button></a>
-			</div>
-			<div class="d-none d-sm-block">
-				&nbsp
-			</div>
-			<div class="col-sm-3 order-first order-sm-last py-1 ">
-				<a href="settings/settings.php"><button id="settingsBtn" type="button" class="btn btn-lg btn-block btn-blue buttonTextSize">Einstellungen</button></a>
-			</div>
-		</div>
-		<br>
 
-	</div>  <!-- end container -->
 
 	<!-- modal chargemode-select-window -->
 	<div class="modal fade" id="chargeModeModal">
@@ -1073,10 +1074,10 @@
 	<script src = "js/mqttws31.js" ></script>
 
 	<!-- load respective Chart.js definition -->
-	<script src="themes/<?php echo $themeCookie ?>/livechart.js?ver=20200411-a"></script>
+	<script src="themes/<?php echo $themeCookie ?>/livechart.js?ver=20200506-a"></script>
 	<script src="themes/<?php echo $themeCookie ?>/awattarchart.js?ver=20200331-a"></script>
 	<!-- Data refresher -->
-	<script src="themes/<?php echo $themeCookie ?>/processAllMqttMsg.js?ver=20200417-a"></script>
+	<script src="themes/<?php echo $themeCookie ?>/processAllMqttMsg.js?ver=20200506-b"></script>
 
 	<!-- some scripts -->
 	<script type="text/javascript">
@@ -1161,7 +1162,7 @@
 
 		$(document).ready(function(){
 
-			$.getScript("themes/<?php echo $themeCookie ?>/setupMqttServices.js?ver=20200417-a");
+			$.getScript("themes/<?php echo $themeCookie ?>/setupMqttServices.js?ver=20200506-a");
 
 			$('.enableLp').click(function(event){
 				// send mqtt set to enable/disable charge point after click
@@ -1169,9 +1170,9 @@
 				if ( !isNaN(lp) && lp > 0 && lp < 9 ) {
 					var isEnabled = $(this).hasClass("lpEnabledStyle")
 					if ( isEnabled ) {
-						publish("0", "openWB/set/lp" + lp + "/ChargePointEnabled");
+						publish("0", "openWB/set/lp/" + lp + "/ChargePointEnabled");
 					} else {
-						publish("1", "openWB/set/lp" + lp + "/ChargePointEnabled");
+						publish("1", "openWB/set/lp/" + lp + "/ChargePointEnabled");
 					}
 				}
 			});

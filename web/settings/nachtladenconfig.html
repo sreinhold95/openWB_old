@@ -40,41 +40,44 @@
 		<div role="main" class="container" style="margin-top:20px">
 
 			<form id="myForm">
-				<h1>Übergreifende Ladeeinstellungen</h1>
+				<h1>Einstellungen für Nachtladen - Testversion!!</h1>
 
 				<div class="card">
 					<div class="card-header font-weight-bold text-white bg-secondary">
-	    				Allgemeine Einstellungen
-	  				</div>
+						 Einstellungen Ladepunkt 1 (funktionslos)
+					</div>
 					<div class="card-body">
-						<h6 class="mb-0">Maximalstromstärke</h6>
+						<h6 class="mb-0">Nachtladen im Modus Sofortladen</h6>
 						<div>
 							<small>
-								Paramter in Ampere [A] für den maximalen Strom in allen Lademodi.
-								Definiert den maximalen Ladestrom an den Ladepunkten. Der größte einstellbare Wert liegt aus technischen Gründen bei 32 A.
+								Auswahl der Funktion Nachladen im Modus Sofortladen.
+								Die Auswahl beeinflusst den Regelpunkt und die Berechnung des Ladestroms.
 							</small>
 						</div>
-						<div class="form-row form-group mb-1 vaRow">
-							<label for="maxEVSECurrentAllowed" class="col-3 col-sm-2 col-form-label">alle LP:</label>
-							<div class="col-6 col-sm-4">
-								<input type="range" class="form-control-range rangeInput" id="maxEVSECurrentAllowed" min="11" max="32" step="1" value="" data-default="32" data-topicprefix="openWB/config/get/global/">
+						<div class="form-row form-group mt-2">
+							<div class="col btn-group btn-group-toggle" id="chargeLimitationLp3" name="chargeLimitation" data-toggle="buttons" data-default="0" data-topicprefix="openWB/config/get/sofort/" data-topicsubgroup="lp/3/">
+								<label class="btn btn-outline-info btn-toggle">
+									<input type="radio" name="chargeLimitationLp3" autocomplete="off" data-option="0"> ausgeschaltet
+								</label>
+								<label class="btn btn-outline-info btn-toggle">
+									<input type="radio" name="chargeLimitationLp3" autocomplete="off" data-option="1"> eingeschaltet
+								</label>
 							</div>
-							<label for="maxEVSECurrentAllowed" class="col col-form-label valueLabel" suffix="A"></label>
 						</div>
-					</div>  <!-- end card body Allgemeine Einstellungen Übergreifendes -->
-				</div>  <!-- end card Allgemeine Einstellungen Übergreifendes -->
+					</div>  <!-- end card body Einstellungen Ladepunkt 1 -->
+				</div>  <!-- end card Einstellungen Ladepunkt 1 -->
 
 				<br>
 
 				<div class="row justify-content-center">
 					<div class="col-3">
-						<button id="saveSettingsBtn" type="button" class="btn btn-success">speichern</button>
+						<button id="saveSettingsBtn" type="button" class="btn btn-success" disabled>speichern</button>
 					</div>
 					<div class="col-1">
 						&nbsp;
 					</div>
 					<div class="col-3">
-						<button id="modalDefaultsBtn" type="button" class="btn btn-danger">Werkseinstellungen</button>
+						<button id="modalDefaultsBtn" type="button" class="btn btn-danger" disabled>Werkseinstellungen</button>
 					</div>
 				</div>
 			</form>
@@ -92,7 +95,7 @@
 						<!-- modal body -->
 						<div class="modal-body text-center">
 							<p>
-								Sollen die übergreifenden Ladeeinstellungen wirklich auf Werkseinstellungen zurückgesetzt werden?
+								Sollen für die Funktion Nachtladen wirklich die Werkseinstellungen eingestellt werden?
 							</p>
 						</div>
 						<!-- modal footer -->
@@ -104,7 +107,7 @@
 				</div>
 			</div>
 
-			<!-- modal set-defaults-confirmation window -->
+			<!-- modal form-not-valid window -->
 			<div class="modal fade" id="formNotValidModal" role="dialog">
 				<div class="modal-dialog" role="document">
 					<div class="modal-content">
@@ -152,14 +155,14 @@
 
 		<footer class="footer bg-dark text-light font-small">
 			<div class="container text-center">
-				<small>Sie befinden sich hier: Ladeeinstellungen/Übergreifendes</small>
+				<small>Sie befinden sich hier: Ladeeinstellungen/Nachtladen</small>
 			</div>
 		</footer>
 
 		<!-- load mqtt library -->
 		<script src = "js/mqttws31.js" ></script>
 		<!-- load topics -->
-		<script src = "settings/topicsToSubscribe_generalchargeconfig.js?ver=20200428-a" ></script>
+		<script src = "settings/topicsToSubscribe_nachtladenconfig.js?ver=20200505-a" ></script>
 		<!-- load helper functions -->
 		<script src = "settings/helperFunctions.js?ver=20200505-a" ></script>
 		<!-- load service -->
@@ -172,7 +175,7 @@
 			$.get('settings/navbar.html', function(data){
 				$('#nav').replaceWith(data);
 				// disable navbar entry for current page
-				$('#navGeneralLadeeinstellungen').addClass('disabled');
+				$('#navSofortLadeeinstellungen').addClass('disabled');
 			});
 
 			function saveSettings() {
@@ -213,20 +216,11 @@
 					sendValues();
 				});
 
-				$('input').on("paste",function(e) {
-					// prevent paste to input fields to avoid garbage
-					e.preventDefault();
-				});
-
 				$('.rangeInput').on('input', function() {
 					// show slider value in label of class valueLabel
 					updateLabel($(this).attr('id'));
 				});
 
-				$('input.naturalNumber').on('input', function() {
-					// on the fly input validation
-					formatToNaturalNumber(this);
-				});
 			});  // end document ready function
 
 		</script>
