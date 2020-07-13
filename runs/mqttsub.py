@@ -65,6 +65,7 @@ mqtt_broker_ip = "localhost"
 client = mqtt.Client("openWB-mqttsub-" + getserial())
 ipallowed='^[0-9.]+$'
 nameallowed='^[a-zA-Z ]+$'
+namenumballowed='^[0-9a-zA-Z ]+$'
 # connect to broker and subscribe to set topics
 def on_connect(client, userdata, flags, rc):
     #subscribe to all set topics
@@ -73,7 +74,7 @@ def on_connect(client, userdata, flags, rc):
     client.subscribe("openWB/config/set/#", 2)
 # handle each set topic
 def on_message(client, userdata, msg):
- 
+
     if (( "openWB/set/lp" in msg.topic) and ("ChargePointEnabled" in msg.topic)):
         devicenumb=re.sub('\D', '', msg.topic)
         if ( 1 <= int(devicenumb) <= 8 and 0 <= int(msg.payload) <= 1):
@@ -198,9 +199,6 @@ def on_message(client, userdata, msg):
 
             client.publish("openWB/config/get/sofort/lp/"+str(devicenumb)+"/energyToCharge", msg.payload.decode("utf-8"), qos=0, retain=True)
             client.publish("openWB/config/set/sofort/lp/"+str(devicenumb)+"/energyToCharge", "", qos=0, retain=True)
-            f = open('/var/www/html/openWB/ramdisk/lp'+str(devicenumb)+'sofortll', 'w')
-            f.write(msg.payload.decode("utf-8"))
-            f.close()
     if (( "openWB/config/set/sofort/lp" in msg.topic) and ("resetEnergyToCharge" in msg.topic)):
         devicenumb=re.sub('\D', '', msg.topic)
         if ( 1 <= int(devicenumb) <= 8 and int(msg.payload) == 1):
@@ -232,7 +230,7 @@ def on_message(client, userdata, msg):
                 f = open('/var/www/html/openWB/ramdisk/gelrlp'+str(devicenumb), 'w')
                 f.write("0")
                 f.close()
-            client.publish("openWB/config/set/sofort/lp/"+str(devicenumb)+"/resetEnergyToCharge", "", qos=0, retain=True) 
+            client.publish("openWB/config/set/sofort/lp/"+str(devicenumb)+"/resetEnergyToCharge", "", qos=0, retain=True)
     if (( "openWB/config/set/sofort/lp" in msg.topic) and ("socToChargeTo" in msg.topic)):
         devicenumb=re.sub('\D', '', msg.topic)
         if ( 1 <= int(devicenumb) <= 2 and 0 <= int(msg.payload) <= 100):
@@ -257,7 +255,7 @@ def on_message(client, userdata, msg):
 
             client.publish("openWB/config/get/sofort/lp/"+str(devicenumb)+"/chargeLimitation", msg.payload.decode("utf-8"), qos=0, retain=True)
             client.publish("openWB/config/set/sofort/lp/"+str(devicenumb)+"/chargeLimitation", "", qos=0, retain=True)
- 
+
 
     if (msg.topic == "openWB/config/set/pv/minFeedinPowerBeforeStart"):
         if (int(msg.payload) >= -100000 and int(msg.payload) <= 100000):
@@ -489,6 +487,11 @@ def on_message(client, userdata, msg):
             f = open('/var/www/html/openWB/ramdisk/FixedChargeCurrentCp2', 'w')
             f.write(msg.payload.decode("utf-8"))
             f.close()
+    if (msg.topic == "openWB/set/configure/SlaveModeAllowedLoadImbalance"):
+        if (float(msg.payload) >= 0 and float(msg.payload) <=200):
+            f = open('/var/www/html/openWB/ramdisk/SlaveModeAllowedLoadImbalance', 'w')
+            f.write(msg.payload.decode("utf-8"))
+            f.close()
     if (msg.topic == "openWB/set/configure/AllowedRfidsForLp1"):
         f = open('/var/www/html/openWB/ramdisk/AllowedRfidsForLp1', 'w')
         f.write(msg.payload.decode("utf-8"))
@@ -552,6 +555,12 @@ def on_message(client, userdata, msg):
             sendcommand = ["/var/www/html/openWB/runs/replaceinconfig.sh", "livegraph=", msg.payload.decode("utf-8")]
             subprocess.Popen(sendcommand)
             client.publish("openWB/set/graph/LiveGraphDuration", "", qos=0, retain=True)
+    if (msg.topic == "openWB/set/system/SimulateRFID"):
+        if len(str(msg.payload)) >= 1 and bool(re.match(namenumballowed, msg.payload.decode("utf-8"))):
+            f = open('/var/www/html/openWB/ramdisk/readtag', 'w')
+            f.write(msg.payload.decode("utf-8"))
+            f.close()
+            client.publish("openWB/set/system/SimulateRFID", "", qos=0, retain=True)
     if (msg.topic == "openWB/set/system/PerformUpdate"):
         if (int(msg.payload) == 1):
             client.publish("openWB/set/system/PerformUpdate", "0", qos=0, retain=True)
@@ -893,7 +902,7 @@ def on_message(client, userdata, msg):
             f.write(msg.payload.decode("utf-8"))
             f.close()
 
-    if (len(msg.payload) >= 1): 
+    if (len(msg.payload) >= 1):
         theTime = datetime.now()
         timestamp = theTime.strftime(format = "%Y-%m-%d %H:%M:%S")
         file = open('/var/www/html/openWB/ramdisk/mqtt.log', 'a')

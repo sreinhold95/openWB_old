@@ -199,6 +199,16 @@ if [[ $lastmanagement == "0" ]]; then
 							fi
 							exit 0
 						fi
+						if (( llneu < minimalstromstaerke )); then
+							llneu=$minimalstromstaerke
+							runs/set-current.sh "$llneu" m
+							echo "$date LP1, Lademodus Sofort. Ladung geändert auf $llneu Ampere" >> ramdisk/ladestatus.log
+							if [[ $debug == "1" ]]; then
+								echo "Sofort ladung auf $llneu reduziert, unter eingestellter max A $minimalstromstaerke"
+							fi
+							exit 0
+						fi
+
 						runs/set-current.sh "$llneu" m
 						echo "$date LP1, Lademodus Sofort. Ladung geändert auf $llneu Ampere" >> ramdisk/ladestatus.log
 						if [[ $debug == "1" ]]; then
@@ -516,6 +526,9 @@ else
 						if (( llneus1 > maximalstromstaerke )); then
 							llneus1=$maximalstromstaerke
 						fi
+						if (( llneus1 < minimalstromstaerke )); then
+							llneus1=$minimalstromstaerke
+						fi
 						runs/set-current.sh "$llneus1" s1
 						if [[ $debug == "1" ]]; then
 							echo "Sofort ladung Ladepunkt 2 um $maxdiff A Differenz auf $llneus1 A erhoeht, war kleiner als sofortll $sofortlls1"
@@ -523,6 +536,9 @@ else
 					fi
 					if (( llalts1 > sofortlls1)); then
 						llneus1=$sofortlls1
+						if (( llneus1 < minimalstromstaerke )); then
+							llneus1=$minimalstromstaerke
+						fi
 						runs/set-current.sh "$llneus1" s1
 						echo "$date LP2, Lademodus Sofort. Ladung geändert auf $llneus1 Ampere" >> ramdisk/ladestatus.log
 						if [[ $debug == "1" ]]; then
@@ -597,6 +613,10 @@ else
 						if (( llneus1 > maximalstromstaerke )); then
 							llneus1=$maximalstromstaerke
 						fi
+						if (( llneus1 < minimalstromstaerke )); then
+							llneus1=$minimalstromstaerke
+						fi
+
 						runs/set-current.sh "$llneus1" s1
 						if [[ $debug == "1" ]]; then
 							echo "Sofort ladung Ladepunkt 2 um $maxdiff A Differenz auf $llneus1 A erhoeht, war kleiner als sofortll $sofortlls1"
@@ -604,6 +624,10 @@ else
 					fi
 					if (( llalts1 > sofortlls1)); then
 						llneus1=$sofortlls1
+						if (( llneus1 < minimalstromstaerke )); then
+							llneus1=$minimalstromstaerke
+						fi
+
 						runs/set-current.sh "$llneus1" s1
 						echo "$date LP2, Lademodus Sofort. Ladung geändert auf $llneus1 Ampere" >> ramdisk/ladestatus.log
 						if [[ $debug == "1" ]]; then

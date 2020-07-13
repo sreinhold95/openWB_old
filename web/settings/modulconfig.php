@@ -48,8 +48,8 @@
 				if(strpos($line, "pv2id=") !== false) {
 					list(, $pv2idold) = explode("=", $line);
 				}
-				if(strpos($line, "pv1_ip=") !== false) {
-					list(, $pv1_ipold) = explode("=", $line);
+				if(strpos($line, "pv1_ipa=") !== false) {
+					list(, $pv1_ipaold) = explode("=", $line);
 				}
 				if(strpos($line, "speicher1_ip=") !== false) {
 					list(, $speicher1_ipold) = explode("=", $line);
@@ -271,9 +271,6 @@
 					list(, $solarview_portold) = explode("=", $line);
 				}
 
-				if(strpos($line, "alphaessip=") !== false) {
-					list(, $alphaessipold) = explode("=", $line);
-				}
 				if(strpos($line, "soc_audi_username=") !== false) {
 					list(, $soc_audi_usernameold) = explode("=", $line);
 				}
@@ -354,6 +351,9 @@
 				}
 				if(strpos($line, "maximalstromstaerke=") !== false) {
 					list(, $maximalstromstaerkeold) = explode("=", $line);
+				}
+				if(strpos($line, "httpevseip=") !== false) {
+					list(, $httpevseipold) = explode("=", $line);
 				}
 				if(strpos($line, "evsecon=") !== false) {
 					list(, $evseconold) = explode("=", $line);
@@ -580,6 +580,9 @@
 				}
 				if(strpos($line, "httpll_w_url=") !== false) {
 					list(, $httpll_w_urlold) = explode("=", $line, 2);
+				}
+				if(strpos($line, "httpll_ip=") !== false) {
+					list(, $httpll_ipold) = explode("=", $line, 2);
 				}
 				if(strpos($line, "httpll_kwh_url=") !== false) {
 					list(, $httpll_kwh_urlold) = explode("=", $line, 2);
@@ -1108,6 +1111,9 @@
 				if(strpos($line, "kostalplenticorebatt=") !== false) {
 					list(, $kostalplenticorebattold) = explode("=", $line);
 				}
+				if(strpos($line, "froniuserzeugung=") !== false) {
+					list(, $froniuserzeugungold) = explode("=", $line);
+				}
 				if(strpos($line, "froniusprimo=") !== false) {
 					list(, $froniusprimoold) = explode("=", $line);
 				}
@@ -1216,7 +1222,9 @@
 								<option <?php if($evseconold == "keba\n") echo "selected" ?> value="keba">Keba</option>
 								<option <?php if($evseconold == "modbusevse\n" && $ladeleistungmodulold == "mpm3pmll\n" && $mpm3pmllsourceold == "/dev/ttyUSB0\n" && $mpm3pmllidold == "5\n") echo "selected" ?> value="openwb12">openWB series1/2</option>
 								<option <?php if($evseconold == "modbusevse\n" && $ladeleistungmodulold == "mpm3pmll\n" && $mpm3pmllsourceold == "/dev/ttyUSB0\n" && $mpm3pmllidold == "105\n") echo "selected" ?> value="openwb12mid">openWB series1/2 mit geeichtem Zähler</option>
+								<option <?php if($evseconold == "modbusevse\n" && $ladeleistungmodulold == "mpm3pmll\n" && $mpm3pmllsourceold == "/dev/serial0\n" && $mpm3pmllidold == "105\n") echo "selected" ?> value="openwb12v2mid">openWB series1/2 mit geeichtem Zähler v2</option>
 								<option <?php if($evseconold == "ipevse\n") echo "selected" ?> value="ipevse">openWB Satellit </option>
+								<option <?php if($evseconold == "httpevse\n") echo "selected" ?> value="httpevse">HTTP</option>
 							</select>
 						</div>
 					</div>
@@ -1237,6 +1245,13 @@
 							Dies ist die richtige Option, sowohl für Bausatz als auch für fertige openWB series1 oder series2 mit geeichtem Zähler.
 						</div>
 					</div>
+					<div id="openwb12v2mid">
+						<div class="row bg-success">
+							Keine Konfiguration erforderlich.<br>
+							Dies ist die richtige Option, für fertige openWB series2 mit geeichtem Zähler und Addon Platine ab Mai 2020 (Standard+).
+						</div>
+					</div>
+
 					<div id="evsecondac">
 						<div class="row bg-success">
 							<b><label for="dacregister">Dacregister:</label></b>
@@ -1320,6 +1335,19 @@
 							Erforder eine Keba C- oder X- Series. Die Smart Home Funktion (UDP Schnittstelle) muss per DIP Switch in der Keba aktiviert sein!
 						</div>
 					</div>
+					<div id="evseconhttp">
+						<div class="row bg-info">
+							<b><label for="httpevseip">IP Adresse:</label></b>
+							<input type="text" name="httpevseip" id="httpevseip" value="<?php echo $httpevseipold ?>">
+						</div>
+						<div class="row bg-info">
+							Gültige Werte IP Adresse im Format: 192.168.0.12<br>
+							Der Ampere sollwert wird an http://$IP/setcurrent?current=$WERT gesendet.<br>
+							Für eine korrekte Funktion ist als Ladeleistungsmodul HTTP zu wählen.<br>
+							WERT kann sein: 0 = keine Ladung erlaubt, 6-32 = x Ampere erlaubt.
+						</div>
+					</div>
+
 					<div id="evsecontwcmanager">
 						<div class="row bg-info">
 							<b><label for="twcmanagerlp1ip">TWCManager IP Adresse:</label></b>
@@ -1397,6 +1425,8 @@
 							$('#evseconkeba').hide();
 							$('#openwb12').hide();
 							$('#openwb12mid').hide();
+							$('#openwb12v2mid').hide();
+							$('#evseconhttp').hide();
 							$('#evsecontwcmanager').hide();
 							$('#evseconipevse').hide();
 							if($('#evsecon').val() == 'ipevse') {
@@ -1414,6 +1444,11 @@
 							if($('#evsecon').val() == 'simpleevsewifi') {
 								$('#evseconswifi').show();
 							}
+							if($('#evsecon').val() == 'httpevse') {
+								$('#evseconhttp').show();
+								$('#llmodullp1').show();
+							}
+
 							if($('#evsecon').val() == 'goe') {
 								$('#evsecongoe').show();
 							}
@@ -1435,6 +1470,10 @@
 							if($('#evsecon').val() == 'openwb12mid') {
 								$('#openwb12mid').show();
 							}
+							if($('#evsecon').val() == 'openwb12v2mid') {
+								$('#openwb12v2mid').show();
+							}
+
 							if($('#evsecon').val() == 'ipevse') {
 								$('#evseconipevse').show();
 							}
@@ -1518,6 +1557,14 @@
 							</div>
 							<div class="row bg-info">
 								Gültige Werte vollständige URL. Die abgerufene Url muss eine reine Zahl zurückgeben. Enthält der Rückgabewert etwas anderes als wird der Wert auf null gesetzt. Der Wert muss in Ampere sein als Trennstelle wird ein Punkt genutzt.
+							</div>
+							<div class="row bg-info" >
+								<b><label for="httpll_ip">IP Adresse für Plug/Charge Status</label></b>
+								<input type="text" name="httpll_ip" id="httpll_ip" value="<?php echo htmlspecialchars($httpll_ipold) ?>">
+							</div>
+							<div class="row bg-info">
+								Gültige Werte IP. Abgerufene wird die Url http://$IP/plugstat und http://$IP/chargestat<br>
+								Rückgabe ist jeweils 0 oder 1. Plugstat gibt an ob ein Stecker steckt, Chargestat gibt an ob EVSEseitig die Ladung aktiv ist
 							</div>
 						</div>
 						<div id="llmpm3pm">
@@ -3490,7 +3537,7 @@
 							<option <?php if($wattbezugmodulold == "bezug_solaredge\n") echo "selected" ?> value="bezug_solaredge">Solaredge</option>
 							<option <?php if($wattbezugmodulold == "bezug_smartme\n") echo "selected" ?> value="bezug_smartme">Smartme</option>
 							<option <?php if($wattbezugmodulold == "bezug_e3dc\n") echo "selected" ?> value="bezug_e3dc">E3DC Speicher</option>
-							<option <?php if($wattbezugmodulold == "bezug_sbs25\n") echo "selected" ?> value="bezug_sbs25">SMA SBS2.5 Speicher</option>
+							<option <?php if($wattbezugmodulold == "bezug_sbs25\n") echo "selected" ?> value="bezug_sbs25">SMA Sunny Boy Storage </option>
 							<option <?php if($wattbezugmodulold == "bezug_kostalplenticoreem300haus\n") echo "selected" ?> value="bezug_kostalplenticoreem300haus">Kostal Plenticore mit EM300/KSEM</option>
 							<option <?php if($wattbezugmodulold == "bezug_kostalpiko\n") echo "selected" ?> value="bezug_kostalpiko">Kostal Piko mit Energy Meter</option>
 							<option <?php if($wattbezugmodulold == "bezug_ksem\n") echo selected ?> value="bezug_ksem">Kostal Smart Energy Meter oder TQ EM410</option>
@@ -3782,6 +3829,7 @@
 						<div class="row" style="background-color:#febebe">
 							Gültige Werte vollständige URL. Die abgerufene Url muss eine reine Zahl zurückgeben. Enthält der Rückgabewert etwas anderes als "-" (für Einspeisung) oder "0-9" wird der Wert auf null gesetzt. Der Wert muss in Ampere sein. Bei nicht Nutzung auf none setzen.
 						</div>
+
 					</div>
 					<div id="wattbezugsmartme">
 						<div class="row" style="background-color:#febebe">
@@ -3835,12 +3883,14 @@
 						</div>
 					</div>
 					<div id="wattbezugfronius">
-						<div class="row" style="background-color:#febebe">
-							Die IP des Wechselrichters wird im dazugehörigen Fronius PV-Modul eingestellt.
+						<div class="row" style="background-color:#febebe"> Die IP des Wechselrichters wird im dazugehörigen Fronius PV-Modul eingestellt.
 						</div>
+						<input type='hidden' value='0' name='froniuserzeugung'>
+						<input id="froniuserzeugung" name="froniuserzeugung" value="1" type="checkbox" <?php if ( $froniuserzeugungold == 1){ echo "checked"; } ?> >
+						<label for="froniuserzeugung"> Meter mit ID 1 statt 0</label><br />
 						<input type='hidden' value='0' name='froniusprimo'>
 						<input id="froniusprimo" name="froniusprimo" value="1" type="checkbox" <?php if ( $froniusprimoold == 1){ echo "checked"; } ?> >
-						<label for="froniusprimo">Kompatibilitätsmodus für die Primo Reihe</label>
+						<label for="froniusprimo"> Kompatibilitätsmodus für die Primo Reihe</label>
 					</div>
 					<div id="wattbezugjson">
 						<div class="row" style="background-color:#febebe">
@@ -3911,7 +3961,7 @@
 					</div>
 					<div id="wattbezugsbs25">
 						<div class="row" style="background-color:#febebe">
-							Die IP des Speichers wird im dazugehörigen SMA SBS 2.5 Speicher-Modul eingestellt.
+							Die IP des Speichers wird im dazugehörigen SMA SBS Speicher-Modul eingestellt.
 						</div>
 					</div>
 
@@ -4166,8 +4216,8 @@
 					</div>
 					<div id="pvip">
 						<div class="row" style="background-color:#febebe">
-							<b><label for="pv1_ip">IP Adresse:</label></b>
-							<input type="text" name="pv1_ip" id="pv1_ip" value="<?php echo htmlspecialchars($pv1_ipold) ?>">
+							<b><label for="pv1_ipa">IP Adresse:</label></b>
+							<input type="text" name="pv1_ipa" id="pv1_ipa" value="<?php echo htmlspecialchars($pv1_ipaold) ?>">
 						</div>
 					</div>
 
@@ -4236,18 +4286,18 @@
 					</div>
 					<div id="pvsolarview">
 						<div class="row" style="background-color:#febebe">
-							<b><label for="solarview_hostname">IP Adresse des Solarview</label></b>
+							<b><label for="solarview_hostname">Hostname des SolarView TCP-Servers</label></b>
 							<input type="text" name="solarview_hostname" id="solarview_hostname" value="<?php echo htmlspecialchars($solarview_hostnameold) ?>">
 						</div>
 						<div class="row" style="background-color:#febebe">
-							Gültige Werte IP.
+							Gültige Werte Hostname oder IP-Adresse.
 						</div>
 						<div class="row" style="background-color:#febebe">
-							<b><label for="solarview_port">Port des Solarview</label></b>
+							<b><label for="solarview_port">Port des Solarview TCP-Servers</label></b>
 							<input type="text" name="solarview_port" id="solarview_port" value="<?php echo htmlspecialchars($solarview_portold) ?>">
 						</div>
 						<div class="row" style="background-color:#febebe">
-							Gültige Werte Port, z.B. 80.
+							Gültige Werte Port, z.B. 15000.
 						</div>
 					</div>
 					<div id="pvpowerwall">
@@ -4786,11 +4836,11 @@
 							<option <?php if($speichermodulold == "speicher_bydhv\n") echo "selected" ?> value="speicher_bydhv">ByD HV</option>
 							<option <?php if($speichermodulold == "speicher_fronius\n") echo "selected" ?> value="speicher_fronius">Fronius Speicher</option>
 							<option <?php if($speichermodulold == "speicher_e3dc\n") echo "selected" ?> value="speicher_e3dc">E3DC Speicher</option>
-							<option <?php if($speichermodulold == "speicher_sbs25\n") echo "selected" ?> value="speicher_sbs25">SMA SBS2.5 Speicher</option>
+							<option <?php if($speichermodulold == "speicher_sbs25\n") echo "selected" ?> value="speicher_sbs25">SMA Sunny Boy Storage</option>
 							<option <?php if($speichermodulold == "speicher_solaredge\n") echo "selected" ?> value="speicher_solaredge">Solaredge Speicher</option>
 							<option <?php if($speichermodulold == "speicher_powerwall\n") echo "selected" ?> value="speicher_powerwall">Tesla Powerwall</option>
 							<option <?php if($speichermodulold == "speicher_kostalplenticore\n") echo "selected" ?> value="speicher_kostalplenticore">Kostal Plenticore mit Speicher</option>
-							<option <?php if($speichermodulold == "speicher_sunnyisland\n") echo "selected" ?> value="speicher_sunnyisland">SMA Sunny Island Speicher</option>
+							<option <?php if($speichermodulold == "speicher_sunnyisland\n") echo "selected" ?> value="speicher_sunnyisland">SMA Sunny Island</option>
 							<option <?php if($speichermodulold == "speicher_sonneneco\n") echo "selected" ?> value="speicher_sonneneco">Sonnen eco</option>
 							<option <?php if($speichermodulold == "speicher_varta\n") echo "selected" ?> value="speicher_varta">Varta Element u.a.</option>
 							<option <?php if($speichermodulold == "speicher_alphaess\n") echo "selected" ?> value="speicher_alphaess">Alpha ESS</option>
@@ -4836,13 +4886,13 @@
 					<div id="divspeichermqtt">
 						<div class="row" style="background-color:#fcbe1e">Keine Konfiguration erforderlich</div>
 						<div class="row" style="background-color:#fcbe1e">Per MQTT zu schreiben:</div>
-						<div class="row" style="background-color:#fcbe1e"><b>"openWB/set/Housebattery/W"</b></div>
+						<div class="row" style="background-color:#fcbe1e"><b>"openWB/set/HouseBattery/W"</b></div>
 						<div class="row" style="background-color:#fcbe1e">Speicherleistung in Watt, int, positiv Ladung, negativ Entladung</div>
-						<div class="row" style="background-color:#fcbe1e"><b>"openWB/set/Housebattery/WhImported"</b></div>
+						<div class="row" style="background-color:#fcbe1e"><b>"openWB/set/HouseBattery/WhImported"</b></div>
 						<div class="row" style="background-color:#fcbe1e">Geladene Energie in Wh, float, nur positiv</div>
-						<div class="row" style="background-color:#fcbe1e"><b>"openWB/set/Housebattery/WhExported"</b></div>
+						<div class="row" style="background-color:#fcbe1e"><b>"openWB/set/HouseBattery/WhExported"</b></div>
 						<div class="row" style="background-color:#fcbe1e">Entladene Energie in Wh, float, nur positiv</div>
-						<div class="row" style="background-color:#fcbe1e"><b>"openWB/set/Housebattery/%Soc"</b></div>
+						<div class="row" style="background-color:#fcbe1e"><b>"openWB/set/HouseBattery/%Soc"</b></div>
 						<div class="row" style="background-color:#fcbe1e">Ladestand des Speichers, int, 0-100</div>
 					</div>
 					<div id="divspeichervictron">
@@ -4877,12 +4927,9 @@
 						</div>
 					</div>
 					<div id="divspeicheralphaess">
+
 						<div class="row" style="background-color:#fcbe1e">
-							<b><label for="alphaessip">Anbindung:</label></b>
-							<input type="text" name="alphaessip" id="alphaessip" value="<?php echo $alphaessipold ?>">
-						</div>
-						<div class="row" style="background-color:#fcbe1e">
-							Wenn das Alpha Kit von openWB genutzt wird ist hier 192.168.193.31 einzutragen. Wenn direkt RS485 per Adapter genutzt z.B. /dev/ttyUSB1
+							Keine Konfiguration erforderlich
 						</div>
 					</div>
 					<div id="divspeicherpw">
@@ -4935,11 +4982,11 @@
 					</div>
 					<div id="divspeichersbs25">
 						<div class="row" style="background-color:#fcbe1e">
-							<b><label for="sbs25ip">SBS 2.5 IP:</label></b>
+							<b><label for="sbs25ip">SBS IP:</label></b>
 							<input type="text" name="sbs25ip" id="sbs25ip" value="<?php echo $sbs25ipold ?>">
 						</div>
 						<div class="row" style="background-color:#fcbe1e">
-							Gültige Werte: IPs. IP Adresse des SMA Sunny Boy Storage 2.5 Speichers.
+							Gültige Werte: IPs. IP Adresse des SMA Sunny Boy Storage Speichers.
 						</div>
 					</div>
 					<div id="divspeichersunnyisland">

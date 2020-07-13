@@ -195,7 +195,7 @@ if (( ladeleistung < 300 )); then
 	fi
 else
 	if [[ $speichervorhanden == "1" ]]; then
-		if (( speicherleistung < 0 )); then
+		if (( speicherleistung < 10 )); then
 			if (( speichersoc > speichersocnurpv )); then
 				uberschuss=$((uberschuss + speicherleistung + speicherwattnurpv))
 				echo "$date SpeicherSoc ($speichersoc) über konfiguriertem Wert ($speichersocnurpv), neuer Überschusswert: $uberschuss" >> ramdisk/nurpv.log
@@ -236,7 +236,7 @@ else
 			llneu=$minimalapv
 		fi
 		echo "$date Uberschuss ($uberschuss) ist größer als Schaltschwelle ($schaltschwelle), neuer Ladestromwert: $llneu" >> ramdisk/nurpv.log
-		if (( adaptpv == 1 )) && (( soc > 0 )) && (( soc1 > 0 )) && (( anzahlphasen == 2 )); then
+		if (( adaptpv == 1 )) && (( soc > 0 )) && (( soc1 > 0 )) && (( (( anzahlphasen == 6 )) || (( anzahlphasen == 2 )) )); then
 			if (( minimalalp2pv > minimalapv )); then
 				minimalapv=$minimalalp2pv
 			fi
@@ -286,7 +286,7 @@ else
 			if (( llneu < minimalapv )); then
 				llneu=$minimalapv
 			fi
-			if (( adaptpv == 1 )) && (( soc > 0 )) && (( soc1 > 0 )) && ((anzahlphasen == 2 )); then
+			if (( adaptpv == 1 )) && (( soc > 0 )) && (( soc1 > 0 )) && (( (( anzahlphasen == 6 )) || (( anzahlphasen == 2 )) )); then
 				socdist=$(echo $((soc1 - soc)) | sed 's/-//')
 				anzahl=$((socdist / adaptfaktor))
 				if (( soc1 > soc )); then
