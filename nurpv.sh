@@ -17,8 +17,10 @@ if [[ $schieflastaktiv == "1" ]]; then
 	if [[ $u1p3paktiv == "1" ]]; then
 		u1p3pstat=$(<ramdisk/u1p3pstat)
 		if [[ $u1p3pstat == "1" ]]; then
-			maximalstromstaerke=$schieflastmaxa
-			echo "$date Maximalstromstärke begrenzt auf $schieflastmaxa da Schieflastbegrenzung konfiguriert" >> ramdisk/nurpv.log
+			if (( schieflastmax < maximalstromstaerke )); then
+				maximalstromstaerke=$schieflastmaxa
+				echo "$date Maximalstromstärke begrenzt auf $schieflastmaxa da Schieflastbegrenzung konfiguriert" >> ramdisk/nurpv.log
+			fi
 		fi
 	fi
 fi
@@ -29,6 +31,7 @@ if (( stopchargeafterdisclp1 == 0 )); then
 				mosquitto_pub -r -t "openWB/set/lp/1/ChargePointEnabled" -m "0"
 				echo "$date LP1, Lademodus NurPV. Schalte Ladepunkt auf gesperrt da $soc % SoC erreicht, Ziel $stopchargepvpercentagelp1 %" >> ramdisk/ladestatus.log
 				echo "$date LP1, Lademodus NurPV. Schalte Ladepunkt auf gesperrt da $soc % SoC erreicht, Ziel $stopchargepvpercentagelp1 %" >> ramdisk/nurpv.log
+				echo "SoC PV Begrenzung (Limit: $stopchargepvpercentagelp1%) LP1 aktiv, LP gesperrt" > ramdisk/lastregelungaktiv
 
 			fi
 		fi
@@ -37,6 +40,8 @@ if (( stopchargeafterdisclp1 == 0 )); then
 				mosquitto_pub -r -t "openWB/set/lp/1/ChargePointEnabled" -m "1"
 				echo "$date LP1, Lademodus NurPV. Schalte Ladepunkt frei da $soc % SoC noch nicht erreicht, Ziel $stopchargepvpercentagelp1 %" >> ramdisk/ladestatus.log
 				echo "$date LP1, Lademodus NurPV. Schalte Ladepunkt frei da $soc % SoC noch nicht erreicht, Ziel $stopchargepvpercentagelp1 %" >> ramdisk/nurpv.log
+				echo "SoC PV Begrenzung LP1 (Limit: $stopchargepvpercentagelp1%) unterschritten, LP entsperrt" > ramdisk/lastregelungaktiv
+
 			fi
 		fi
 	fi
@@ -48,6 +53,8 @@ if (( stopchargeafterdisclp2 == 0 )); then
 				mosquitto_pub -r -t "openWB/set/lp/2/ChargePointEnabled" -m "0"
 				echo "$date LP2, Lademodus NurPV. Schalte Ladepunkt auf gesperrt da $soc1 % SoC erreicht, Ziel $stopchargepvpercentagelp2 %" >> ramdisk/ladestatus.log
 				echo "$date LP2, Lademodus NurPV. Schalte Ladepunkt auf gesperrt da $soc1 % SoC erreicht, Ziel $stopchargepvpercentagelp2 %" >> ramdisk/nurpv.log
+				echo "SoC PV Begrenzung LP2 (Limit: $stopchargepvpercentagelp2%) aktiv, LP gesperrt" > ramdisk/lastregelungaktiv
+
 			fi
 		fi
 		if (( soc1 < stopchargepvpercentagelp2 )); then
@@ -55,6 +62,8 @@ if (( stopchargeafterdisclp2 == 0 )); then
 				mosquitto_pub -r -t "openWB/set/lp/2/ChargePointEnabled" -m "1"
 				echo "$date LP2, Lademodus NurPV. Schalte Ladepunkt frei da $soc % SoC noch nicht erreicht, Ziel $stopchargepvpercentagelp2 %" >> ramdisk/ladestatus.log
 				echo "$date LP2, Lademodus NurPV. Schalte Ladepunkt frei da $soc % SoC noch nicht erreicht, Ziel $stopchargepvpercentagelp2 %" >> ramdisk/nurpv.log
+				echo "SoC PV Begrenzung LP2 (Limit: $stopchargepvpercentagelp2%) unterschritten, LP entsperrt" > ramdisk/lastregelungaktiv
+
 			fi
 		fi
 	fi
@@ -75,7 +84,8 @@ if [[ $lastmanagement == "0" ]]; then
 					runs/set-current.sh $minnurpvsocll all
 					echo "$date LP1, Lademodus NurPV. Ladung geändert auf $minnurpvsocll Ampere, $soc % SoC noch nicht erreicht" >> ramdisk/ladestatus.log
 				fi
-			fi 
+			fi
+			echo "Ladung mit $minnurpvsocll Ampere, da $soc % SoC noch nicht erreicht" > ramdisk/lastregelungaktiv
 		exit 0
 		fi
 		if (( soc > maxnurpvsoclp1 )); then
@@ -349,7 +359,7 @@ else
 			if [[ $nurpv70dynact == "1" ]]; then
 				nurpv70status=$(<ramdisk/nurpv70dynstatus)
 				if [[ $nurpv70status == "1" ]]; then
-					abschaltuberschuss=1500
+					abschaltuberschuss=$(( 1500 * anzahlphasen ))
 					if [[ $debug == "1" ]]; then
 						echo "Setze neue Abschwaltschwelle"
 					fi

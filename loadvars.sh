@@ -61,8 +61,16 @@ lp7enabled=$(<ramdisk/lp7enabled)
 lp8enabled=$(<ramdisk/lp8enabled)
 version=$(<web/version)
 # EVSE DIN Plug State
+declare -r IsNumberRegex='^[0-9]+$'
 if [[ $evsecon == "modbusevse" ]]; then
 	evseplugstate=$(sudo python runs/readmodbus.py $modbusevsesource $modbusevseid 1002 1)
+	if [ -z "${evseplugstate}" ] || ! [[ "${evseplugstate}" =~ $IsNumberRegex ]]; then
+	    # EVSE read returned empty or non-numeric value --> use last state for this loop
+		evseplugstate=$(</var/www/html/openWB/ramdisk/evseplugstate)
+		echo "$(date +%s) Modbus EVSE read CP1 issue - using previous state '${evseplugstate}'"
+	else
+	    echo $evseplugstate > /var/www/html/openWB/ramdisk/evseplugstate
+	fi
 	ladestatuslp1=$(</var/www/html/openWB/ramdisk/ladestatus)
 	if [ "$evseplugstate" -ge "0" ] && [ "$evseplugstate" -le "10" ] ; then
 		if [[ $evseplugstate > "1" ]]; then
@@ -97,6 +105,12 @@ else
 fi
 if [[ $evsecon == "ipevse" ]]; then
 	evseplugstatelp1=$(sudo python runs/readipmodbus.py $evseiplp1 $evseidlp1 1002 1)
+	if [ -z "${evseplugstate}" ] || ! [[ "${evseplugstate}" =~ $IsNumberRegex ]]; then
+		evseplugstate=$(</var/www/html/openWB/ramdisk/evseplugstate)
+		echo "$(date +%s) IP EVSE read CP1 issue - using previous state '${evseplugstate}'"
+	else
+	    echo $evseplugstate > /var/www/html/openWB/ramdisk/evseplugstate
+	fi
 	ladestatuslp1=$(</var/www/html/openWB/ramdisk/ladestatus)
 	if [[ $evseplugstatelp1 > "1" ]]; then
 		echo 1 > /var/www/html/openWB/ramdisk/plugstat
@@ -109,15 +123,27 @@ if [[ $evsecon == "ipevse" ]]; then
 		echo 0 > /var/www/html/openWB/ramdisk/chargestat
 	fi
 fi
-
+if [[ $evsecon == "extopenwb" ]]; then
+	evseplugstatelp1=$(mosquitto_sub -C 1 -h $chargep1ip -t openWB/lp/1/boolPlugStat)
+	ladestatuslp1=$(mosquitto_sub -C 1 -h $chargep1ip -t openWB/lp/1/boolChargeStat)
+	echo $evseplugstatelp1  > /var/www/html/openWB/ramdisk/plugstat
+	echo $ladestatuslp1 > /var/www/html/openWB/ramdisk/chargestat
+fi
 if [[ $lastmanagement == "1" ]]; then
+	ConfiguredChargePoints=2
 	if [[ $evsecons1 == "modbusevse" ]]; then
 		evseplugstatelp2=$(sudo python runs/readmodbus.py $evsesources1 $evseids1 1002 1)
+		if [ -z "${evseplugstatelp2}" ] || ! [[ "${evseplugstatelp2}" =~ $IsNumberRegex ]]; then
+			evseplugstatelp2=$(</var/www/html/openWB/ramdisk/evseplugstatelp2)
+			echo "$(date +%s) Modbus EVSE read CP2 issue - using previous state '${evseplugstatelp2}'"
+		else
+			echo $evseplugstatelp2 > /var/www/html/openWB/ramdisk/evseplugstatelp2
+		fi
 		ladestatuss1=$(</var/www/html/openWB/ramdisk/ladestatuss1)
 		if [[ $evseplugstatelp2 > "0" ]] && [[ $evseplugstatelp2 < "7" ]] ; then
 			if [[ $evseplugstatelp2 > "1" ]]; then
 				plugstat2=$(</var/www/html/openWB/ramdisk/plugstats1)
-				
+
 				if [[ $plugstat2 == "0" ]] ; then
 					if [[ $displayconfigured == "1" ]] && [[ $displayEinBeimAnstecken == "1" ]] ; then
 						export DISPLAY=:0 && xset dpms force on && xset dpms $displaysleep $displaysleep $displaysleep
@@ -139,8 +165,20 @@ if [[ $lastmanagement == "1" ]]; then
 
 		fi
 	fi
+	if [[ $evsecons1 == "extopenwb" ]]; then
+		evseplugstatelp2=$(mosquitto_sub -C 1 -h $chargep2ip -t openWB/lp/1/boolPlugStat)
+		ladestatuslp2=$(mosquitto_sub -C 1 -h $chargep2ip -t openWB/lp/1/boolChargeStat)
+		echo $evseplugstatelp2  > /var/www/html/openWB/ramdisk/plugstats1
+		echo $ladestatuslp2 > /var/www/html/openWB/ramdisk/chargestats1
+	fi
 	if [[ $evsecons1 == "slaveeth" ]]; then
 		evseplugstatelp2=$(sudo python runs/readslave.py 1002 1)
+		if [ -z "${evseplugstatelp2}" ] || ! [[ "${evseplugstatelp2}" =~ $IsNumberRegex ]]; then
+			evseplugstatelp2=$(</var/www/html/openWB/ramdisk/evseplugstatelp2)
+			echo "$(date +%s) Slaveeth EVSE read CP2 issue - using previous state '${evseplugstatelp2}'"
+		else
+			echo $evseplugstatelp2 > /var/www/html/openWB/ramdisk/evseplugstatelp2
+		fi
 		ladestatuss1=$(</var/www/html/openWB/ramdisk/ladestatuss1)
 
 		if [[ $evseplugstatelp2 > "1" ]]; then
@@ -156,6 +194,12 @@ if [[ $lastmanagement == "1" ]]; then
 	fi
 	if [[ $evsecons1 == "ipevse" ]]; then
 		evseplugstatelp2=$(sudo python runs/readipmodbus.py $evseiplp2 $evseidlp2 1002 1)
+		if [ -z "${evseplugstatelp2}" ] || ! [[ "${evseplugstatelp2}" =~ $IsNumberRegex ]]; then
+			evseplugstatelp2=$(</var/www/html/openWB/ramdisk/evseplugstatelp2)
+			echo "$(date +%s) IP EVSE read CP2 issue - using previous state '${evseplugstatelp2}'"
+		else
+			echo $evseplugstatelp2 > /var/www/html/openWB/ramdisk/evseplugstatelp2
+		fi
 		ladestatuslp2=$(</var/www/html/openWB/ramdisk/ladestatuss1)
 
 		if [[ $evseplugstatelp2 > "1" ]]; then
@@ -174,11 +218,19 @@ if [[ $lastmanagement == "1" ]]; then
 else
 	plugstatlp2=$(<ramdisk/plugstats1)
 	chargestatlp2=$(<ramdisk/chargestats1)
+	ConfiguredChargePoints=1
 
 fi
 if [[ $lastmanagements2 == "1" ]]; then
+	ConfiguredChargePoints=3
 	if [[ $evsecons2 == "ipevse" ]]; then
 		evseplugstatelp3=$(sudo python runs/readipmodbus.py $evseiplp3 $evseidlp3 1002 1)
+		if [ -z "${evseplugstatelp3}" ] || ! [[ "${evseplugstatelp3}" =~ $IsNumberRegex ]]; then
+			evseplugstatelp3=$(</var/www/html/openWB/ramdisk/evseplugstatelp3)
+			echo "$(date +%s) IP EVSE read CP3 issue - using previous state '${evseplugstatelp3}'"
+		else
+			echo $evseplugstatelp3 > /var/www/html/openWB/ramdisk/evseplugstatelp3
+		fi
 		ladestatuslp3=$(</var/www/html/openWB/ramdisk/ladestatuss2)
 
 		if [[ $evseplugstatelp3 > "1" ]]; then
@@ -192,8 +244,21 @@ if [[ $lastmanagements2 == "1" ]]; then
 			echo 0 > /var/www/html/openWB/ramdisk/chargestatlp3
 		fi
 	fi
+	if [[ $evsecons2 == "extopenwb" ]]; then
+		evseplugstatelp3=$(mosquitto_sub -C 1 -h $chargep3ip -t openWB/lp/1/boolPlugStat)
+		ladestatuslp3=$(mosquitto_sub -C 1 -h $chargep3ip -t openWB/lp/1/boolChargeStat)
+		echo $evseplugstatelp3  > /var/www/html/openWB/ramdisk/plugstatlp3
+		echo $ladestatuslp3 > /var/www/html/openWB/ramdisk/chargestatlp3
+	fi
+
 	if [[ $evsecons2 == "modbusevse" ]]; then
 	        evseplugstatelp3=$(sudo python runs/readmodbus.py $evsesources2 $evseids2 1002 1)
+			if [ -z "${evseplugstatelp3}" ] || ! [[ "${evseplugstatelp3}" =~ $IsNumberRegex ]]; then
+				evseplugstatelp3=$(</var/www/html/openWB/ramdisk/evseplugstatelp3)
+				echo "$(date +%s) Modbus EVSE read CP3 issue - using previous state '${evseplugstatelp3}'"
+			else
+				echo $evseplugstatelp3 > /var/www/html/openWB/ramdisk/evseplugstatelp3
+			fi
 	        ladestatuss2=$(</var/www/html/openWB/ramdisk/ladestatuss2)
 	        if [[ $evseplugstatelp3 > "1" ]]; then
 	                echo 1 > /var/www/html/openWB/ramdisk/plugstatlp3
@@ -206,13 +271,23 @@ if [[ $lastmanagements2 == "1" ]]; then
                         echo 0 > /var/www/html/openWB/ramdisk/chargestatlp3
                 fi
         fi
+	plugstatlp3=$(<ramdisk/plugstatlp3)
+	chargestatlp3=$(<ramdisk/chargestatlp3)
 else
-	plugstatlp3=$(<ramdisk/plugstats2)
-	chargestatlp3=$(<ramdisk/chargestats2)
+	plugstatlp3=$(<ramdisk/plugstatlp3)
+	chargestatlp3=$(<ramdisk/chargestatlp3)
 fi
 if [[ $lastmanagementlp4 == "1" ]]; then
+	ConfiguredChargePoints=4
 	if [[ $evseconlp4 == "ipevse" ]]; then
 		evseplugstatelp4=$(sudo python runs/readipmodbus.py $evseiplp4 $evseidlp4 1002 1)
+		if [ -z "${evseplugstatelp4}" ] || ! [[ "${evseplugstatelp4}" =~ $IsNumberRegex ]]; then
+			# EVSE read returned empty or non-numeric value --> use last state for this loop
+			evseplugstatelp4=$(</var/www/html/openWB/ramdisk/evseplugstatelp4)
+			echo "$(date +%s) IP EVSE read CP4 issue - using previous state '${evseplugstatelp4}'"
+		else
+			echo $evseplugstatelp4 > /var/www/html/openWB/ramdisk/evseplugstatelp4
+		fi
 		ladestatuslp4=$(</var/www/html/openWB/ramdisk/ladestatuslp4)
 
 		if [[ $evseplugstatelp4 > "1" ]]; then
@@ -228,8 +303,16 @@ if [[ $lastmanagementlp4 == "1" ]]; then
 	fi
 fi
 if [[ $lastmanagementlp5 == "1" ]]; then
+	ConfiguredChargePoints=5
 	if [[ $evseconlp5 == "ipevse" ]]; then
 		evseplugstatelp5=$(sudo python runs/readipmodbus.py $evseiplp5 $evseidlp5 1002 1)
+		if [ -z "${evseplugstatelp5}" ] || ! [[ "${evseplugstatelp5}" =~ $IsNumberRegex ]]; then
+			# EVSE read returned empty or non-numeric value --> use last state for this loop
+			evseplugstatelp5=$(</var/www/html/openWB/ramdisk/evseplugstatelp5)
+			echo "$(date +%s) IP EVSE read CP5 issue - using previous state '${evseplugstatelp5}'"
+		else
+			echo $evseplugstatelp5 > /var/www/html/openWB/ramdisk/evseplugstatelp5
+		fi
 		ladestatuslp5=$(</var/www/html/openWB/ramdisk/ladestatuslp5)
 
 		if [[ $evseplugstatelp5 > "1" ]]; then
@@ -245,8 +328,16 @@ if [[ $lastmanagementlp5 == "1" ]]; then
 	fi
 fi
 if [[ $lastmanagementlp6 == "1" ]]; then
+	ConfiguredChargePoints=6
 	if [[ $evseconlp6 == "ipevse" ]]; then
 		evseplugstatelp6=$(sudo python runs/readipmodbus.py $evseiplp6 $evseidlp6 1002 1)
+		if [ -z "${evseplugstatelp6}" ] || ! [[ "${evseplugstatelp6}" =~ $IsNumberRegex ]]; then
+			# EVSE read returned empty or non-numeric value --> use last state for this loop
+			evseplugstatelp6=$(</var/www/html/openWB/ramdisk/evseplugstatelp6)
+			echo "$(date +%s) IP EVSE read CP6 issue - using previous state '${evseplugstatelp6}'"
+		else
+			echo $evseplugstatelp6 > /var/www/html/openWB/ramdisk/evseplugstatelp6
+		fi
 		ladestatuslp6=$(</var/www/html/openWB/ramdisk/ladestatuslp6)
 
 		if [[ $evseplugstatelp6 > "1" ]]; then
@@ -262,8 +353,16 @@ if [[ $lastmanagementlp6 == "1" ]]; then
 	fi
 fi
 if [[ $lastmanagementlp7 == "1" ]]; then
+	ConfiguredChargePoints=7
 	if [[ $evseconlp7 == "ipevse" ]]; then
 		evseplugstatelp7=$(sudo python runs/readipmodbus.py $evseiplp7 $evseidlp7 1002 1)
+		if [ -z "${evseplugstatelp7}" ] || ! [[ "${evseplugstatelp7}" =~ $IsNumberRegex ]]; then
+			# EVSE read returned empty or non-numeric value --> use last state for this loop
+			evseplugstatelp7=$(</var/www/html/openWB/ramdisk/evseplugstatelp7)
+			echo "$(date +%s) IP EVSE read CP7 issue - using previous state '${evseplugstatelp7}'"
+		else
+			echo $evseplugstatelp7 > /var/www/html/openWB/ramdisk/evseplugstatelp7
+		fi
 		ladestatuslp7=$(</var/www/html/openWB/ramdisk/ladestatuslp7)
 
 		if [[ $evseplugstatelp7 > "1" ]]; then
@@ -279,8 +378,16 @@ if [[ $lastmanagementlp7 == "1" ]]; then
 	fi
 fi
 if [[ $lastmanagementlp8 == "1" ]]; then
+	ConfiguredChargePoints=8
 	if [[ $evseconlp8 == "ipevse" ]]; then
 		evseplugstatelp8=$(sudo python runs/readipmodbus.py $evseiplp8 $evseidlp8 1002 1)
+		if [ -z "${evseplugstatelp8}" ] || ! [[ "${evseplugstatelp8}" =~ $IsNumberRegex ]]; then
+			# EVSE read returned empty or non-numeric value --> use last state for this loop
+			evseplugstatelp4=$(</var/www/html/openWB/ramdisk/evseplugstatelp8)
+			echo "$(date +%s) IP EVSE read CP8 issue - using previous state '${evseplugstatelp8}'"
+		else
+			echo $evseplugstatelp8 > /var/www/html/openWB/ramdisk/evseplugstatelp8
+		fi
 		ladestatuslp8=$(</var/www/html/openWB/ramdisk/ladestatuslp8)
 
 		if [[ $evseplugstatelp8 > "1" ]]; then
@@ -295,7 +402,7 @@ if [[ $lastmanagementlp8 == "1" ]]; then
 		fi
 	fi
 fi
-
+echo $ConfiguredChargePoints > ramdisk/ConfiguredChargePoints
 # Lastmanagement var check age
 if test $(find "ramdisk/lastregelungaktiv" -mmin +2); then
        echo " " > ramdisk/lastregelungaktiv
@@ -315,6 +422,7 @@ if [[ $pvwattmodul != "none" ]]; then
 	if ! [[ $pvwatt =~ $re ]] ; then
 		pvwatt="0"
 	fi
+	pv1watt=$pvwatt
 else
 	pvwatt=$(</var/www/html/openWB/ramdisk/pvwatt)
 fi
@@ -359,6 +467,7 @@ else
 	echo 0 > /var/www/html/openWB/ramdisk/speichervorhanden
 fi
 llphaset=3
+
 #Ladeleistung ermitteln
 if [[ $ladeleistungmodul != "none" ]]; then
 	timeout 10 modules/$ladeleistungmodul/main.sh || true
@@ -370,7 +479,9 @@ if [[ $ladeleistungmodul != "none" ]]; then
 	lla1=$(echo $lla1 | sed 's/\..*$//')
 	lla2=$(echo $lla2 | sed 's/\..*$//')
 	lla3=$(echo $lla3 | sed 's/\..*$//')
-	llv1=$(cat /var/www/html/openWB/ramdisk/llv1) 
+	llv1=$(cat /var/www/html/openWB/ramdisk/llv1)
+	llv2=$(cat /var/www/html/openWB/ramdisk/llv2)
+	llv3=$(cat /var/www/html/openWB/ramdisk/llv3)
 	ladeleistung=$(cat /var/www/html/openWB/ramdisk/llaktuell)
 	ladeleistunglp1=$ladeleistung
 	if ! [[ $lla1 =~ $re ]] ; then
@@ -408,13 +519,17 @@ else
 	llkwh=0
 	llkwhges=$llkwh
 fi
+
 #zweiter ladepunkt
 if [[ $lastmanagement == "1" ]]; then
 	if [[ $socmodul1 != "none" ]]; then
 		timeout 10 modules/$socmodul1/main.sh || true
 		soc1=$(</var/www/html/openWB/ramdisk/soc1)
+		tmpsoc1=$(</var/www/html/openWB/ramdisk/tmpsoc1)
 		if ! [[ $soc1 =~ $re ]] ; then
-		 soc1="0"
+			soc1=$tmpsoc1
+		else
+			echo $soc1 > /var/www/html/openWB/ramdisk/tmpsoc1
 		fi
 		soc1vorhanden=1
 		echo 1 > /var/www/html/openWB/ramdisk/soc1vorhanden
@@ -495,7 +610,11 @@ else
 fi
 #vierter ladepunkt
 if [[ $lastmanagementlp4 == "1" ]]; then
-	timeout 3 modules/mpm3pmlllp4/main.sh || true
+	if [[ "$evseconlp4" == "extopenwb" ]]; then
+		timeout 3 modules/extopenwb/main.sh 4 $chargep4ip $chargep4cp || true
+	else
+		timeout 3 modules/mpm3pmlllp4/main.sh || true
+	fi
 	llkwhlp4=$(</var/www/html/openWB/ramdisk/llkwhlp4)
 	llkwhges=$(echo "$llkwhges + $llkwhlp4" |bc)
 	llaltlp4=$(cat /var/www/html/openWB/ramdisk/llsolllp4)
@@ -527,7 +646,11 @@ else
 fi
 #fünfter ladepunkt
 if [[ $lastmanagementlp5 == "1" ]]; then
-	timeout 3 modules/mpm3pmlllp5/main.sh || true
+	if [[ "$evseconlp5" == "extopenwb" ]]; then
+		timeout 3 modules/extopenwb/main.sh 5 $chargep5ip $chargep5cp || true
+	else
+		timeout 3 modules/mpm3pmlllp5/main.sh || true
+	fi
 	llkwhlp5=$(</var/www/html/openWB/ramdisk/llkwhlp5)
 	llkwhges=$(echo "$llkwhges + $llkwhlp5" |bc)
 	llaltlp5=$(cat /var/www/html/openWB/ramdisk/llsolllp5)
@@ -559,7 +682,11 @@ else
 fi
 #sechster ladepunkt
 if [[ $lastmanagementlp6 == "1" ]]; then
-	timeout 3 modules/mpm3pmlllp6/main.sh || true
+	if [[ "$evseconlp6" == "extopenwb" ]]; then
+		timeout 3 modules/extopenwb/main.sh 6 $chargep6ip $chargep6cp || true
+	else
+		timeout 3 modules/mpm3pmlllp6/main.sh || true
+	fi
 	llkwhlp6=$(</var/www/html/openWB/ramdisk/llkwhlp6)
 	llkwhges=$(echo "$llkwhges + $llkwhlp6" |bc)
 	llaltlp6=$(cat /var/www/html/openWB/ramdisk/llsolllp6)
@@ -591,7 +718,11 @@ else
 fi
 #siebter ladepunkt
 if [[ $lastmanagementlp7 == "1" ]]; then
-	timeout 3 modules/mpm3pmlllp7/main.sh || true
+	if [[ "$evseconlp7" == "extopenwb" ]]; then
+		timeout 3 modules/extopenwb/main.sh 7 $chargep7ip $chargep7cp || true
+	else
+		timeout 3 modules/mpm3pmlllp7/main.sh || true
+	fi
 	llkwhlp7=$(</var/www/html/openWB/ramdisk/llkwhlp7)
 	llkwhges=$(echo "$llkwhges + $llkwhlp7" |bc)
 	llaltlp7=$(cat /var/www/html/openWB/ramdisk/llsolllp7)
@@ -623,7 +754,12 @@ else
 fi
 #achter ladepunkt
 if [[ $lastmanagementlp8 == "1" ]]; then
-	timeout 3 modules/mpm3pmlllp8/main.sh || true
+	if [[ "$evseconlp8" == "extopenwb" ]]; then
+		timeout 3 modules/extopenwb/main.sh 8 $chargep8ip $chargep8cp || true
+	else
+		timeout 3 modules/mpm3pmlllp8/main.sh || true
+	fi
+
 	llkwhlp8=$(</var/www/html/openWB/ramdisk/llkwhlp8)
 	llkwhges=$(echo "$llkwhges + $llkwhlp8" |bc)
 	llaltlp8=$(cat /var/www/html/openWB/ramdisk/llsolllp8)
@@ -742,8 +878,11 @@ if [[ $socmodul != "none" ]]; then
 	else
 		timeout 10 modules/$socmodul/main.sh || true
 		soc=$(</var/www/html/openWB/ramdisk/soc)
+		tmpsoc=$(</var/www/html/openWB/ramdisk/tmpsoc)
 		if ! [[ $soc =~ $re ]] ; then
-			soc="0"
+			soc=$tmpsoc
+		else
+			echo $soc > /var/www/html/openWB/ramdisk/tmpsoc
 		fi
 	fi
 else
@@ -770,10 +909,13 @@ if (( hausverbrauch < 0 )); then
 fi
 echo $hausverbrauch > /var/www/html/openWB/ramdisk/hausverbrauch
 usesimbezug=0
-if [[ $wattbezugmodul == "bezug_e3dc" ]] || [[ $wattbezugmodul == "bezug_lgessv1" ]] || [[ $wattbezugmodul == "bezug_kostalpiko" ]] || [[ $wattbezugmodul == "bezug_kostalplenticoreem300haus" ]] || [[ $wattbezugmodul == "bezug_sbs25" ]] || [[ $wattbezugmodul == "bezug_solarlog" ]] || [[ $wattbezugmodul == "bezug_sonneneco" ]]; then
+if [[ $wattbezugmodul == "bezug_e3dc" ]] || [[ $wattbezugmodul == "bezug_powerdog" ]] || [[ $wattbezugmodul == "bezug_lgessv1" ]] || [[ $wattbezugmodul == "bezug_kostalpiko" ]] || [[ $wattbezugmodul == "bezug_kostalplenticoreem300haus" ]] || [[ $wattbezugmodul == "bezug_sbs25" ]] || [[ $wattbezugmodul == "bezug_solarlog" ]] || [[ $wattbezugmodul == "bezug_sonneneco" ]]; then
 	usesimbezug=1
 fi
 if [[ $wattbezugmodul == "bezug_ethmpm3pm" ]] && [[ $evukitversion == "1" ]]; then
+	usesimbezug=1
+fi
+if [[ $wattbezugmodul == "bezug_ethmpm3pm" ]] && [[ $evukitversion == "2" ]]; then
 	usesimbezug=1
 fi
 if [[ $usesimbezug == "1" ]]; then
@@ -822,10 +964,13 @@ fi
 if [[ $speichermodul == "speicher_kostalplenticore" ]] && [[ $pvwattmodul == "wr_plenticore" ]]; then
 	usesimpv=1
 fi
+if [[ $speichermodul == "speicher_solaredge" ]] && [[ $pvwattmodul == "wr_solaredge" ]]; then
+	usesimpv=1
+fi
 if [[ $pvwattmodul == "wr_fronius" ]] && [[ $speichermodul == "speicher_fronius" ]]; then
 	usesimpv=1
 fi
-if [[ $pvwattmodul == "wr_kostalpiko" ]] || [[ $pvwattmodul == "wr_lgessv1" ]]|| [[ $pvwattmodul == "wr_kostalpikovar2" ]]; then
+if [[ $pvwattmodul == "wr_kostalpiko" ]] || [[ $pvwattmodul == "wr_huawei" ]] || [[ $pvwattmodul == "wr_powerdog" ]] || [[ $pvwattmodul == "wr_lgessv1" ]]|| [[ $pvwattmodul == "wr_kostalpikovar2" ]]; then
 	usesimpv=1
 fi
 if [[ $usesimpv == "1" ]]; then
@@ -864,7 +1009,7 @@ if [[ $usesimpv == "1" ]]; then
 	fi
 	# sim bezug end
 fi
-if [[ $speichermodul == "speicher_e3dc" ]] || [[ $speichermodul == "speicher_lgessv1" ]] || [[ $speichermodul == "speicher_bydhv" ]] || [[ $speichermodul == "speicher_kostalplenticore" ]] || [[ $speichermodul == "speicher_powerwall" ]] || [[ $speichermodul == "speicher_sbs25" ]] || [[ $speichermodul == "speicher_solaredge" ]] || [[ $speichermodul == "speicher_sonneneco" ]] || [[ $speichermodul == "speicher_varta" ]] || [[ $speichermodul == "speicher_victron" ]] || [[ $speichermodul == "speicher_fronius" ]] ; then
+if [[ $speichermodul == "speicher_e3dc" ]] || [[ $speichermodul == "speicher_alphaess" ]]|| [[ $speichermodul == "speicher_lgessv1" ]] || [[ $speichermodul == "speicher_bydhv" ]] || [[ $speichermodul == "speicher_kostalplenticore" ]] || [[ $speichermodul == "speicher_powerwall" ]] || [[ $speichermodul == "speicher_sbs25" ]] || [[ $speichermodul == "speicher_solaredge" ]] || [[ $speichermodul == "speicher_sonneneco" ]] || [[ $speichermodul == "speicher_varta" ]] || [[ $speichermodul == "speicher_victron" ]] || [[ $speichermodul == "speicher_fronius" ]] ; then
 	ra='^-?[0-9]+$'
 	watt2=$(</var/www/html/openWB/ramdisk/speicherleistung)
 	if [[ -e /var/www/html/openWB/ramdisk/speicherwatt0pos ]]; then
@@ -941,18 +1086,22 @@ fi
 date=$(date)
 H=$(date +%H)
 if [[ $debug == "1" ]]; then
-	echo "$(tail -20000 /var/www/html/openWB/ramdisk/openWB.log)" > /var/www/html/openWB/ramdisk/openWB.log
+	echo "$(tail -1500 /var/www/html/openWB/ramdisk/openWB.log)" > /var/www/html/openWB/ramdisk/openWB.log
 	date
 	if [[ $speichermodul != "none" ]] ; then
 		echo speicherleistung $speicherleistung speichersoc $speichersoc
 	fi
-	echo pvwatt $pvwatt ladeleistung "$ladeleistung" llalt "$llalt" nachtladen "$nachtladen" nachtladen "$nachtladens1" minimalA "$minimalstromstaerke" maximalA "$maximalstromstaerke"
-	echo lla1 "$lla1" llv1 "$llv1" llas11 "$llas11" llas21 "$llas21" mindestuberschuss "$mindestuberschuss" abschaltuberschuss "$abschaltuberschuss" lademodus "$lademodus"
-	echo lla2 "$lla2" llas12 "$llas12" llas22 "$llas22" sofortll "$sofortll" wattbezug "$wattbezug" uberschuss "$uberschuss"
-	echo lla3 "$lla3" llas13 "$llas13" llas23 "$llas23" soclp1 $soc soclp2 $soc1
+	if (( $awattaraktiv == 1 )) ; then
+		echo awattarprice "$awattarprice" awattarmaxprice "$awattarmaxprice"
+	fi
+	echo pv1watt $pv1watt pv2watt $pv2watt pvwatt $pvwatt ladeleistung "$ladeleistung" llalt "$llalt" nachtladen "$nachtladen" nachtladen "$nachtladens1" minimalA "$minimalstromstaerke" maximalA "$maximalstromstaerke"
+	echo -e lla1 "$lla1"'\t'llv1 "$llv1"'\t'llas11 "$llas11" llas21 "$llas21" mindestuberschuss "$mindestuberschuss" abschaltuberschuss "$abschaltuberschuss" lademodus "$lademodus"
+	echo -e lla2 "$lla2"'\t'llv2 "$llv2"'\t'llas12 "$llas12" llas22 "$llas22" sofortll "$sofortll" wattbezug "$wattbezug" uberschuss "$uberschuss"
+	echo -e lla3 "$lla3"'\t'llv3 "$llv3"'\t'llas13 "$llas13" llas23 "$llas23" soclp1 $soc soclp2 $soc1
 	echo "EVU 1:${evuv1}V/${evua1}A 2: ${evuv2}V/${evua2}A 3: ${evuv3}V/${evua3}A"
-	echo lp1enabled "$lp1enabled" lp2enabled "$lp2enabled" lp3enabled "$lp3enabled"
-	echo plugstatlp1 "$plugstat" plugstatlp2 "$plugstatlp2" chargestatlp1 "$chargestat" chargestatlp2 "$chargestatlp2"
+	echo -e lp1enabled "$lp1enabled"'\t'lp2enabled "$lp2enabled"'\t'lp3enabled "$lp3enabled"
+	echo -e plugstatlp1 "$plugstat"'\t'plugstatlp2 "$plugstatlp2"'\t'plugstatlp3 "$plugstatlp3"
+	echo -e chargestatlp1 "$chargestat"'\t'chargestatlp2 "$chargestatlp2"'\t'chargestatlp3 "$chargestatlp3"
 fi
 
 tempPubList=""
@@ -1095,6 +1244,12 @@ oversion=$(<ramdisk/mqttversion)
 if [[ $oversion != $version ]]; then
 	tempPubList="${tempPubList}\nopenWB/system/Version=${version}"
 	echo -n "$version" > ramdisk/mqttversion
+fi
+
+ocp1config=$(<ramdisk/mqttCp1Configured)
+if [[ "$ocp1config" != "1" ]]; then
+	tempPubList="${tempPubList}\nopenWB/lp/1/boolChargePointConfigured=1"
+	echo 1 > ramdisk/mqttCp1Configured
 fi
 
 olastmanagement=$(<ramdisk/mqttlastmanagement)
@@ -1430,6 +1585,13 @@ mqttconfvar["config/get/pv/nurpv70dynact"]=nurpv70dynact
 mqttconfvar["config/get/pv/nurpv70dynw"]=nurpv70dynw
 mqttconfvar["config/get/global/maxEVSECurrentAllowed"]=maximalstromstaerke
 mqttconfvar["config/get/global/minEVSECurrentAllowed"]=minimalstromstaerke
+mqttconfvar["config/get/global/dataProtectionAcknoledged"]=datenschutzack
+mqttconfvar["config/get/u1p3p/sofortPhases"]=u1p3psofort
+mqttconfvar["config/get/u1p3p/standbyPhases"]=u1p3pstandby
+mqttconfvar["config/get/u1p3p/nurpvPhases"]=u1p3pnurpv
+mqttconfvar["config/get/u1p3p/minundpvPhases"]=u1p3pminundpv
+mqttconfvar["config/get/u1p3p/nachtPhases"]=u1p3pnl
+mqttconfvar["config/get/u1p3p/isConfigured"]=u1p3paktiv
 mqttconfvar["config/get/sofort/lp/1/energyToCharge"]=lademkwh
 mqttconfvar["config/get/sofort/lp/2/energyToCharge"]=lademkwhs1
 mqttconfvar["config/get/sofort/lp/3/energyToCharge"]=lademkwhs2
@@ -1452,6 +1614,8 @@ mqttconfvar["config/get/pv/lp/1/socLimitation"]=stopchargepvatpercentlp1
 mqttconfvar["config/get/pv/lp/2/socLimitation"]=stopchargepvatpercentlp2
 mqttconfvar["config/get/pv/lp/1/maxSoc"]=stopchargepvpercentagelp1
 mqttconfvar["config/get/pv/lp/2/maxSoc"]=stopchargepvpercentagelp2
+mqttconfvar["global/rfidConfigured"]=rfidakt
+
 
 for mq in "${!mqttconfvar[@]}"; do
 	theval=${!mqttconfvar[$mq]}

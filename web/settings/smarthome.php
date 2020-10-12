@@ -760,13 +760,16 @@
 		</footer>
 
 
-		<script type="text/javascript">
+		<script>
 
-			$.get("settings/navbar.html", function(data){
-				$("#nav").replaceWith(data);
-				// disable navbar entry for current page
-				$('#navSmartHome').addClass('disabled');
-			});
+			$.get(
+				{ url: "settings/navbar.html", cache: false },
+				function(data){
+					$("#nav").replaceWith(data);
+					// disable navbar entry for current page
+					$('#navSmartHome').addClass('disabled');
+				}
+			);
 
 		</script>
 

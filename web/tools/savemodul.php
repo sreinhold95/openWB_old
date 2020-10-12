@@ -69,6 +69,10 @@ if(isset($_POST['evsecon'])) {
 			$result .= 'soc_bluelink_pin='.$_POST['soc_bluelink_pin']."\n";
 			$writeit = '1';
 		}
+		if(strpos($line, "soc_vin=") !== false) {
+			$result .= 'soc_vin='.$_POST['soc_vin']."\n";
+			$writeit = '1';
+		}
 		if(strpos($line, "solarworld_emanagerip=") !== false) {
 			$result .= 'solarworld_emanagerip='.$_POST['solarworld_emanagerip']."\n";
 			$writeit = '1';
@@ -79,6 +83,10 @@ if(isset($_POST['evsecon'])) {
 		}
 		if(strpos($line, "femsip=") !== false) {
 			$result .= 'femsip='.$_POST['femsip']."\n";
+			$writeit = '1';
+		}
+		if(strpos($line, "femskacopw=") !== false) {
+			$result .= 'femskacopw='.$_POST['femskacopw']."\n";
 			$writeit = '1';
 		}
 		if(strpos($line, "modbusevsesource=") !== false) {
@@ -105,6 +113,10 @@ if(isset($_POST['evsecon'])) {
 		}
 		if(strpos($line, "evukitversion=") !== false) {
 			$result .= 'evukitversion='.$_POST['evukitversion']."\n";
+			$writeit = '1';
+		}
+		if(strpos($line, "speicherkitversion=") !== false) {
+			$result .= 'speicherkitversion='.$_POST['speicherkitversion']."\n";
 			$writeit = '1';
 		}
 		if(strpos($line, "pvkitversion=") !== false) {
@@ -197,6 +209,70 @@ if(isset($_POST['evsecon'])) {
 		}
 		if(strpos($line, "mpmlp1ip=") !== false) {
 			$result .= 'mpmlp1ip='.$_POST['mpmlp1ip']."\n";
+			$writeit = '1';
+		}
+		if(strpos($line, "chargep1cp=") !== false) {
+			$result .= 'chargep1cp='.$_POST['chargep1cp']."\n";
+			$writeit = '1';
+		}
+		if(strpos($line, "chargep2cp=") !== false) {
+			$result .= 'chargep2cp='.$_POST['chargep2cp']."\n";
+			$writeit = '1';
+		}
+		if(strpos($line, "chargep3cp=") !== false) {
+			$result .= 'chargep3cp='.$_POST['chargep3cp']."\n";
+			$writeit = '1';
+		}
+		if(strpos($line, "chargep4cp=") !== false) {
+			$result .= 'chargep4cp='.$_POST['chargep4cp']."\n";
+			$writeit = '1';
+		}
+		if(strpos($line, "chargep5cp=") !== false) {
+			$result .= 'chargep5cp='.$_POST['chargep5cp']."\n";
+			$writeit = '1';
+		}
+		if(strpos($line, "chargep6cp=") !== false) {
+			$result .= 'chargep6cp='.$_POST['chargep6cp']."\n";
+			$writeit = '1';
+		}
+		if(strpos($line, "chargep7cp=") !== false) {
+			$result .= 'chargep7cp='.$_POST['chargep7cp']."\n";
+			$writeit = '1';
+		}
+		if(strpos($line, "chargep8cp=") !== false) {
+			$result .= 'chargep8cp='.$_POST['chargep8cp']."\n";
+			$writeit = '1';
+		}
+		if(strpos($line, "chargep1ip=") !== false) {
+			$result .= 'chargep1ip='.$_POST['chargep1ip']."\n";
+			$writeit = '1';
+		}
+		if(strpos($line, "chargep2ip=") !== false) {
+			$result .= 'chargep2ip='.$_POST['chargep2ip']."\n";
+			$writeit = '1';
+		}
+		if(strpos($line, "chargep3ip=") !== false) {
+			$result .= 'chargep3ip='.$_POST['chargep3ip']."\n";
+			$writeit = '1';
+		}
+		if(strpos($line, "chargep4ip=") !== false) {
+			$result .= 'chargep4ip='.$_POST['chargep4ip']."\n";
+			$writeit = '1';
+		}
+		if(strpos($line, "chargep5ip=") !== false) {
+			$result .= 'chargep5ip='.$_POST['chargep5ip']."\n";
+			$writeit = '1';
+		}
+		if(strpos($line, "chargep6ip=") !== false) {
+			$result .= 'chargep6ip='.$_POST['chargep6ip']."\n";
+			$writeit = '1';
+		}
+		if(strpos($line, "chargep7ip=") !== false) {
+			$result .= 'chargep7ip='.$_POST['chargep7ip']."\n";
+			$writeit = '1';
+		}
+		if(strpos($line, "chargep8ip=") !== false) {
+			$result .= 'chargep8ip='.$_POST['chargep8ip']."\n";
 			$writeit = '1';
 		}
 		if(strpos($line, "mpmlp2id=") !== false) {
@@ -336,12 +412,19 @@ if(isset($_POST['evsecon'])) {
 			$writeit = '1';
 		}
 		if(strpos($line, "ladeleistungmodul=") !== false) {
-			if($_POST['evsecon'] == "simpleevsewifi" or $_POST['evsecon'] == "goe" or $_POST['evsecon'] == "twcmanager" or $_POST['evsecon'] == "masterethframer" or $_POST['evsecon'] == "nrgkick" or $_POST['evsecon'] == "keba" or $_POST['evsecon'] == "openwb12" or $_POST['evsecon'] == "openwb12v2mid" or $_POST['evsecon'] == "openwb12mid") {
+			if($_POST['evsecon'] == "simpleevsewifi" or $_POST['evsecon'] == "goe" or $_POST['evsecon'] == "buchse" or $_POST['evsecon'] == "openwbext" or $_POST['evsecon'] == "twcmanager" or $_POST['evsecon'] == "masterethframer" or $_POST['evsecon'] == "nrgkick" or $_POST['evsecon'] == "keba" or $_POST['evsecon'] == "openwb12" or $_POST['evsecon'] == "openwb12v2mid" or $_POST['evsecon'] == "openwb12mid") {
 				if($_POST['evsecon'] == "goe") {
 					$result .= 'ladeleistungmodul=goelp1'."\n";
 				}
+				if($_POST['evsecon'] == "buchse") {
+					$result .= 'ladeleistungmodul=llbuchse'."\n";
+				}
+
 				if($_POST['evsecon'] == "twcmanager") {
 					$result .= 'ladeleistungmodul=twcmanagerlp1'."\n";
+				}
+				if($_POST['evsecon'] == "extopenwb") {
+					$result .= 'ladeleistungmodul=extopenwblp1'."\n";
 				}
 				if($_POST['evsecon'] == "openwb12"  or $_POST['evsecon'] == "openwb12v2mid" or $_POST['evsecon'] == "openwb12mid") {
 					$result .= 'ladeleistungmodul=mpm3pmll'."\n";
@@ -435,6 +518,27 @@ if(isset($_POST['evsecon'])) {
 			$result .= 'evsecons2='.$_POST['evsecons2']."\n";
 			$writeit = '1';
 		}
+		if(strpos($line, "evseconlp4=") !== false) {
+			$result .= 'evseconlp4='.$_POST['evseconlp4']."\n";
+			$writeit = '1';
+		}
+		if(strpos($line, "evseconlp5=") !== false) {
+			$result .= 'evseconlp5='.$_POST['evseconlp5']."\n";
+			$writeit = '1';
+		}
+		if(strpos($line, "evseconlp6=") !== false) {
+			$result .= 'evseconlp6='.$_POST['evseconlp6']."\n";
+			$writeit = '1';
+		}
+		if(strpos($line, "evseconlp7=") !== false) {
+			$result .= 'evseconlp7='.$_POST['evseconlp7']."\n";
+			$writeit = '1';
+		}
+		if(strpos($line, "evseconlp8=") !== false) {
+			$result .= 'evseconlp8='.$_POST['evseconlp8']."\n";
+			$writeit = '1';
+		}
+
 		if(strpos($line, "evsesources1=") !== false) {
 			if($_POST['evsecons1'] == "openwb12s1" or $_POST['evsecons1'] == "openwb12s1mid") {
 				$result .= 'evsesources1=/dev/ttyUSB1'."\n";
@@ -520,12 +624,15 @@ if(isset($_POST['evsecon'])) {
 			$writeit = '1';
 		}
 		if(strpos($line, "ladeleistungs1modul=") !== false) {
-			if($_POST['evsecons1'] == "simpleevsewifi" or  $_POST['evsecons1'] == "nrgkick" or $_POST['evsecons1'] == "keba" or $_POST['evsecons1'] == "goe" or $_POST['evsecons1'] == "slaveeth" or $_POST['evsecons1'] == "openwb12s1" or $_POST['evsecons1'] == "openwb12s1mid") {
+			if($_POST['evsecons1'] == "simpleevsewifi" or  $_POST['evsecons1'] == "nrgkick" or $_POST['evsecons1'] == "extopenwb" or $_POST['evsecons1'] == "keba" or $_POST['evsecons1'] == "goe" or $_POST['evsecons1'] == "slaveeth" or $_POST['evsecons1'] == "openwb12s1" or $_POST['evsecons1'] == "openwb12s1mid") {
 				if($_POST['evsecons1'] == "nrgkick") {
 					$result .= 'ladeleistungs1modul=nrgkicklp2'."\n";
 				}
 				if($_POST['evsecons1'] == "goe") {
 					$result .= 'ladeleistungs1modul=goelp2'."\n";
+				}
+				if($_POST['evsecons1'] == "extopenwb") {
+					$result .= 'ladeleistungs1modul=extopenwblp2'."\n";
 				}
 				if($_POST['evsecons1'] == "keba") {
 					$result .= 'ladeleistungs1modul=keballlp2'."\n";
@@ -545,9 +652,12 @@ if(isset($_POST['evsecon'])) {
 			$writeit = '1';
 		}
 		if(strpos($line, "ladeleistungs2modul=") !== false) {
-			if($_POST['evsecons2'] == "simpleevsewifi" or $_POST['evsecons2'] == "goe" or $_POST['evsecons2'] == "thirdeth") {
+			if($_POST['evsecons2'] == "simpleevsewifi" or $_POST['evsecons2'] == "goe" or $_POST['evsecons2'] == "extopenwb" or $_POST['evsecons2'] == "thirdeth") {
 				if($_POST['evsecons2'] == "goe") {
 					$result .= 'ladeleistungs2modul=goelp3'."\n";
+				}
+				if($_POST['evsecons2'] == "extopenwb") {
+					$result .= 'ladeleistungs2modul=extopenwblp3'."\n";
 				}
 				if($_POST['evsecons2'] == "simpleevsewifi") {
 					$result .= 'ladeleistungs2modul=simpleevsewifis2'."\n";
@@ -590,6 +700,10 @@ if(isset($_POST['evsecon'])) {
 		}
 		if(strpos($line, "bezug_http_w_url=") !== false) {
 			$result .= 'bezug_http_w_url=\''.$_POST['bezug_http_w_url']."'\n";
+			$writeit = '1';
+		}
+		if(strpos($line, "bezug_id=") !== false) {
+			$result .= 'bezug_id=\''.$_POST['bezug_id']."'\n";
 			$writeit = '1';
 		}
 		if(strpos($line, "bezug_http_l1_url=") !== false) {
@@ -800,6 +914,26 @@ if(isset($_POST['evsecon'])) {
 			$result .= 'zoepasswort=\''.$_POST['zoepasswort']."'\n";
 			$writeit = '1';
 		}
+		if(strpos($line, "socpass=") !== false) {
+			$result .= 'socpass=\''.$_POST['socpass']."'\n";
+			$writeit = '1';
+		}
+		if(strpos($line, "socuser=") !== false) {
+			$result .= 'socuser='.$_POST['socuser']."\n";
+			$writeit = '1';
+		}
+		if(strpos($line, "soc2pass=") !== false) {
+			$result .= 'soc2pass=\''.$_POST['soc2pass']."'\n";
+			$writeit = '1';
+		}
+		if(strpos($line, "soc2pin=") !== false) {
+			$result .= 'soc2pin='.$_POST['soc2pin']."\n";
+			$writeit = '1';
+		}
+		if(strpos($line, "soc2user=") !== false) {
+			$result .= 'soc2user='.$_POST['soc2user']."\n";
+			$writeit = '1';
+		}
 		if(strpos($line, "zoelp2username=") !== false) {
 			$result .= 'zoelp2username='.$_POST['zoelp2username']."\n";
 			$writeit = '1';
@@ -948,6 +1082,10 @@ if(isset($_POST['evsecon'])) {
 			$result .= 'solaredgeip=\''.$_POST['solaredgeip']."'\n";
 			$writeit = '1';
 		}
+		if(strpos($line, "wr1extprod=") !== false) {
+			$result .= 'wr1extprod=\''.$_POST['wr1extprod']."'\n";
+			$writeit = '1';
+		}
 		if(strpos($line, "solaredgewr2ip=") !== false) {
 			$result .= 'solaredgewr2ip=\''.$_POST['solaredgewr2ip']."'\n";
 			$writeit = '1';
@@ -970,6 +1108,10 @@ if(isset($_POST['evsecon'])) {
 		}
 		if(strpos($line, "solaredgepvslave3=") !== false) {
 			$result .= 'solaredgepvslave3='.$_POST['solaredgepvslave3']."\n";
+			$writeit = '1';
+		}
+		if(strpos($line, "solaredgepvslave4=") !== false) {
+			$result .= 'solaredgepvslave4='.$_POST['solaredgepvslave4']."\n";
 			$writeit = '1';
 		}
 		if(strpos($line, "lllaniplp2=") !== false) {
