@@ -85,7 +85,7 @@ if ($_POST['action'] === 'deleteBridge') {
 	exec("/var/www/html/openWB/runs/checkmqttconf.sh >>/var/www/html/openWB/ramdisk/checkmqttconf.log &");
 ?>
 		<script>
-			setTimeout(function() { window.location = "../settings/mqtt.php"; }, 8000);
+			setTimeout(function() { window.location = "../index.php"; }, 8000);
 		</script>
 	</body>
 </html>
@@ -225,7 +225,10 @@ if ($exportGraph) {
 	fwrite($configFile, <<<EOS
 
 # export global data to remote
-topic openWB/graph/# out 2 "" $remotePrefix/
+topic openWB/config/get/# out 2 "" $remotePrefix
+topic openWB/SmartHome/# out 2 "" $remotePrefix
+
+
 EOS
 	);
 }
@@ -245,6 +248,9 @@ EOS
 if ($subscribeConfigs) {
 	fwrite($configFile, <<<EOS
 topic openWB/set/# both 2 "" $remotePrefix
+topic openWB/config/set/# both 2 "" $remotePrefix
+
+
 EOS
 	);
 }
@@ -320,7 +326,7 @@ echo "Rekonfiguration des MQTT-Servers wird durchgeführt, bitte nicht vom Strom
 exec("/var/www/html/openWB/runs/checkmqttconf.sh >>/var/www/html/openWB/ramdisk/checkmqttconf.log &");
 ?>
 		<script>
-			setTimeout(function() { window.location = "../settings/mqtt.php"; }, 8000);
+			setTimeout(function() { window.location = "../index.php"; }, 8000);
 		</script>
 	</body>
 </html>

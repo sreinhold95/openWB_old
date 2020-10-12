@@ -1,10 +1,31 @@
 var initialladelogread = 1;
-
+var ConfiguredChargePoints = 0;
 
 
 var clientuid = Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 5);
 var client = new Messaging.Client(location.host,9001, clientuid);
 function handlevar(mqttmsg, mqttpayload, mqtttopic, htmldiv) {
+	if ( mqttmsg =="openWB/system/ConfiguredChargePoints" ) {
+		ConfiguredChargePoints = mqttpayload;
+		console.log(mqttpayload);
+
+		if ( mqttpayload == 1 ) {
+			document.getElementById("chargep1").style.display = 'block';
+		}
+		if ( mqttpayload == 2 ) {
+			document.getElementById("chargep1").style.display = 'block';
+			document.getElementById("chargep2").style.display = 'block';
+
+		}
+		if ( mqttpayload == 3 ) {
+			document.getElementById("chargep1").style.display = 'block';
+			document.getElementById("chargep2").style.display = 'block';
+			document.getElementById("chargep3").style.display = 'block';
+
+		}
+
+	}
+
 	     if ( mqttmsg =="openWB/system/MonthLadelogData1" ) {
 		                     if (initialladelogread == 0 && (mqttpayload != "empty")) {
 					                             ladelog1p = mqttpayload;
@@ -114,6 +135,7 @@ var thevalues = [
 	["openWB/system/MonthLadelogData10", "#"],
 	["openWB/system/MonthLadelogData11", "#"],
 	["openWB/system/MonthLadelogData12", "#"],
+	["openWB/system/ConfiguredChargePoints", "#"],
 ];
 var options = {
 	        timeout: 5,
@@ -151,7 +173,6 @@ function showhideladelog() {
 		}
 	};
 function selectladelogclick(newdate){
-	        console.log(newdate);
 	        newdate = newdate.replace('-','');
 	        ladelog1=0;
 	        ladelog2=0;
@@ -279,6 +300,9 @@ function putladelogtogether() {
 					if (cell == 2 && shownurpv == 1) {
 						writemodus = 1;
 					}
+					if (cell == 3) {
+						writemodus = 1;
+					}
 					if (cell == 4 && showstandby == 1) {
 						writemodus = 1;
 					}
@@ -335,6 +359,8 @@ function putladelogtogether() {
 					} else if (cell == 1) {
 						content += "<td>" + "Min und PV" + "</td>" ;
 					} else if (cell == 4) {
+						content += "<td>" + "Standby" + "</td>" ;
+					} else if (cell == 3) {
 						content += "<td>" + "Standby" + "</td>" ;
 					} else if (cell == 7) {
 						content += "<td>" + "Nachtladen" + "</td>" ;

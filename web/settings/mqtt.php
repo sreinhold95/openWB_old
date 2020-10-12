@@ -155,7 +155,7 @@
 					<div style="margin-top: 15px;">
 						Entfernter Pr&auml;fix:&nbsp;<input type="text" size="55" name="RemotePrefix" id="RemotePrefix" value="<?php echo $remotePrefix; ?>" /><br/>
 						<small>MQTT-Thema Pr&auml;fix welches dem 'openWB/...' vorangestellt wird.<br/>
-						Beispiel: Wenn in diesem Feld 'pfx' eingetragen wird, werden alle Weiterleitungen und Registrierungen auf der entfernten Seite mit 'pfx/openWB/...' benannt.</small>
+						Beispiel: Wenn in diesem Feld 'pfx/' eingetragen wird, werden alle Weiterleitungen und Registrierungen auf der entfernten Seite mit 'pfx/openWB/...' benannt.</small>
 					</div>
 					<div style="margin-top: 15px;">
 						MQTT Protokoll:<br/>
@@ -226,7 +226,7 @@
 				<div class="row justify-content-center">
 					<div class="col text-center">
 						Open Source made with love!<br>
-						Jede Spende hilft die Weiterentwicklung von openWB vorranzutreiben<br>
+						Jede Spende hilft die Weiterentwicklung von openWB voranzutreiben<br>
 						<form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
 							<input type="hidden" name="cmd" value="_s-xclick">
 							<input type="hidden" name="hosted_button_id" value="2K8C4Y2JTGH7U">
@@ -244,13 +244,16 @@
 			</div>
 		</footer>
 
-		<script type="text/javascript">
+		<script>
 
-			$.get("settings/navbar.php", function(data){
-				$("#nav").replaceWith(data);
-				// disable navbar entry for current page
-				$('#navMqttBruecke').addClass('disabled');
-			});
+			$.get(
+				{ url: "settings/navbar.html", cache: false },
+				function(data){
+					$("#nav").replaceWith(data);
+					// disable navbar entry for current page
+					$('#navMqttBruecke').addClass('disabled');
+				}
+			);
 
 		</script>
 

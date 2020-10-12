@@ -9,7 +9,7 @@ import struct
 import binascii
 seradd = str(sys.argv[1])
 from pymodbus.client.sync import ModbusTcpClient
-client = ModbusTcpClient(seradd,port=502)
+client = ModbusTcpClient(seradd,port=8899)
 
 #rq = client.read_holding_registers(0,8,unit=5)
 #print(rq.registers)
