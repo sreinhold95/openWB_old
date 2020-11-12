@@ -13,6 +13,7 @@ sudo chmod 777 /var/www/html/openWB/web/files/*
 sudo chmod -R +x /var/www/html/openWB/modules/*
 sudo chmod -R 777 /var/www/html/openWB/modules/soc_i3
 sudo chmod -R 777 /var/www/html/openWB/modules/soc_i3s1
+echo 0 > /var/www/html/openWB/ramdisk/randomSleepValue
 echo 0 > /var/www/html/openWB/ramdisk/rfidlp1
 echo 0 > /var/www/html/openWB/ramdisk/rfidlp2
 echo 0 > /var/www/html/openWB/ramdisk/rfidlp3
@@ -108,17 +109,17 @@ echo 0 > /var/www/html/openWB/ramdisk/chargestatlp5
 echo 0 > /var/www/html/openWB/ramdisk/chargestatlp6
 echo 0 > /var/www/html/openWB/ramdisk/chargestatlp7
 echo 0 > /var/www/html/openWB/ramdisk/chargestatlp8
+echo 0 > /var/www/html/openWB/ramdisk/verbraucher1vorhanden
 echo 0 > /var/www/html/openWB/ramdisk/verbraucher1_watt
 echo 0 > /var/www/html/openWB/ramdisk/verbraucher1_wh
+echo 0 > /var/www/html/openWB/ramdisk/verbraucher1_whe
+echo 0 > /var/www/html/openWB/ramdisk/verbraucher2vorhanden
 echo 0 > /var/www/html/openWB/ramdisk/verbraucher2_watt
 echo 0 > /var/www/html/openWB/ramdisk/verbraucher2_wh
 echo 0 > /var/www/html/openWB/ramdisk/verbraucher2_whe
+echo 0 > /var/www/html/openWB/ramdisk/verbraucher3vorhanden
 echo 0 > /var/www/html/openWB/ramdisk/verbraucher3_watt
 echo 0 > /var/www/html/openWB/ramdisk/verbraucher3_wh
-echo 0 > /var/www/html/openWB/ramdisk/verbraucher1_whe
-echo 0 > /var/www/html/openWB/ramdisk/verbraucher1vorhanden
-echo 0 > /var/www/html/openWB/ramdisk/verbraucher2vorhanden
-echo 0 > /var/www/html/openWB/ramdisk/verbraucher3vorhanden
 echo 0 > /var/www/html/openWB/ramdisk/evseausgelesen
 echo 0 > /var/www/html/openWB/ramdisk/progevsedinlp1
 echo 0 > /var/www/html/openWB/ramdisk/progevsedinlp2
@@ -293,7 +294,7 @@ echo 0 > /var/www/html/openWB/ramdisk/pv2kwh
 echo 0 > /var/www/html/openWB/ramdisk/pv2a1
 echo 0 > /var/www/html/openWB/ramdisk/pv2a2
 echo 0 > /var/www/html/openWB/ramdisk/pv2a3
-
+echo 0 > /var/www/html/openWB/ramdisk/pvvorhanden
 
 
 # Gesamtleistung AC PV-Module WR 1 + 2
@@ -565,6 +566,11 @@ echo "nicht angefragt" > /var/www/html/openWB/ramdisk/evsedintestlp3
 echo 0 > /var/www/html/openWB/ramdisk/u1p3pstat
 echo 0 > /var/www/html/openWB/ramdisk/hook1einschaltverzcounter
 echo 0 > /var/www/html/openWB/ramdisk/hook2einschaltverzcounter
+echo 0 > /var/www/html/openWB/ramdisk/daily_verbraucher1ikwh
+echo 0 > /var/www/html/openWB/ramdisk/daily_verbraucher1ekwh
+echo 0 > /var/www/html/openWB/ramdisk/daily_verbraucher2ikwh
+echo 0 > /var/www/html/openWB/ramdisk/daily_verbraucher2ekwh
+echo 0 > /var/www/html/openWB/ramdisk/daily_verbraucher3ikwh
 sudo chmod 777 /var/www/html/openWB/ramdisk/*
 sudo chmod 777 /var/www/html/openWB/web/files/*
 sudo chmod -R +x /var/www/html/openWB/modules/*
@@ -1061,6 +1067,18 @@ fi
 if ! grep -Fq "wrjsonurl=" /var/www/html/openWB/openwb.conf
 then
 	  echo "wrjsonurl=http://192.168.0.12/solar_api" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "wr2jsonwatt=" /var/www/html/openWB/openwb.conf
+then
+	  echo "wr2jsonwatt=.watt" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "wr2jsonkwh=" /var/www/html/openWB/openwb.conf
+then
+	  echo "wr2jsonkwh=.kwh" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "wr2jsonurl=" /var/www/html/openWB/openwb.conf
+then
+	  echo "wr2jsonurl=http://192.168.0.12/solar_api" >> /var/www/html/openWB/openwb.conf
 fi
 if ! grep -Fq "hausbezugnone=" /var/www/html/openWB/openwb.conf
 then
@@ -1832,6 +1850,10 @@ if ! grep -Fq "vartaspeicherip=" /var/www/html/openWB/openwb.conf
 then
 	  echo "vartaspeicherip=192.168.0.10" >> /var/www/html/openWB/openwb.conf
   fi
+if ! grep -Fq "usevartamodbus=" /var/www/html/openWB/openwb.conf
+then
+	  echo "usevartamodbus=0" >> /var/www/html/openWB/openwb.conf
+  fi
 if ! grep -Fq "adaptpv=" /var/www/html/openWB/openwb.conf
 then
 	  echo "adaptpv=0" >> /var/www/html/openWB/openwb.conf
@@ -1880,6 +1902,10 @@ then
 if ! grep -Fq "froniusprimo=" /var/www/html/openWB/openwb.conf
 then
 	  echo "froniusprimo=0" >> /var/www/html/openWB/openwb.conf
+  fi
+if ! grep -Fq "froniusvar2=" /var/www/html/openWB/openwb.conf
+then
+	  echo "froniusvar2=0" >> /var/www/html/openWB/openwb.conf
   fi
 if ! grep -Fq "kebaiplp1=" /var/www/html/openWB/openwb.conf
 then
@@ -2571,6 +2597,10 @@ if ! grep -Fq "pvkitversion=" /var/www/html/openWB/openwb.conf
 then
 	echo "pvkitversion=0" >> /var/www/html/openWB/openwb.conf
 fi
+if ! grep -Fq "pv2kitversion=" /var/www/html/openWB/openwb.conf
+then
+	echo "pv2kitversion=0" >> /var/www/html/openWB/openwb.conf
+fi
 if ! grep -Fq "wrsunwayspw=" /var/www/html/openWB/openwb.conf
 then
 	echo "wrsunwayspw=passwort" >> /var/www/html/openWB/openwb.conf
@@ -2709,6 +2739,10 @@ fi
 if ! grep -Fq "soclp1_vin=" /var/www/html/openWB/openwb.conf
 then
 	echo "soclp1_vin=none" >> /var/www/html/openWB/openwb.conf
+fi
+if ! grep -Fq "soclp2_vin=" /var/www/html/openWB/openwb.conf
+then
+	echo "soclp2_vin=none" >> /var/www/html/openWB/openwb.conf
 fi
 if ! grep -Fq "rfidlist=" /var/www/html/openWB/openwb.conf
 then
@@ -2854,36 +2888,40 @@ chmod 777 /var/www/html/openWB/ramdisk/mqttlastregelungaktiv
 if (( isss == 1 )); then
 	echo $lastmanagement > /var/www/html/openWB/ramdisk/issslp2act
 	sudo kill $(ps aux |grep '[i]sss.py' | awk '{print $2}')
-    if ps ax |grep -v grep |grep "python3 /var/www/html/openWB/runs/isss.py" > /dev/null
-    then
-    	echo "test" > /dev/null
-    else
-    	python3 /var/www/html/openWB/runs/isss.py &
-	ethstate=$(</sys/class/net/eth0/carrier)
-	if (( ethstate == 1 )); then
-		sudo ifconfig eth0:0 192.168.193.5 netmask 255.255.255.0 down
+	if ps ax |grep -v grep |grep "python3 /var/www/html/openWB/runs/isss.py" > /dev/null
+	then
+		echo "test" > /dev/null
 	else
-		sudo ifconfig wlan0:0 192.168.193.6 netmask 255.255.255.0 down
+		python3 /var/www/html/openWB/runs/isss.py &
+		# second IP already set up !
+		ethstate=$(</sys/class/net/eth0/carrier)
+		if (( ethstate == 1 )); then
+			sudo ifconfig eth0:0 192.168.193.5 netmask 255.255.255.0 down
+		else
+			sudo ifconfig wlan0:0 192.168.193.6 netmask 255.255.255.0 down
+		fi
 	fi
-
-    fi
 fi
 if [[ "$evsecon" == "buchse" ]]; then
 	sudo kill $(ps aux |grep '[b]uchse.py' | awk '{print $2}')
-    if ps ax |grep -v grep |grep "python3 /var/www/html/openWB/runs/buchse.py" > /dev/null
-    then
-    	echo "test" > /dev/null
-    else
-    	python3 /var/www/html/openWB/runs/buchse.py &
-    fi
+	if ps ax |grep -v grep |grep "python3 /var/www/html/openWB/runs/buchse.py" > /dev/null
+	then
+		echo "test" > /dev/null
+	else
+		python3 /var/www/html/openWB/runs/buchse.py &
+	fi
 fi
 if [[ "$rfidakt" == "2" ]]; then
-       if ps ax |grep -v grep |grep "python3 /var/www/html/openWB/runs/rfid.py" > /dev/null
-       then
-               echo "test" > /dev/null
-       else
-               python3 /var/www/html/openWB/runs/rfid.py &
-       fi
+	if ps ax |grep -v grep |grep "python3 /var/www/html/openWB/runs/rfid.py" > /dev/null
+	then
+		echo "test" > /dev/null
+	else
+		python3 /var/www/html/openWB/runs/rfid.py &
+	fi
+fi
+if grep -Fq "@chromium-browser --incognito --disable-pinch --kiosk http://localhost/openWB/web/display.php" /home/pi/.config/lxsession/LXDE-pi/autostart
+then
+	sed -i "s,@chromium-browser --incognito --disable-pinch --kiosk http://localhost/openWB/web/display.php,@chromium-browser --incognito --disable-pinch --overscroll-history-navigation=0 --kiosk http://localhost/openWB/web/display.php,g" /home/pi/.config/lxsession/LXDE-pi/autostart
 fi
 (sleep 10; echo 1 > /var/www/html/openWB/ramdisk/reloaddisplay) &
 ip route get 1 | awk '{print $NF;exit}' > /var/www/html/openWB/ramdisk/ipaddress
@@ -2906,8 +2944,8 @@ mosquitto_pub -t openWB/lp/2/W -r -m "0"
 mosquitto_pub -t openWB/lp/3/W -r -m "0"
 mosquitto_pub -t openWB/lp/1/boolChargePointConfigured -r -m "1"
 rm -rf /var/www/html/openWB/web/themes/dark19_01
-(sleep 10; mosquitto_pub -t openWB/set/ChargeMode -r -m $bootmodus) &
-(sleep 10; mosquitto_pub -t openWB/global/ChargeMode -r -m $bootmodus) &
+(sleep 10; mosquitto_pub -t openWB/set/ChargeMode -r -m "$bootmodus") &
+(sleep 10; mosquitto_pub -t openWB/global/ChargeMode -r -m "$bootmodus") &
 echo " " > /var/www/html/openWB/ramdisk/lastregelungaktiv
 chmod 777 /var/www/html/openWB/ramdisk/lastregelungaktiv
 chmod 777 /var/www/html/openWB/ramdisk/smarthome.log

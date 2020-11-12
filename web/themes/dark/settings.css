@@ -33,7 +33,8 @@ body {
 }
 
 .card-header.bg-secondary .btn-outline-info:not(.active):not(:hover),
-.card-header.bg-success .btn-outline-info:not(.active):not(:hover) {
+.card-header.bg-success .btn-outline-info:not(.active):not(:hover),
+.card-header.bg-primary .btn-outline-info:not(.active):not(:hover) {
     background-color: #212529;
 }
 
@@ -115,4 +116,16 @@ hr {
 
 .carousel-indicators li {
 	background-color: #ffffff;
+}
+
+.cssload-inner.cssload-one {
+	border-bottom: 5px solid #ffffff;
+}
+
+.cssload-inner.cssload-two {
+	border-right: 5px solid #ffffff;
+}
+
+.cssload-inner.cssload-three {
+	border-top: 5px solid #ffffff;
 }

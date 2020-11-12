@@ -63,12 +63,12 @@
 
 			<form id="myForm">
 				<h1>Einstellungen für SmartHome Geräte</h1>
-<?php for( $devicenum = 1; $devicenum <= 10; $devicenum++ ) { ?>
+<?php for( $devicenum = 1; $devicenum < 10; $devicenum++ ) { // Limited to devices 1-9 as device 10 is not properly implemented in various parts of the code ?>
 				<div class="card border-secondary">
 					<div class="card-header bg-secondary">
 						<div class="form-group mb-0">
 							<div class="form-row vaRow mb-0">
-								<div class="col-4">Gerät <?php echo $devicenum; ?></div>
+								<div class="col-4" id="deviceHeader<?php echo $devicenum; ?>">Gerät <?php echo $devicenum; ?></div>
 								<div class="col">
 									<div class="btn-group btn-group-toggle btn-block" id="device_configuredDevices<?php echo $devicenum; ?>" name="device_configured" data-toggle="buttons" data-default="0" value="0" data-topicprefix="openWB/config/get/SmartHome/" data-topicsubgroup="Devices/<?php echo $devicenum; ?>/">
 										<label class="btn btn-sm btn-outline-info">
@@ -131,6 +131,24 @@
 								</div>
 							</div>
 						</div>
+						<hr class="border-secondary">
+						<div class="form-group">
+							<div class="form-row mb-1">
+								<label class="col-md-4 col-form-label">Bei Autoladen ausschalten</label>
+								<div class="col">
+									<div class="btn-group btn-group-toggle btn-block" id="device_deactivateWhileEvChargingDevices<?php echo $devicenum; ?>" name="device_deactivateWhileEvCharging" data-toggle="buttons" data-default="0" value="0" data-topicprefix="openWB/config/get/SmartHome/" data-topicsubgroup="Devices/<?php echo $devicenum; ?>/">
+										<label class="btn btn-outline-info">
+											<input type="radio" name="device_deactivateWhileEvChargingDevices<?php echo $devicenum; ?>" id="device_deactivateWhileEvCharging<?php echo $devicenum; ?>0" data-option="0">Nein
+										</label>
+										<label class="btn btn-outline-info">
+											<input type="radio" name="device_deactivateWhileEvChargingDevices<?php echo $devicenum; ?>" id="device_deactivateWhileEvCharging<?php echo $devicenum; ?>1" data-option="1">Ja
+										</label>
+									</div>
+									<span class="form-text small">Gibt an ob der Aktor deaktiviert werden soll um mehr Überschuss für die EV Ladung zu erhalten. ACHTUNG! Nightly Feature!</span>
+								</div>
+							</div>
+						</div>
+
 						<hr class="border-secondary">
 						<div class="form-group">
 							<div class="form-row mb-1">
@@ -352,6 +370,13 @@
 						$('#device<?php echo $devicenum; ?>options').show();
 					}
 				}
+				if ( elementId == 'device_nameDevices<?php echo $devicenum; ?>') {
+					if ( mqttpayload != "Name" ) {
+						$('#deviceHeader<?php echo $devicenum; ?>').text('Gerät <?php echo $devicenum; ?> ('+mqttpayload+')');
+					} else {
+						$('#deviceHeader<?php echo $devicenum; ?>').text('Gerät <?php echo $devicenum; ?>');
+					}
+				}
 <?php } ?>
 			}
 			$(function() {
@@ -361,6 +386,13 @@
 						$('#device<?php echo $devicenum; ?>options').show();
 					} else {
 						$('#device<?php echo $devicenum; ?>options').hide();
+					}
+				});
+				$('#device_nameDevices<?php echo $devicenum; ?>').change(function(){
+					if (($(this).val() != "Name") && ($(this).val().length > 0)) {
+						$('#deviceHeader<?php echo $devicenum; ?>').text('Gerät <?php echo $devicenum; ?> ('+$(this).val()+')');
+					} else {
+						$('#deviceHeader<?php echo $devicenum; ?>').text('Gerät <?php echo $devicenum; ?>');
 					}
 				})
 <?php } ?>
