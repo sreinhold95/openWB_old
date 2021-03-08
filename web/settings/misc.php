@@ -34,34 +34,8 @@
 		<script src="js/jquery-3.4.1.min.js"></script>
 		<script src="js/bootstrap-4.4.1/bootstrap.bundle.min.js"></script>
 		<!-- load helper functions -->
-		<script src = "settings/helperFunctions.js?ver=20200505-a" ></script>
+		<script src = "settings/helperFunctions.js?ver=20201231" ></script>
 		<script>
-			/**
-			 * hideSection
-			 * add class 'hide' to element with id 'section'
-			 * disables all contained input and select elements if 'disableChildren' is not set to false
-			**/
-			function hideSection(section, disableChildren=true) {
-				$('#'+section).addClass('hide');
-				if (disableChildren) {
-					$('#'+section).find('input').prop("disabled", true);
-					$('#'+section).find('select').prop("disabled", true);
-				}
-			}
-
-			/**
-			 * showSection
-			 * remove class 'hide' from element with id 'section'
-			 * enables all contained input and select elements if 'enableChildren' is not set to false
-			**/
-			function showSection(section, enableChildren=true) {
-				$('#'+section).removeClass('hide');
-				if (enableChildren) {
-					$('#'+section).find('input').prop("disabled", false);
-					$('#'+section).find('select').prop("disabled", false);
-				}
-			}
-
 			function getCookie(cname) {
 				var name = cname + '=';
 				var decodedCookie = decodeURIComponent(document.cookie);
@@ -94,7 +68,7 @@
 				${$key."old"} = trim( $value, " '\t\n\r\0\x0B" ); // remove all garbage and single quotes
 			}
 
-			$lastrfid = trim( file_get_contents( '/var/www/html/openWB/ramdisk/rfidlasttag' ) );
+			$lastrfid = explode(',',trim( file_get_contents( '/var/www/html/openWB/ramdisk/rfidlasttag' )))[0];
 		?>
 
 		<div id="nav"></div> <!-- placeholder for navbar -->
@@ -245,9 +219,9 @@
 							var lp2akt = <?php echo $lastmanagementold ?>;
 
 							if(lp2akt == '0') {
-								hideSection('lp2cpdiv');
+								hideSection('#lp2cpdiv');
 							} else {
-								showSection('lp2cpdiv');
+								showSection('#lp2cpdiv');
 							}
 						});
 					</script>
@@ -734,19 +708,19 @@
 						$(function() {
 							function visibility_rfidakt() {
 								if($('#rfidaktOff').prop("checked")) {
-									hideSection('rfidandiv');
-									hideSection('rfidan1div');
-									hideSection('rfidan2div');
+									hideSection('#rfidandiv');
+									hideSection('#rfidan1div');
+									hideSection('#rfidan2div');
 								} else {
 									if($('#rfidaktOn1').prop("checked")) {
-										showSection('rfidandiv', false);
-										showSection('rfidan1div');
-										hideSection('rfidan2div');
+										showSection('#rfidandiv', false);
+										showSection('#rfidan1div');
+										hideSection('#rfidan2div');
 
 									} else {
-										showSection('rfidandiv', false);
-										showSection('rfidan2div');
-										hideSection('rfidan1div');
+										showSection('#rfidandiv', false);
+										showSection('#rfidan2div');
+										hideSection('#rfidan1div');
 									}
 								}
 							}
@@ -880,9 +854,9 @@
 						$(function() {
 							function visibility_pushbenachrichtigung() {
 								if($('#pushbenachrichtigungOff').prop("checked")) {
-									hideSection('pushban');
+									hideSection('#pushban');
 								} else {
-									showSection('pushban');
+									showSection('#pushban');
 								}
 							}
 
@@ -1145,9 +1119,9 @@
 						$(function() {
 							function visibility_ledsakt() {
 								if($('#ledsaktOff').prop("checked")) {
-									hideSection('ledsan');
+									hideSection('#ledsan');
 								} else {
-									showSection('ledsan');
+									showSection('#ledsan');
 								}
 							}
 							$('input[type=radio][name=ledsakt]').change(function(){
@@ -1159,48 +1133,67 @@
 					</script>
 				</div>
 
-				<!-- integriertes Display -->
+				<!-- Display intern/extern -->
 				<div class="card border-secondary">
 					<div class="card-header bg-secondary">
+						Display (intern oder extern)
+					</div>
+					<div class="card-body">
 						<div class="form-group mb-0">
-							<div class="form-row vaRow mb-0">
-								<div class="col-4">integriertes Display</div>
+							<div class="form-row mb-1">
+								<div class="col-md-4">
+									<label class="col-form-label">integriertes Display</label>
+								</div>
 								<div class="col">
-									<div class="btn-group btn-group-toggle col" data-toggle="buttons">
-										<label class="btn btn-sm btn-outline-info<?php if($displayaktivold == 0) echo " active" ?>">
+									<div class="btn-group btn-block btn-group-toggle" data-toggle="buttons">
+										<label class="btn btn-outline-info<?php if($displayaktivold == 0) echo " active" ?>">
 											<input type="radio" name="displayaktiv" id="displayaktivOff" value="0"<?php if($displayaktivold == 0) echo " checked=\"checked\"" ?>>Nein
 										</label>
-										<label class="btn btn-sm btn-outline-info<?php if($displayaktivold == 1) echo " active" ?>">
+										<label class="btn btn-outline-info<?php if($displayaktivold == 1) echo " active" ?>">
 											<input type="radio" name="displayaktiv" id="displayaktivOn" value="1"<?php if($displayaktivold == 1) echo " checked=\"checked\"" ?>>Ja
 										</label>
 									</div>
 								</div>
 							</div>
 						</div>
-					</div>
-					<div class="card-body hide" id="displayan">
-						<div class="form-group">
-							<div class="form-row mb-1">
-								<div class="col-md-4">
-									<label class="col-form-label">Tagesgraph anzeigen</label>
-								</div>
-								<div class="col">
-									<div class="btn-group btn-block btn-group-toggle" data-toggle="buttons">
-										<label class="btn btn-outline-info<?php if($displaytagesgraphold == 0) echo " active" ?>">
-											<input type="radio" name="displaytagesgraph" id="displaytagesgraphOff" value="0"<?php if($displaytagesgraphold == 0) echo " checked=\"checked\"" ?>>Nein
-										</label>
-										<label class="btn btn-outline-info<?php if($displaytagesgraphold == 1) echo " active" ?>">
-											<input type="radio" name="displaytagesgraph" id="displaytagesgraphOn" value="1"<?php if($displaytagesgraphold == 1) echo " checked=\"checked\"" ?>>Ja
-										</label>
+						<div class="hide" id="displayan">
+							<div class="form-group">
+								<div class="form-row mb-1">
+									<div class="col">
+										Display Standby
 									</div>
-									<span class="form-text small text-danger">Ja vermindert die Performance</span>
+								</div>
+								<div class="form-row vaRow mb-1">
+									<label for="displaysleep" class="col-md-4 col-form-label">ausschalten nach x Sekunden</label>
+									<div class="col">
+										<input type="number" min="5" step="5" name="displaysleep" id="displaysleep" class="form-control" value="<?php echo $displaysleepold ?>">
+									</div>
+								</div>
+								<div class="form-row mb-1">
+									<div class="col-md-4">
+										<label class="col-form-label">beim Einstecken des Fahrzeugs einschalten</label>
+									</div>
+									<div class="col">
+										<div class="btn-group btn-block btn-group-toggle" data-toggle="buttons">
+											<label class="btn btn-outline-info<?php if($displayEinBeimAnsteckenold == 0) echo " active" ?>">
+												<input type="radio" name="displayEinBeimAnstecken" id="displayEinBeimAnsteckenOff" value="0"<?php if($displayEinBeimAnsteckenold == 0) echo " checked=\"checked\"" ?>>Nein
+											</label>
+											<label class="btn btn-outline-info<?php if($displayEinBeimAnsteckenold == 1) echo " active" ?>">
+												<input type="radio" name="displayEinBeimAnstecken" id="displayEinBeimAnsteckenOn" value="1"<?php if($displayEinBeimAnsteckenold == 1) echo " checked=\"checked\"" ?>>Ja
+											</label>
+										</div>
+									</div>
 								</div>
 							</div>
+						</div>
+						<hr class="border-secondary">
+						<div class="form-group">
 							<div class="form-row vaRow mb-1">
 								<label for="displaytheme" class="col-md-4 col-form-label">Theme des Displays</label>
 								<div class="col">
 									<select name="displaytheme" id="displaytheme" class="form-control">
-										<option <?php if($displaythemeold == 0) echo "selected" ?> value="0">Gauges</option>
+										<option <?php if($displaythemeold == 0) echo "selected" ?> value="0">Cards</option>
+										<option <?php if($displaythemeold == 3) echo "selected" ?> value="3">Gauges</option>
 										<option <?php if($displaythemeold == 1) echo "selected" ?> value="1">Symbolfluss</option>
 										<option <?php if($displaythemeold == 2) echo "selected" ?> value="2">Nur Ladeleistung, keine verstellmöglichkeit</option>
 									</select>
@@ -1252,10 +1245,48 @@
 										<input type="number" min="1000" step="100" name="displaylp1max" id="displaylp1max" class="form-control" value="<?php echo $displaylp1maxold ?>">
 									</div>
 								</div>
-								<div class="form-row vaRow mb-1">
+								<div class="form-row vaRow mb-1" id="displaylp2">
 									<label for="displaylp2max" class="col-md-4 col-form-label">Ladepunkt 2 Skala Max</label>
 									<div class="col">
 										<input type="number" min="1000" step="100" name="displaylp2max" id="displaylp2max" class="form-control" value="<?php echo $displaylp2maxold ?>">
+									</div>
+								</div>
+							</div>
+							<div id="displaycards" class="hide">
+								<div class="form-row vaRow mb-1" id="displaylp3">
+									<label for="displaylp3max" class="col-md-4 col-form-label">Ladepunkt 3 Skala Max</label>
+									<div class="col">
+										<input type="number" min="1000" step="100" name="displaylp3max" id="displaylp3max" class="form-control" value="<?php echo $displaylp3maxold ?>">
+									</div>
+								</div>
+								<div class="form-row vaRow mb-1" id="displaylp4">
+									<label for="displaylp4max" class="col-md-4 col-form-label">Ladepunkt 4 Skala Max</label>
+									<div class="col">
+										<input type="number" min="1000" step="100" name="displaylp4max" id="displaylp4max" class="form-control" value="<?php echo $displaylp4maxold ?>">
+									</div>
+								</div>
+								<div class="form-row vaRow mb-1" id="displaylp5">
+									<label for="displaylp5max" class="col-md-4 col-form-label">Ladepunkt 5 Skala Max</label>
+									<div class="col">
+										<input type="number" min="1000" step="100" name="displaylp5max" id="displaylp5max" class="form-control" value="<?php echo $displaylp5maxold ?>">
+									</div>
+								</div>
+								<div class="form-row vaRow mb-1" id="displaylp6">
+									<label for="displaylp6max" class="col-md-4 col-form-label">Ladepunkt 6 Skala Max</label>
+									<div class="col">
+										<input type="number" min="1000" step="100" name="displaylp6max" id="displaylp6max" class="form-control" value="<?php echo $displaylp6maxold ?>">
+									</div>
+								</div>
+								<div class="form-row vaRow mb-1" id="displaylp7">
+									<label for="displaylp7max" class="col-md-4 col-form-label">Ladepunkt 7 Skala Max</label>
+									<div class="col">
+										<input type="number" min="1000" step="100" name="displaylp7max" id="displaylp7max" class="form-control" value="<?php echo $displaylp7maxold ?>">
+									</div>
+								</div>
+								<div class="form-row vaRow mb-1" id="displaylp8">
+									<label for="displaylp8max" class="col-md-4 col-form-label">Ladepunkt 8 Skala Max</label>
+									<div class="col">
+										<input type="number" min="1000" step="100" name="displaylp8max" id="displaylp8max" class="form-control" value="<?php echo $displaylp8maxold ?>">
 									</div>
 								</div>
 							</div>
@@ -1264,12 +1295,12 @@
 						<div class="form-group">
 							<div class="form-row mb-1">
 								<div class="col">
-									Pin-Sperre
+									PIN-Sperre
 								</div>
 							</div>
 							<div class="form-row mb-1">
 								<div class="col-md-4">
-									<label class="col-form-label">Pin nötig zum ändern des Lademodus</label>
+									<label class="col-form-label">Display mit PIN schützen</label>
 								</div>
 								<div class="col">
 									<div class="btn-group btn-block btn-group-toggle" data-toggle="buttons">
@@ -1283,38 +1314,9 @@
 								</div>
 							</div>
 							<div class="form-row mb-1 hide" id="displaypin">
-								<label for="displaypincode" class="col-md-4 col-form-label">Pin (nur Zahlen von 1-9 erlaubt)</label>
+								<label for="displaypincode" class="col-md-4 col-form-label">PIN (4 Stellen, nur Zahlen erlaubt)</label>
 								<div class="col">
-									<input type="text" pattern="[1-9]*" minlength="4" maxlength="4" size="4" name="displaypincode" id="displaypincode" class="form-control" value="<?php echo $displaypincodeold ?>">
-								</div>
-							</div>
-						</div>
-						<hr class="border-secondary">
-						<div class="form-group">
-							<div class="form-row mb-1">
-								<div class="col">
-									Display Standby
-								</div>
-							</div>
-							<div class="form-row vaRow mb-1">
-								<label for="displaysleep" class="col-md-4 col-form-label">ausschalten nach x Sekunden</label>
-								<div class="col">
-									<input type="number" min="5" step="5" name="displaysleep" id="displaysleep" class="form-control" value="<?php echo $displaysleepold ?>">
-								</div>
-							</div>
-							<div class="form-row mb-1">
-								<div class="col-md-4">
-									<label class="col-form-label">beim Einstecken des Fahrzeugs einschalten</label>
-								</div>
-								<div class="col">
-									<div class="btn-group btn-block btn-group-toggle" data-toggle="buttons">
-										<label class="btn btn-outline-info<?php if($displayEinBeimAnsteckenold == 0) echo " active" ?>">
-											<input type="radio" name="displayEinBeimAnstecken" id="displayEinBeimAnsteckenOff" value="0"<?php if($displayEinBeimAnsteckenold == 0) echo " checked=\"checked\"" ?>>Nein
-										</label>
-										<label class="btn btn-outline-info<?php if($displayEinBeimAnsteckenold == 1) echo " active" ?>">
-											<input type="radio" name="displayEinBeimAnstecken" id="displayEinBeimAnsteckenOn" value="1"<?php if($displayEinBeimAnsteckenold == 1) echo " checked=\"checked\"" ?>>Ja
-										</label>
-									</div>
+									<input type="text" pattern="[0-9]{4}" minlength="4" maxlength="4" size="4" name="displaypincode" id="displaypincode" class="form-control" value="<?php echo $displaypincodeold ?>">
 								</div>
 							</div>
 						</div>
@@ -1323,9 +1325,9 @@
 						$(function() {
 							function visibility_displayaktiv() {
 								if($('#displayaktivOff').prop("checked")) {
-									hideSection('displayan');
+									hideSection('#displayan');
 								} else {
-									showSection('displayan');
+									showSection('#displayan');
 									visibility_displaypinaktiv();
 									visibility_displaytheme()
 								}
@@ -1333,17 +1335,25 @@
 
 							function visibility_displaypinaktiv() {
 								if($('#displaypinaktivOff').prop("checked")) {
-									hideSection('displaypin');
+									hideSection('#displaypin');
 								} else {
-									showSection('displaypin');
+									showSection('#displaypin');
 								}
 							}
 
 							function visibility_displaytheme() {
-								if($('#displaytheme').val() == '0') {
-									showSection('displaygauge');
-								} else {
-									hideSection('displaygauge');
+								switch ($('#displaytheme').val()) {
+									case '0': // Cards
+										showSection('#displaygauge');
+										showSection('#displaycards');
+										break;
+									case '3': // Gauges
+										showSection('#displaygauge');
+										hideSection('#displaycards');
+										break;
+									default:
+									hideSection('#displaygauge');
+									hideSection('#displaycards');
 								}
 							}
 
@@ -1406,6 +1416,23 @@
 											<input type="range" class="form-control-range rangeInput" name="livegraph" id="livegraph" min="10" max="120" step="10" value="<?php echo $livegraphold; ?>">
 										</div>
 									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<!-- Ladelog Optionen -->
+				<div class="card border-secondary">
+					<div class="card-header bg-secondary">
+						Ladelog
+					</div>
+					<div class="card-body">
+						<div class="form-group">
+							<div class="form-row mb-1">
+								<label for="durchslp1" class="col-md-4 col-form-label">Preis je kWh</label>
+								<div class="col">
+									<input class="form-control" type="number" min="0" step="0.0001" name="preisjekwh" id="preisjekwh" value="<?php echo $preisjekwhold ?>">
+									<span class="form-text small">Gültige Werte xx.xx, z.B. 0.2833. Dient zur Berechnung der Ladekosten im Ladelog.</span>
 								</div>
 							</div>
 						</div>

@@ -78,7 +78,7 @@
 					<div class="card-body">
 						<div class="form-group">
 							<span id="textareaHelpBlock" class="form-text">Das Sammeln der Systemparameter für die Debug-Meldung kann einige Zeit in Anspruch nehmen. Es werden keine Benutzernamen oder Passwörter aus der Konfigurationsdatei übertragen! Der Debug Modus muss nicht verstellt werden.</span>
-							<textarea class="form-control" id="debugMessage" name="debugMessage" rows="3" placeholder="Fehlerbeschreibung" maxlength="500" required="required"></textarea>
+							<textarea class="form-control" id="debugMessage" name="debugMessage" rows="3" placeholder="Fehlerbeschreibung" minlength="20" maxlength="500" required="required"></textarea>
 							<small id="textareaTextLength" class="form-text text-muted text-right">500/500</small>
 						</div>
 						<div class="form-group mb-0">
@@ -93,7 +93,7 @@
 						</div>
 					</div>
 					<div class="card-footer text-center datenschutzack hide">
-						<button type="submit" class="btn btn-success">Absenden</button>
+						<button id="sendDebugBtn" type="submit" class="btn btn-success">Absenden</button>
 					</div>
 				</form>
 			</div>
@@ -118,6 +118,7 @@
 		<script src = "settings/processAllMqttMsg.js?ver=20200505-a" ></script>
 
 		<script>
+			var enableSubmit = true;
 
 			$.get(
 				{ url: "settings/navbar.html", cache: false },
@@ -151,6 +152,15 @@
 					$('#textareaTextLength').text(length+"/500");
 				});
 
+				$('#sendDebugMessageForm').submit(function( event ){
+					if( enableSubmit == true ){
+						$('#sendDebugBtn').append( ' <i class="fas fa-cog fa-spin"></i>' );
+						enableSubmit = false;
+					} else {
+						event.preventDefault();
+						console.log("dupplicate submit of form detected, preventing submit");
+					}
+				});
 			});
 
 		</script>
