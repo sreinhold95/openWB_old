@@ -8,7 +8,6 @@
 openwb_home=/var/www/html/openWB
 target="$openwb_home/ramdisk"
 
-. "$openwb_home/openwb.conf"
 
 # Checks
 if [ -z "$solarview_hostname" ]; then
@@ -26,7 +25,7 @@ command_bezug='22*'
 command_einspeisung='21*'
 
 log() {
-  echo "[bezug_solarview] $*" >>"$target/openwb.log"
+  echo "[bezug_solarview] $*" >>"$target/openWB.log"
 }
 
 request() {

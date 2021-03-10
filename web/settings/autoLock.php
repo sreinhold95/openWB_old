@@ -3,13 +3,13 @@
 
 	<!-- Einstellungen für automatisches Sperren/Entsperren
 		 der LP: ein Vorgang pro Tag
-	 	 Autor: M. Ortenstein -->
+		 Autor: M. Ortenstein -->
 	<head>
 		<base href="/openWB/web/">
 
 		<meta charset="UTF-8">
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
-		<meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<title>openWB Einstellungen</title>
 		<meta name="author" content="Michael Ortenstein">
 		<!-- Favicons (created with http://realfavicongenerator.net/)-->
@@ -24,8 +24,8 @@
 		<meta name="theme-color" content="#ffffff">
 
 		<!-- important scripts to be loaded -->
-		<script type="text/javascript" src="js/jquery-3.4.1.min.js"></script>
-		<script type="text/javascript" src="js/bootstrap-4.4.1/bootstrap.bundle.min.js"></script>
+		<script src="js/jquery-3.4.1.min.js"></script>
+		<script src="js/bootstrap-4.4.1/bootstrap.bundle.min.js"></script>
 
 		<!-- Bootstrap -->
 		<link rel="stylesheet" type="text/css" href="css/bootstrap-4.4.1/bootstrap.min.css">
@@ -38,12 +38,33 @@
 		<link rel="stylesheet" type="text/css" href="settings/settings_style.css">
 
 		<!-- clockpicker -->
-		<script type="text/javascript" src="js/clockpicker/bootstrap-clockpicker.min.js"></script>
+		<script src="js/clockpicker/bootstrap-clockpicker.min.js"></script>
 		<link rel="stylesheet" type="text/css" href="css/clockpicker/bootstrap-clockpicker.min.css">
 
 		<!-- global variables -->
-		<script type="text/javascript">
+		<script>
 			var oldClockpickerTime;  // holds old value of clockpicker during changing the time
+
+			function getCookie(cname) {
+				var name = cname + '=';
+				var decodedCookie = decodeURIComponent(document.cookie);
+				var ca = decodedCookie.split(';');
+				for(var i = 0; i <ca.length; i++) {
+					var c = ca[i];
+					while (c.charAt(0) == ' ') {
+						c = c.substring(1);
+					}
+					if (c.indexOf(name) == 0) {
+						return c.substring(name.length, c.length);
+					}
+				}
+				return '';
+			}
+			var themeCookie = getCookie('openWBTheme');
+			// include special Theme style
+			if( '' != themeCookie ){
+				$('head').append('<link rel="stylesheet" href="themes/' + themeCookie + '/settings.css?v=20200801">');
+			}
 		</script>
 	</head>
 
@@ -82,7 +103,7 @@
 
 			$isConfiguredLp = array_fill(1, $maxQuantityLp, false); // holds boolean for configured lp
 			// due to inconsitent variable naming need individual lines
-			$isConfiguredLp[1] = true;  // lp1 always configured
+			$isConfiguredLp[1] = 1;  // lp1 always configured
 			$isConfiguredLp[2] = ($settingsArray['lastmanagement'] == 1) ? 1 : 0;
 			$isConfiguredLp[3] = ($settingsArray['lastmanagements2'] == 1) ? 1 : 0;
 			for ($lp=4; $lp<=$maxQuantityLp; $lp++) {
@@ -145,15 +166,15 @@
 					$elemValue = '';
 				}
 				echo <<<ECHOCHECKBOX
-													<div class="col-auto my-1">
-														<div class="form-check">
-															<input type="hidden" name="{$elemName}">
-															<input class="form-check-input lockUnlockCheckbox" type="checkbox" id="{$elemId}" name="{$elemName}"{$elemValue}>
-															<label class="form-check-label pl-10" for="{$elemId}">
-																{$label}
-															</label>
-														</div>
-													</div>
+									<div class="col-auto my-1">
+										<div class="custom-control custom-checkbox">
+											<input type="hidden" name="{$elemName}">
+											<input class="custom-control-input lockUnlockCheckbox" type="checkbox" id="{$elemId}" name="{$elemName}"{$elemValue}>
+											<label class="custom-control-label pl-10" for="{$elemId}">
+												{$label}
+											</label>
+										</div>
+									</div>
 
 ECHOCHECKBOX;
 			}
@@ -163,14 +184,14 @@ ECHOCHECKBOX;
 				global $elemName, $elemId, $elemValue;
 				buildElementProperties($elemType);
 				echo <<<ECHOCLOCKPICKER
-													<div class="col-sm-6 my-1">
-														<div class="input-group">
-															<input type="text" class="form-control" readonly id="{$elemId}" name="{$elemName}" placeholder="--" value="{$elemValue}">
-															<div class="input-group-append">
-																<span class="input-group-text far fa-xs fa-clock vaRow"></span>
-															</div>
-														</div>
-													</div>\n
+									<div class="col-sm-6 my-1">
+										<div class="input-group">
+											<input type="text" class="form-control" readonly id="{$elemId}" name="{$elemName}" placeholder="--" value="{$elemValue}">
+											<div class="input-group-append">
+												<span class="input-group-text far fa-xs fa-clock vaRow"></span>
+											</div>
+										</div>
+									</div>\n
 ECHOCLOCKPICKER;
 			}
 
@@ -180,31 +201,31 @@ ECHOCLOCKPICKER;
 				$dayOfWeekString = getDayOfWeekString($dayOfWeek);
 
 				echo <<<ECHODAYROWHEAD
-										<div class="row vaRow">  <!-- row {$dayOfWeekString} -->
-											<div class="col-2">
-									            {$dayOfWeekString}
-									        </div>
-											<div class="col-5">
-												<div class="form-row align-items-center">\n
+						<div class="row form-row vaRow">  <!-- {$dayOfWeekString} -->
+							<div class="col-sm">
+								{$dayOfWeekString}
+							</div>
+							<div class="col-5">
+								<div class="form-row align-items-center">\n
 ECHODAYROWHEAD;
 
 				echoCheckboxDiv("lockBoxLp", "sperren");
 				echoClockpickerDiv("lockTimeLp");
 
 				echo <<<ECHODAYROWMIDDLE
-												</div>
-									        </div>
-											<div class="col-5">
-												<div class="form-row align-items-center">\n
+								</div>
+							</div>
+							<div class="col-5">
+								<div class="form-row align-items-center">\n
 ECHODAYROWMIDDLE;
 
 				echoCheckboxDiv("unlockBoxLp", "entsperren");
 				echoClockpickerDiv("unlockTimeLp");
 
 				echo <<<ECHODAYROWTAIL
-												</div>
-									        </div>
-										</div>  <!-- end row {$dayOfWeekString} -->\n
+								</div>
+							</div>
+						</div>  <!-- end {$dayOfWeekString} -->\n
 ECHODAYROWTAIL;
 
 				if ( $dayOfWeek < 7 ) {
@@ -216,12 +237,15 @@ ECHODAYROWTAIL;
 
 <!-- begin of html body -->
 
-		<?php include "/var/www/html/openWB/web/settings/navbar.php"; ?>
+		<div id="nav"></div> <!-- placeholder for navbar -->
 
 		<div role="main" class="container" style="margin-top:20px">
-			<div class="row justify-content-center">
-
-				<form class="form col-md-10" action="./tools/saveautolock.php" method="POST">
+			<h1>Autolock Einstellungen</h1>
+			<div class="alert alert-info">
+				Diese Einstellungen ermöglichen es, dass man jeden konfigurierten Ladepunkt zu bestimmten Zeiten automatisiert sperren bzw. wieder entsperren kann.
+				Ein möglicher Anwendungsfall wäre das Bereitstellen von Lademöglichkeiten nur während der Öffnungszeiten.
+			</div>
+			<form class="form" action="./tools/saveautolock.php" method="POST">
 
 				<?php
 
@@ -229,10 +253,10 @@ ECHODAYROWTAIL;
 						// build form-groups for all lp
 						if ( $isConfiguredLp[$lp] ) {
 							// if lp is configured: display form-group
-							$visibility = '';
+							$visibilityClass = '';
 						} else {
 							// if lp is not configured: hide form-group
-							$visibility = ' display: none;';
+							$visibilityClass = ' hide';
 						}
 						// remove special characters except space and underscore... maybe dangerous
 						$nameLp = preg_replace('/[^A-Za-z0-9_ ]/', '', $settingsArray['lp'.$lp.'name']);
@@ -248,22 +272,20 @@ ECHODAYROWTAIL;
 						}
 
 						echo <<<ECHOFORMGROUPHEAD
-							<div class="form-group px-3 pb-3" style="border:1px solid black;{$visibility}" id="lp{$lp}">  <!-- group charge point {$lp} -->
-								<h1>LP {$lp} ({$nameLp})</h1>\n
+				<div class="card border-secondary{$visibilityClass}" id="lp{$lp}">  <!-- group charge point {$lp} -->
+					<div class="card-header bg-secondary">
+						Ladepunkt {$lp} ({$nameLp})
+					</div>
 
-								<div class="row mt-2">
-									<div class="col">
-										<div class="form-check">
-											<input type="hidden" name="{$elemName}">
-											<input class="form-check-input" type="checkbox" id="{$elemId}" name="{$elemName}"{$elemValue}>
-											<label class="form-check-label pl-10" for="{$elemName}">
-												sperren erst nach Ende lfd. Ladevorgang
-											</label>
-										</div>
-									</div>
-								</div>
-
-								<hr>
+					<div class="card-body">
+						<div class="custom-control custom-checkbox">
+							<input type="hidden" name="{$elemName}">
+							<input class="custom-control-input" type="checkbox" id="{$elemId}" name="{$elemName}"{$elemValue}>
+							<label class="custom-control-label pl-10" for="{$elemId}">
+								sperren erst nach Ende lfd. Ladevorgang
+							</label>
+						</div>
+						<hr>
 ECHOFORMGROUPHEAD;
 
 						for ($dayOfWeek=1; $dayOfWeek<=7; $dayOfWeek++) {
@@ -272,10 +294,11 @@ ECHOFORMGROUPHEAD;
 						}  // end all days
 
 						echo <<<ECHOFORMGROUPTAIL
-											<div class="row justify-content-center mt-2">
-												<button type="button" class="btn btn-sm btn-red resetForm" id="resetFormBtnLp{$lp}">LP{$lp} zurücksetzen</button>
-											</div>
-										</div>  <!-- end form-group charge point {$lp} -->
+					</div> <!-- card body -->
+					<div class="card-footer text-center">
+						<button type="button" class="btn btn-sm btn-danger resetForm" id="resetFormBtnLp{$lp}">LP{$lp} zurücksetzen</button>
+					</div>
+				</div>  <!-- end form-group charge point {$lp} -->
 
 ECHOFORMGROUPTAIL;
 
@@ -283,24 +306,30 @@ ECHOFORMGROUPTAIL;
 
 				?>
 
-					<div class="row justify-content-center">
-						<button type="submit" class="btn btn-green">Einstellungen übernehmen</button>
-					</div>
+				<div class="row justify-content-center">
+					<button type="submit" class="btn btn-success">Einstellungen übernehmen</button>
+				</div>
 
-				</form>  <!-- end form -->
-			</div>
-			<br>
-
+			</form>  <!-- end form -->
 
 		</div>  <!-- end container -->
 
 		<footer class="footer bg-dark text-light font-small">
-	      <div class="container text-center">
-			  <small>Sie befinden sich hier: Auto-Lock</small>
-	      </div>
-	    </footer>
+			<div class="container text-center">
+				<small>Sie befinden sich hier: Auto-Lock</small>
+			</div>
+		</footer>
 
-		<script type="text/javascript">
+		<script>
+
+			$.get(
+				{ url: "settings/navbar.html", cache: false },
+				function(data){
+					$("#nav").replaceWith(data);
+					// disable navbar entry for current page
+					$('#navAutolock').addClass('disabled');
+				}
+			);
 
 			$(document).ready(function(){
 
@@ -353,23 +382,23 @@ ECHOFORMGROUPTAIL;
 				}
 
 				$(function() {
-	 			    $(".lockUnlockCheckbox").change(function() {
+					$(".lockUnlockCheckbox").change(function() {
 						// if a checkbox for enabling lock or unlock time is checked/unchecked
 						// add/remove respective clockpicker and empty input field if removed
-	 					var boxIsChecked = $(this).prop("checked") == true;
-	 					var clockpickerId = "#" + this.id.replace("Box", "Time");  // create matching clockpicker id
+						var boxIsChecked = $(this).prop("checked") == true;
+						var clockpickerId = "#" + this.id.replace("Box", "Time");  // create matching clockpicker id
 						if ( boxIsChecked ) {
-	 						// activate clockpicker
+							// activate clockpicker
 							if ( $(clockpickerId).val() == "" ) {
 								// replace empty field (placeholder = --) with initial time
 								$(clockpickerId).val("00:00");
 							}
-	 						addClockpicker(clockpickerId, false);
-	 					} else {
-	 						// remove clockpicker
-	 						removeClockpicker(clockpickerId);
-	 					}
-	 			    });
+							addClockpicker(clockpickerId, false);
+						} else {
+							// remove clockpicker
+							removeClockpicker(clockpickerId);
+						}
+					});
 
 					$("input:text").click(function() {
 						// if clockpicker input is clickedstore the old clockpicker time of clicked clockpicker in global var
@@ -407,10 +436,10 @@ ECHOFORMGROUPTAIL;
 						}
 					});
 
-	 			});  // end $(function()...
+				});  // end $(function()...
 
 				// initially add all clockpickers to visible form-groups
-			 	for (chargePoint=1; chargePoint<=8; chargePoint++) {
+				for (chargePoint=1; chargePoint<=8; chargePoint++) {
 					if ( $("#lp"+chargePoint).is(":visible") ) {
 						for (day=1; day<=7; day++) {
 							if ( $("#lockBoxLp"+chargePoint+"_"+day).prop("checked") == true ) {
@@ -426,7 +455,7 @@ ECHOFORMGROUPTAIL;
 
 			});  // end document ready function
 
-	    </script>
+		</script>
 
 		<!-- modal alert window -->
 		<div class="modal fade" id="alertModal">
@@ -446,7 +475,7 @@ ECHOFORMGROUPTAIL;
 
 					<!-- modal footer -->
 					<div class="modal-footer justify-content-center">
-						<button type="button" class="btn btn-green" data-dismiss="modal">OK</button>
+						<button type="button" class="btn btn-success" data-dismiss="modal">OK</button>
 					</div>
 
 				</div>

@@ -1,7 +1,6 @@
 #!/bin/bash
 
 
-. /var/www/html/openWB/openwb.conf
 
 
 answer=$(curl -d {\"801\":{\"170\":null}} --connect-timeout 5 -s $bezug_solarlog_ip/getjp)
@@ -21,7 +20,7 @@ fi
 echo $bezugwatt
 echo $bezugwatt > /var/www/html/openWB/ramdisk/wattbezug
 echo $pvwatt > /var/www/html/openWB/ramdisk/pvwatt
-echo $pvkwhy > /var/www/html/openWB/ramdisk/pvkwh
+echo $pvkwh > /var/www/html/openWB/ramdisk/pvkwh
 pvkwhk=$(echo "$pvkwh*1000" |bc)
 echo $pvkwhk > /var/www/html/openWB/ramdisk/pvkwhk
 
