@@ -2,7 +2,50 @@
  * helper functions for setup-pages
  *
  * @author Michael Ortenstein
+ * @author Lutz Bender
  */
+
+/**
+ * hideSection
+ * add class 'hide' to element with selector 'section' in JQuery syntax
+ * disables all contained input and select elements if 'disableChildren' is not set to false
+**/
+function hideSection(section, disableChildren=true) {
+    $(section).addClass('hide');
+    updateFormFieldVisibility();
+}
+
+/**
+ * showSection
+ * remove class 'hide' from element with selector 'section' in JQuery syntax
+ * enables all contained input and select elements if 'enableChildren' is not set to false
+**/
+function showSection(section, enableChildren=true) {
+    $(section).removeClass('hide');
+    updateFormFieldVisibility();
+}
+
+/**
+ * updateFormFields
+ * checks every input and select element for a parent with class 'hide'
+ * if there is a match, disable this element
+**/
+function updateFormFieldVisibility() {
+    $('input').each(function() {
+        if( $(this).closest('.hide').length == 0 ) {
+            $(this).prop("disabled", false);
+        } else {
+            $(this).prop("disabled", true);
+        }
+    });
+    $('select').each(function() {
+        if( $(this).closest('.hide').length == 0 ) {
+            $(this).prop("disabled", false);
+        } else {
+            $(this).prop("disabled", true);
+        }
+    });
+}
 
 var originalValues = {};  // holds all topics and its values received by mqtt as objects before possible changes made by user
 
@@ -12,8 +55,12 @@ var changedValuesHandler = {
         // if array is empty after delete, all send topics have been received with correct value
         // so redirect to main page
         // array is only filled by function getChangedValues!
+        // console.log("num changed values left: "+Object.keys(changedValues).length);
         if ( Object.keys(changedValues).length === 0 ) {
-            window.location.href = './index.php';
+            // console.log("done");
+            setTimeout( function(){
+                window.location.href = './index.php';
+            }, 200);
         } else {
             return true;
         }
@@ -66,8 +113,8 @@ function setInputValue(elementId, value) {
             updateLabel(elementId);
         }
     } else {
-	var element = $('#' + elementId);
-	element.val(value);
+        var element = $('#' + elementId);
+        element.val(value);
     }
 }
 
@@ -109,7 +156,16 @@ function sendValues() {
         Object.keys(changedValues).forEach(function(topic, index) {
             var value = this[topic].toString();
             setTimeout(function () {
-                publish(value, topic);
+                // console.log("publishing changed value: "+topic+": "+value);
+                // as all empty messages are not processed by mqttsub.py, we have to send something usefull
+                if ( value.length == 0 ) {
+                    publish("none", topic);
+                    // delete empty values as we will never get an answer
+                    console.log("deleting empty changedValue: "+topic)
+                    delete changedValues[topic];
+                } else {
+                    publish(value, topic);
+                }
             }, index * intervall);
         }, changedValues);
 
@@ -126,7 +182,7 @@ function getChangedValues() {
      * @property {string} value - the value
      * @return {topic-value-pair} - the changed values and their topics
      */
-    $('.btn-group-toggle, input[type="number"]:not(:disabled), input[type="text"]:not(:disabled), input[type="range"]:not(:disabled), select:not(:disabled)').each(function() {
+    $('.btn-group-toggle, input[type="number"]:not(:disabled), input[type="text"]:not(:disabled), input[type="password"]:not(:disabled), input[type="range"]:not(:disabled), select:not(:disabled)').each(function() {
         var topicPrefix = $(this).data('topicprefix');
         var topicSubGroup = $(this).data('topicsubgroup');
         if ( typeof topicSubGroup == 'undefined' ) {
@@ -159,6 +215,7 @@ function getChangedValues() {
         if ( ( value != undefined ) && ( originalValues[topic] != value ) ) {
             topic = topic.replace('/get/', '/set/');
             changedValues[topic] = value;
+            // console.log("ChangedValue found: "+topic+": "+value);
         }
     });
 }

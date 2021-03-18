@@ -34,34 +34,8 @@
 		<script src="js/jquery-3.4.1.min.js"></script>
 		<script src="js/bootstrap-4.4.1/bootstrap.bundle.min.js"></script>
 		<!-- load helper functions -->
-		<script src = "settings/helperFunctions.js?ver=20200505-a" ></script>
+		<script src = "settings/helperFunctions.js?ver=20201231" ></script>
 		<script>
-			/**
-			 * hideSection
-			 * add class 'hide' to element with id 'section'
-			 * disables all contained input and select elements if 'disableChildren' is not set to false
-			**/
-			function hideSection(section, disableChildren=true) {
-				$('#'+section).addClass('hide');
-				if (disableChildren) {
-					$('#'+section).find('input').prop("disabled", true);
-					$('#'+section).find('select').prop("disabled", true);
-				}
-			}
-
-			/**
-			 * showSection
-			 * remove class 'hide' from element with id 'section'
-			 * enables all contained input and select elements if 'enableChildren' is not set to false
-			**/
-			function showSection(section, enableChildren=true) {
-				$('#'+section).removeClass('hide');
-				if (enableChildren) {
-					$('#'+section).find('input').prop("disabled", false);
-					$('#'+section).find('select').prop("disabled", false);
-				}
-			}
-
 			function getCookie(cname) {
 				var name = cname + '=';
 				var decodedCookie = decodeURIComponent(document.cookie);
@@ -120,10 +94,10 @@
 											<input type="radio" name="dspeed" id="dspeed0" value="0"<?php if($dspeedold == 0) echo " checked=\"checked\"" ?>>Normal
 										</label>
 										<label class="btn btn-outline-info<?php if($dspeedold == 2) echo " active" ?>">
-											<input type="radio" name="dspeed" id="dspeed2" value="2"<?php if($dspeedold == 1) echo " checked=\"checked\"" ?>>Langsam
+											<input type="radio" name="dspeed" id="dspeed2" value="2"<?php if($dspeedold == 2) echo " checked=\"checked\"" ?>>Langsam
 										</label>
 										<label class="btn btn-outline-info<?php if($dspeedold == 3) echo " active" ?>">
-											<input type="radio" name="dspeed" id="dspeed3" value="3"<?php if($dspeedold == 1) echo " checked=\"checked\"" ?>>Sehr Langsam
+											<input type="radio" name="dspeed" id="dspeed3" value="3"<?php if($dspeedold == 3) echo " checked=\"checked\"" ?>>Sehr Langsam
 										</label>
 									</div>
 									<span class="form-text small">
@@ -158,16 +132,16 @@
 								</div>
 								<div class="col">
 									<div class="btn-group btn-block btn-group-toggle" data-toggle="buttons">
-										<label class="btn btn-outline-info<?php if($bootmodusold == 0) echo " active" ?>">
+										<label class="btn btn-outline-info<?php if($bootmodusold == 3) echo " active" ?>">
 											<input type="radio" name="bootmodus" id="bootmodus3" value="3"<?php if($bootmodusold == 3) echo " checked=\"checked\"" ?>>Stop
 										</label>
-										<label class="btn btn-outline-info<?php if($bootmodusold == 1) echo " active" ?>">
+										<label class="btn btn-outline-info<?php if($bootmodusold == 4) echo " active" ?>">
 											<input type="radio" name="bootmodus" id="bootmodus4" value="4"<?php if($bootmodusold == 4) echo " checked=\"checked\"" ?>>Standby
 										</label>
-										<label class="btn btn-outline-info<?php if($bootmodusold == 0) echo " active" ?>">
+										<label class="btn btn-outline-info<?php if($bootmodusold == 2) echo " active" ?>">
 											<input type="radio" name="bootmodus" id="bootmodus2" value="2"<?php if($bootmodusold == 2) echo " checked=\"checked\"" ?>>Nur PV
 										</label>
-										<label class="btn btn-outline-info<?php if($bootmodusold == 0) echo " active" ?>">
+										<label class="btn btn-outline-info<?php if($bootmodusold == 1) echo " active" ?>">
 											<input type="radio" name="bootmodus" id="bootmodus1" value="1"<?php if($bootmodusold == 1) echo " checked=\"checked\"" ?>>Min + PV
 										</label>
 										<label class="btn btn-outline-info<?php if($bootmodusold == 0) echo " active" ?>">
@@ -241,13 +215,13 @@
 						</div>
 					</div>
 					<script>
-						$(function() {
-							var lp2akt = <?php echo $lastmanagementold ?>;
+						var lp2akt = <?php echo $lastmanagementold ?>;
 
+						$(document).ready(function(){
 							if(lp2akt == '0') {
-								hideSection('lp2cpdiv');
+								hideSection('#lp2cpdiv');
 							} else {
-								showSection('lp2cpdiv');
+								showSection('#lp2cpdiv');
 							}
 						});
 					</script>
@@ -265,10 +239,10 @@
 											<input type="radio" name="rfidakt" id="rfidaktOff" value="0"<?php if($rfidaktold == 0) echo " checked=\"checked\"" ?>>Aus
 										</label>
 										<label class="btn btn-sm btn-outline-info<?php if($rfidaktold == 1) echo " active" ?>">
-											<input type="radio" name="rfidakt" id="rfidaktOn1" autocomplete="off" value="1"<?php if($rfidaktold == 1) echo " checked=\"checked\"" ?>>An Modus 1
+											<input type="radio" name="rfidakt" id="rfidaktOn1" value="1"<?php if($rfidaktold == 1) echo " checked=\"checked\"" ?>>An Modus 1
 										</label>
 										<label class="btn btn-sm btn-outline-info<?php if($rfidaktold == 2) echo " active" ?>">
-											<input type="radio" name="rfidakt" id="rfidaktOn2" autocomplete="off" value="2"<?php if($rfidaktold == 2) echo " checked=\"checked\"" ?>>An Modus 2
+											<input type="radio" name="rfidakt" id="rfidaktOn2" value="2"<?php if($rfidaktold == 2) echo " checked=\"checked\"" ?>>An Modus 2
 										</label>
 
 									</div>
@@ -717,40 +691,40 @@
 								</div>
 								<div class="form-row">
 									<div class="col-lg-12">
-										<label for="rfidlist" class="input-group">
+										<div class="input-group">
 											<div class="input-group-prepend">
 												<div class="input-group-text">
 													Liste
 												</div>
 											</div> 
 											<input type="text" name="rfidlist" id="rfidlist" class="form-control" value="<?php echo $rfidlistold ?>">
-										</label>
+										</div>
 									</div>
 								</div>
 							</div>
 						</div>
 					</div>
 					<script>
-						$(function() {
-							function visibility_rfidakt() {
-								if($('#rfidaktOff').prop("checked")) {
-									hideSection('rfidandiv');
-									hideSection('rfidan1div');
-									hideSection('rfidan2div');
-								} else {
-									if($('#rfidaktOn1').prop("checked")) {
-										showSection('rfidandiv', false);
-										showSection('rfidan1div');
-										hideSection('rfidan2div');
+						function visibility_rfidakt() {
+							if($('#rfidaktOff').prop("checked")) {
+								hideSection('#rfidandiv');
+								hideSection('#rfidan1div');
+								hideSection('#rfidan2div');
+							} else {
+								if($('#rfidaktOn1').prop("checked")) {
+									showSection('#rfidandiv', false);
+									showSection('#rfidan1div');
+									hideSection('#rfidan2div');
 
-									} else {
-										showSection('rfidandiv', false);
-										showSection('rfidan2div');
-										hideSection('rfidan1div');
-									}
+								} else {
+									showSection('#rfidandiv', false);
+									showSection('#rfidan2div');
+									hideSection('#rfidan1div');
 								}
 							}
+						}
 
+						$(document).ready(function(){
 							$('input[type=radio][name=rfidakt]').change(function(){
 								visibility_rfidakt();
 							});
@@ -877,15 +851,15 @@
 						</div>
 					</div>
 					<script>
-						$(function() {
-							function visibility_pushbenachrichtigung() {
-								if($('#pushbenachrichtigungOff').prop("checked")) {
-									hideSection('pushban');
-								} else {
-									showSection('pushban');
-								}
+						function visibility_pushbenachrichtigung() {
+							if($('#pushbenachrichtigungOff').prop("checked")) {
+								hideSection('#pushban');
+							} else {
+								showSection('#pushban');
 							}
+						}
 
+						$(document).ready(function(){
 							$('input[type=radio][name=pushbenachrichtigung]').change(function(){
 								visibility_pushbenachrichtigung();
 							});
@@ -1142,14 +1116,15 @@
 						</div>
 					</div>
 					<script>
-						$(function() {
-							function visibility_ledsakt() {
-								if($('#ledsaktOff').prop("checked")) {
-									hideSection('ledsan');
-								} else {
-									showSection('ledsan');
-								}
+						function visibility_ledsakt() {
+							if($('#ledsaktOff').prop("checked")) {
+								hideSection('#ledsan');
+							} else {
+								showSection('#ledsan');
 							}
+						}
+
+						$(document).ready(function(){
 							$('input[type=radio][name=ledsakt]').change(function(){
 								visibility_ledsakt();
 							});
@@ -1159,26 +1134,60 @@
 					</script>
 				</div>
 
-				<!-- integriertes Display -->
+				<!-- Display intern/extern -->
 				<div class="card border-secondary">
 					<div class="card-header bg-secondary">
+						Display (intern oder extern)
+					</div>
+					<div class="card-body">
 						<div class="form-group mb-0">
-							<div class="form-row vaRow mb-0">
-								<div class="col-4">integriertes Display</div>
+							<div class="form-row mb-1">
+								<div class="col-md-4">
+									<label class="col-form-label">integriertes Display</label>
+								</div>
 								<div class="col">
-									<div class="btn-group btn-group-toggle col" data-toggle="buttons">
-										<label class="btn btn-sm btn-outline-info<?php if($displayaktivold == 0) echo " active" ?>">
+									<div class="btn-group btn-block btn-group-toggle" data-toggle="buttons">
+										<label class="btn btn-outline-info<?php if($displayaktivold == 0) echo " active" ?>">
 											<input type="radio" name="displayaktiv" id="displayaktivOff" value="0"<?php if($displayaktivold == 0) echo " checked=\"checked\"" ?>>Nein
 										</label>
-										<label class="btn btn-sm btn-outline-info<?php if($displayaktivold == 1) echo " active" ?>">
+										<label class="btn btn-outline-info<?php if($displayaktivold == 1) echo " active" ?>">
 											<input type="radio" name="displayaktiv" id="displayaktivOn" value="1"<?php if($displayaktivold == 1) echo " checked=\"checked\"" ?>>Ja
 										</label>
 									</div>
 								</div>
 							</div>
 						</div>
-					</div>
-					<div class="card-body hide" id="displayan">
+						<div class="hide" id="displayan">
+							<div class="form-group">
+								<div class="form-row mb-1">
+									<div class="col">
+										Display Standby
+									</div>
+								</div>
+								<div class="form-row vaRow mb-1">
+									<label for="displaysleep" class="col-md-4 col-form-label">ausschalten nach x Sekunden</label>
+									<div class="col">
+										<input type="number" min="5" step="5" name="displaysleep" id="displaysleep" class="form-control" value="<?php echo $displaysleepold ?>">
+									</div>
+								</div>
+								<div class="form-row mb-1">
+									<div class="col-md-4">
+										<label class="col-form-label">beim Einstecken des Fahrzeugs einschalten</label>
+									</div>
+									<div class="col">
+										<div class="btn-group btn-block btn-group-toggle" data-toggle="buttons">
+											<label class="btn btn-outline-info<?php if($displayEinBeimAnsteckenold == 0) echo " active" ?>">
+												<input type="radio" name="displayEinBeimAnstecken" id="displayEinBeimAnsteckenOff" value="0"<?php if($displayEinBeimAnsteckenold == 0) echo " checked=\"checked\"" ?>>Nein
+											</label>
+											<label class="btn btn-outline-info<?php if($displayEinBeimAnsteckenold == 1) echo " active" ?>">
+												<input type="radio" name="displayEinBeimAnstecken" id="displayEinBeimAnsteckenOn" value="1"<?php if($displayEinBeimAnsteckenold == 1) echo " checked=\"checked\"" ?>>Ja
+											</label>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<hr class="border-secondary">
 						<div class="form-group">
 							<div class="form-row vaRow mb-1">
 								<label for="displaytheme" class="col-md-4 col-form-label">Theme des Displays</label>
@@ -1287,12 +1296,12 @@
 						<div class="form-group">
 							<div class="form-row mb-1">
 								<div class="col">
-									Pin-Sperre
+									PIN-Sperre
 								</div>
 							</div>
 							<div class="form-row mb-1">
 								<div class="col-md-4">
-									<label class="col-form-label">Pin nötig zum ändern des Lademodus</label>
+									<label class="col-form-label">Display mit PIN schützen</label>
 								</div>
 								<div class="col">
 									<div class="btn-group btn-block btn-group-toggle" data-toggle="buttons">
@@ -1306,78 +1315,49 @@
 								</div>
 							</div>
 							<div class="form-row mb-1 hide" id="displaypin">
-								<label for="displaypincode" class="col-md-4 col-form-label">Pin (nur Zahlen von 1-9 erlaubt)</label>
+								<label for="displaypincode" class="col-md-4 col-form-label">PIN (4 Stellen, nur Zahlen erlaubt)</label>
 								<div class="col">
-									<input type="text" pattern="[1-9]*" minlength="4" maxlength="4" size="4" name="displaypincode" id="displaypincode" class="form-control" value="<?php echo $displaypincodeold ?>">
-								</div>
-							</div>
-						</div>
-						<hr class="border-secondary">
-						<div class="form-group">
-							<div class="form-row mb-1">
-								<div class="col">
-									Display Standby
-								</div>
-							</div>
-							<div class="form-row vaRow mb-1">
-								<label for="displaysleep" class="col-md-4 col-form-label">ausschalten nach x Sekunden</label>
-								<div class="col">
-									<input type="number" min="5" step="5" name="displaysleep" id="displaysleep" class="form-control" value="<?php echo $displaysleepold ?>">
-								</div>
-							</div>
-							<div class="form-row mb-1">
-								<div class="col-md-4">
-									<label class="col-form-label">beim Einstecken des Fahrzeugs einschalten</label>
-								</div>
-								<div class="col">
-									<div class="btn-group btn-block btn-group-toggle" data-toggle="buttons">
-										<label class="btn btn-outline-info<?php if($displayEinBeimAnsteckenold == 0) echo " active" ?>">
-											<input type="radio" name="displayEinBeimAnstecken" id="displayEinBeimAnsteckenOff" value="0"<?php if($displayEinBeimAnsteckenold == 0) echo " checked=\"checked\"" ?>>Nein
-										</label>
-										<label class="btn btn-outline-info<?php if($displayEinBeimAnsteckenold == 1) echo " active" ?>">
-											<input type="radio" name="displayEinBeimAnstecken" id="displayEinBeimAnsteckenOn" value="1"<?php if($displayEinBeimAnsteckenold == 1) echo " checked=\"checked\"" ?>>Ja
-										</label>
-									</div>
+									<input type="text" pattern="[0-9]{4}" minlength="4" maxlength="4" size="4" name="displaypincode" id="displaypincode" class="form-control" value="<?php echo $displaypincodeold ?>">
 								</div>
 							</div>
 						</div>
 					</div>
 					<script>
-						$(function() {
-							function visibility_displayaktiv() {
-								if($('#displayaktivOff').prop("checked")) {
-									hideSection('displayan');
-								} else {
-									showSection('displayan');
-									visibility_displaypinaktiv();
-									visibility_displaytheme()
-								}
+						function visibility_displayaktiv() {
+							if($('#displayaktivOff').prop("checked")) {
+								hideSection('#displayan');
+							} else {
+								showSection('#displayan');
+								visibility_displaypinaktiv();
+								visibility_displaytheme()
 							}
+						}
 
-							function visibility_displaypinaktiv() {
-								if($('#displaypinaktivOff').prop("checked")) {
-									hideSection('displaypin');
-								} else {
-									showSection('displaypin');
-								}
+						function visibility_displaypinaktiv() {
+							if($('#displaypinaktivOff').prop("checked")) {
+								hideSection('#displaypin');
+							} else {
+								showSection('#displaypin');
 							}
+						}
 
-							function visibility_displaytheme() {
-								switch ($('#displaytheme').val()) {
-									case '0': // Cards
-										showSection('displaygauge');
-										showSection('displaycards');
-										break;
-									case '3': // Gauges
-										showSection('displaygauge');
-										hideSection('displaycards');
-										break;
-									default:
-									hideSection('displaygauge');
-									hideSection('displaycards');
-								}
+						function visibility_displaytheme() {
+							switch ($('#displaytheme').val()) {
+								case '0': // Cards
+									showSection('#displaygauge');
+									showSection('#displaycards');
+									break;
+								case '3': // Gauges
+									showSection('#displaygauge');
+									hideSection('#displaycards');
+									break;
+								default:
+								hideSection('#displaygauge');
+								hideSection('#displaycards');
 							}
+						}
 
+						$(document).ready(function(){
 							$('input[type=radio][name=displayaktiv]').change(function(){
 								visibility_displayaktiv();
 							});
@@ -1450,7 +1430,7 @@
 					<div class="card-body">
 						<div class="form-group">
 							<div class="form-row mb-1">
-								<label for="durchslp1" class="col-md-4 col-form-label">Preis je kWh</label>
+								<label for="preisjekwh" class="col-md-4 col-form-label">Preis je kWh</label>
 								<div class="col">
 									<input class="form-control" type="number" min="0" step="0.0001" name="preisjekwh" id="preisjekwh" value="<?php echo $preisjekwhold ?>">
 									<span class="form-text small">Gültige Werte xx.xx, z.B. 0.2833. Dient zur Berechnung der Ladekosten im Ladelog.</span>
@@ -1459,6 +1439,7 @@
 						</div>
 					</div>
 				</div>
+
 				<div class="form-row text-center">
 					<div class="col">
 						<button id="saveSettingsBtn" type="submit" class="btn btn-success">Speichern</button>

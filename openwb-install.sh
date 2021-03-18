@@ -37,11 +37,21 @@ if ! [ -x "$(command -v apachectl)" ]; then
 	sleep 1
 	apt-get -qq install -y php-gd
 	sleep 1
-	apt-get -qq install -y php7.0-xml
+	#prepare for Buster
+	if [ -d "/etc/php/7.0/" ]; then 
+		apt-get -qq install -y php7.0-xml
+	elif [ -d "/etc/php/7.3/" ]; then
+		apt-get -qq install -y php7.3-xml
+	fi	
 	sleep 2
 	apt-get -qq install -y php-curl
 	sleep 1	
-	apt-get -qq install -y libapache2-mod-php7.0
+	#prepare for Buster
+	if [ -d "/etc/php/7.0/" ]; then 
+		apt-get -qq install -y libapache2-mod-php7.0
+	elif [ -d "/etc/php/7.3/" ]; then
+		apt-get -qq install -y libapache2-mod-php7.3
+	fi	
 	sleep 2
 	apt-get -qq install -y jq
 	sleep 2
@@ -82,16 +92,13 @@ fi
 echo "check for initial git clone"
 if [ ! -d /var/www/html/openWB/web ]; then
 	cd /var/www/html/
-	git clone https://github.com/snaptec/openWB.git --branch master
+	git clone https://github.com/sreinhold95/openWB.git --branch stable
 	chown -R pi:pi openWB 
 	echo "... git cloned"
 else
 	echo "...ok"
 fi
-if ! grep -Fq "bootmodus=" /var/www/html/openWB/openwb.conf
-then
-	echo "bootmodus=3" >> /var/www/html/openWB/openwb.conf
-fi
+
 echo "check for ramdisk" 
 if grep -Fxq "tmpfs /var/www/html/openWB/ramdisk tmpfs nodev,nosuid,size=32M 0 0" /etc/fstab 
 then
@@ -144,8 +151,19 @@ then
 else
 	echo "EXTRA_OPTS="-L 0"" >> /etc/default/cron
 fi
-sudo /bin/su -c "echo 'upload_max_filesize = 300M' > /etc/php/7.0/apache2/conf.d/20-uploadlimit.ini"
-sudo /bin/su -c "echo 'post_max_size = 300M' >> /etc/php/7.0/apache2/conf.d/20-uploadlimit.ini"
+
+#prepare for Buster
+echo -n "fix upload limit..."
+if [ -d "/etc/php/7.0/" ]; then
+        echo "OS Stretch"
+        sudo /bin/su -c "echo 'upload_max_filesize = 300M' > /etc/php/7.0/apache2/conf.d/20-uploadlimit.ini"
+        sudo /bin/su -c "echo 'post_max_size = 300M' >> /etc/php/7.0/apache2/conf.d/20-uploadlimit.ini"
+elif [ -d "/etc/php/7.3/" ]; then
+        echo "OS Buster"
+        sudo /bin/su -c "echo 'upload_max_filesize = 300M' > /etc/php/7.3/apache2/conf.d/20-uploadlimit.ini"
+        sudo /bin/su -c "echo 'post_max_size = 300M' >> /etc/php/7.3/apache2/conf.d/20-uploadlimit.ini"
+fi
+
 sudo apt-get -qq install -y python-pip
 sudo pip install  -U pymodbus
 echo "www-data ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers.d/010_pi-nopasswd
