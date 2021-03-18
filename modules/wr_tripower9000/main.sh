@@ -1,5 +1,4 @@
 #!/bin/bash
-. /var/www/html/openWB/openwb.conf
 
 if [[ $wrsmawebbox == "1" ]]; then
 	rekwh='^[-+]?[0-9]+\.?[0-9]*$'
@@ -45,7 +44,7 @@ ekwh=$(</var/www/html/openWB/ramdisk/pvkwh)
 
 
 pvkwhk=$(echo "scale=3;$ekwh / 1000" |bc)
-echo $pvkwhk > ramdisk/pvkwhk
+echo $pvkwhk > /var/www/html/openWB/ramdisk/pvkwhk
 
 
 

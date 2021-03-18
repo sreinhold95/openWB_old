@@ -1,7 +1,6 @@
 #!/bin/bash
 
 
-. /var/www/html/openWB/openwb.conf
 
 
 answer=$(curl -d {\"801\":{\"170\":null}} --connect-timeout 5 -s $bezug_solarlog_ip/getjp)
@@ -11,7 +10,10 @@ hausverbrauch=$(echo $answer | jq '."801"."170"."110"' )
 bezugwatt=$(echo "$hausverbrauch - $pvwatt" |bc) 
 pvkwh=$(echo $answer | jq '."801"."170"."109"' )
 
-
+if (( bezug_solarlog_speicherv == 1 )); then
+	speicherleistung=$(<ramdisk/speicherleistung)
+	bezugwatt=$(( bezugwatt + speicherleistung ))
+fi
 if (( $pvwatt > 5 )); then
 	pvwatt=$(echo "$pvwatt*-1" |bc)
 fi

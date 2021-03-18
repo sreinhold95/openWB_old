@@ -1,5 +1,4 @@
 #!/bin/bash
-. /var/www/html/openWB/openwb.conf
 rekwh='^[-+]?[0-9]+\.?[0-9]*$'
 re='^-?[0-9]+$'
 #sleep 3
@@ -19,15 +18,20 @@ dtime=$(date +"%T")
 nc -ul 7090 >/var/www/html/openWB/ramdisk/keballlp2 &
 pidnc=$!
 disown
-
 echo -n "report 3" | socat - UDP-DATAGRAM:$kebaiplp2:7090
 sleep 1
-output=$(</var/www/html/openWB/ramdisk/keballlp2)
+outputte1=$(tr -d '\0' </var/www/html/openWB/ramdisk/keballlp2)
+echo $outputte1 > /var/www/html/openWB/ramdisk/keballlp2r3
+output=$(echo $outputte1 | tr -d '\n' | sed 's/\}.*/\}/')
+echo $output > /var/www/html/openWB/ramdisk/keballlp2r3x
 echo -n > /var/www/html/openWB/ramdisk/keballlp2
 #read plug and chargingstatus
 echo -n "report 2" | socat - UDP-DATAGRAM:$kebaiplp2:7090
 sleep 1
-output1=$(tr -d '\0' </var/www/html/openWB/ramdisk/keballlp2)
+outputte1=$(tr -d '\0' </var/www/html/openWB/ramdisk/keballlp2)
+echo $outputte1 > /var/www/html/openWB/ramdisk/keballlp2r2
+output1=$(echo $outputte1 | tr -d '\n' | sed 's/\}.*/\}/')
+echo $output1 > /var/www/html/openWB/ramdisk/keballlp2r2x
 #
 kill $pidnc
 rm /var/www/html/openWB/ramdisk/keballlp2
@@ -74,9 +78,9 @@ if [[ $rep3 == "3" ]] ; then
 	      echo $llv3 > /var/www/html/openWB/ramdisk/llvs13
     fi
     chargedwh=$(echo $output | jq '."E pres"') 
-    totalwh=$(echo $output | jq '."E total"') 
-#llwh=$(( chargedwh + totalwh ))
-    llwh=$(echo $chargedwh + $totalwh | bc)
+#   totalwh=$(echo $output | jq '."E total"') 
+#   llwh=$(echo $chargedwh + $totalwh | bc)
+    llwh=$(echo $output | jq '."E total"') 
     llkwh=$(echo "scale=3;$llwh / 10000" | bc -l)
     if [[ $llkwh =~ $rekwh ]] ; then
        	echo $llkwh > /var/www/html/openWB/ramdisk/llkwhs1

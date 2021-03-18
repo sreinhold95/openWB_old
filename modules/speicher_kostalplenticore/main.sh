@@ -15,7 +15,7 @@
 # entsprechenden ramdisks kopieren. Die temporären Werte stammen aus dem
 # wr_plenticore Modul, werden dort zentral aus den Modbus-Registern gelesen
 
-# Speicherleistung
+# Speicherleistung WR 1
 "cp" /var/www/html/openWB/ramdisk/temp_speicherleistung /var/www/html/openWB/ramdisk/speicherleistung
-# Speicher Ladestand
+# Speicher Ladestand von Speicher am WR 1
 "cp" /var/www/html/openWB/ramdisk/temp_speichersoc /var/www/html/openWB/ramdisk/speichersoc
