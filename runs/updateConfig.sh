@@ -729,6 +729,9 @@ updateConfig(){
 	if ! grep -Fq "kostalplenticoreip2=" $ConfigFile; then
 		echo "kostalplenticoreip2=none" >> $ConfigFile
 	fi
+	if ! grep -Fq "kostalplenticoreip3=" $ConfigFile; then
+		echo "kostalplenticoreip3=none" >> $ConfigFile
+	fi
 	if ! grep -Fq "name_wechselrichter1=" $ConfigFile; then
 		echo "name_wechselrichter1=WR1" >> $ConfigFile
 	fi
@@ -1803,6 +1806,9 @@ updateConfig(){
 	fi
 	if ! grep -Fq "solaredgezweiterspeicher=" $ConfigFile; then
 		echo "solaredgezweiterspeicher=0" >> $ConfigFile
+	fi
+	if ! grep -Fq "studer_ip=" $ConfigFile; then
+		echo "studer_ip=192.168.1.1" >> $ConfigFile
 	fi
 	echo "Config file Update done."
 }
