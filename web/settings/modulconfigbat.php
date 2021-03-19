@@ -389,6 +389,23 @@
 										</span>
 									</div>
 								</div>
+								<div class="form-group">
+									<div class="form-row mb-1">
+										<label for="solaredgezweiterspeicher" class="col-md-4 col-form-label">Ist ein zweiter Speicher am Wechselrichter angeschlossen?</label>
+										<div class="col">
+											<select name="solaredgezweiterspeicher" id="solaredgezweiterspeicher" class="form-control">
+												<option <?php if($solaredgezweiterspeicherold == 0) echo "selected" ?> value="0">Nein</option>
+												<option <?php if($solaredgezweiterspeicherold == 1) echo "selected" ?> value="1">Ja</option>
+											</select>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<div id="divspeichersolax" class="hide">
+							<div class="alert alert-info">
+								Die IP des Wechselrichters wird im dazugehörigen Solax PV-Modul eingestellt.
 							</div>
 						</div>
 
