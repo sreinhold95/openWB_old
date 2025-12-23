@@ -1,6 +1,13 @@
 #!/bin/bash
 
 echo "install required packages..."
+# check for outdated sources.list (Stretch only)
+if grep -q -e "^deb http://raspbian.raspberrypi.org/raspbian/ stretch" /etc/apt/sources.list; then
+	echo "sources.list outdated! upgrading..."
+	sudo sed -i "s/^deb http:\/\/raspbian.raspberrypi.org\/raspbian\/ stretch/deb http:\/\/legacy.raspbian.org\/raspbian\/ stretch/g" /etc/apt/sources.list
+else
+	echo "sources.list already updated"
+fi
 apt-get update
 apt-get -q -y install vim bc apache2 php php-gd php-curl php-xml php-json libapache2-mod-php jq raspberrypi-kernel-headers i2c-tools git mosquitto mosquitto-clients socat python-pip python3-pip sshpass
 echo "...done"
@@ -57,17 +64,6 @@ else
 	echo "...created"
 fi
 
-echo "check for crontab"
-if grep -Fxq "@reboot /var/www/html/openWB/runs/atreboot.sh &" /var/spool/cron/crontabs/root
-then
-	echo "...ok"
-else
-	echo "@reboot /var/www/html/openWB/runs/atreboot.sh &" >> /tmp/tocrontab
-	crontab -l -u root | cat - /tmp/tocrontab | crontab -u root -
-	rm /tmp/tocrontab
-	echo "...added"
-fi
-
 # start mosquitto
 sudo service mosquitto start
 
@@ -105,7 +101,7 @@ echo "check for paho-mqtt"
 if python3 -c "import paho.mqtt.publish as publish" &> /dev/null; then
 	echo 'mqtt installed...'
 else
-	sudo pip3 install paho-mqtt
+	sudo pip3 install "paho-mqtt<2.0.0"
 fi
 
 #Adafruit install
@@ -124,4 +120,4 @@ chmod +x /var/www/html/openWB/runs/*
 chmod +x /var/www/html/openWB/*.sh
 touch /var/log/openWB.log
 chmod 777 /var/log/openWB.log
-/var/www/html/openWB/runs/atreboot.sh
+sudo -u pi /var/www/html/openWB/runs/atreboot.sh

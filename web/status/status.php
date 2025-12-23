@@ -29,7 +29,7 @@
 		<!-- local css due to async loading of theme css -->
 		<style>
 			#preloader {
-				background-color:white;
+				background-color:black;
 				position:fixed;
 				top:0px;
 				left:0px;
@@ -43,9 +43,10 @@
 			}
 			#preloader-image {
 				max-width: 300px;
+				filter:invert(1);
 			}
 			#preloader-info {
-				color:grey;
+				color:#e4e4e4;
 			}
 		</style>
 		<!-- important scripts to be loaded -->
@@ -363,11 +364,11 @@
 										<th scope="row">Tagesertrag [kWh]</th>
 										<td><div id="daily_pvkwhdiv">--</div></td>
 									</tr>
-									<tr id="monatsertragRow">
+									<tr class="hide" id="monatsertragRow">
 										<th scope="row">Monatsertrag [kWh]</th>
 										<td><div id="monthly_pvkwhdiv">--</div></td>
 									</tr>
-									<tr id="jahresertragRow">
+									<tr class="hide" id="jahresertragRow">
 										<th scope="row">Jahresertrag [kWh]</th>
 										<td><div id="yearly_pvkwhdiv">--</div></td>
 									</tr>
@@ -665,7 +666,7 @@
 					// load mqtt library
 					'js/mqttws31.js',
 					// functions for processing messages
-					'status/processAllMqttMsg.js?ver=20210209',
+					'status/processAllMqttMsg.js?ver=20230818',
 					// functions performing mqtt and start mqtt-service
 					'status/setupMqttServices.js?ver=20210209',
 				];

@@ -12,15 +12,16 @@ import asyncio
 import json
 
 # Constants
-LOGIN_BASE = "https://login.apps.emea.vwapps.io"
+LOGIN_BASE = "https://emea.bff.cariad.digital/user-login/v1"
 LOGIN_HANDLER_BASE = "https://identity.vwgroup.io"
-API_BASE = "https://mobileapi.apps.emea.vwapps.io"
+API_BASE = "https://emea.bff.cariad.digital/vehicle/v1"
 
 class vwid:
 	def __init__(self, session):
 		self.session = session
 		self.headers = {}
 		self.log = logging.getLogger(__name__)
+		self.jobs_string = 'all'
 
 	def form_from_response(self, text):
 		page = lxml.html.fromstring(text)
@@ -38,9 +39,11 @@ class vwid:
 			if (a.text) and (a.text.find('window._IDK') != -1):
 				text = a.text.strip()
 				text = text[text.find('\n'):text.rfind('\n')].strip()
-
 				for line in text.split('\n'):
-					(name, val) = line.strip().split(':', 1)
+					try:
+						(name, val) = line.strip().split(':', 1)
+					except ValueError:
+						continue
 					val = val.strip('\', ')
 					objects[name] = val
 
@@ -49,7 +52,7 @@ class vwid:
 		if ('errorCode' in json_model):
 			self.log.error("Login error: %s", json_model['errorCode'])
 			return False
-
+			
 		try:
 			# Generate form
 			form = {}
@@ -63,8 +66,8 @@ class vwid:
 
 			return (form, action)
 
-		except KeyError:
-			self.log.error("Missing fields in response from VW API")
+		except KeyError as exc:
+			self.log.error("Missing fields in response from VW API ("+str(exc)+")")
 			return False
 
 	def set_vin(self, vin):
@@ -73,6 +76,9 @@ class vwid:
 	def set_credentials(self, username, password):
 		self.username = username
 		self.password = password
+
+	def set_jobs(self, jobs):
+		self.jobs_string = ','.join(jobs)
 		
 	async def connect(self, username, password):
 		self.set_credentials(username, password)
@@ -87,6 +93,7 @@ class vwid:
 
 		response = await self.session.get(LOGIN_BASE + '/authorize', params=payload)
 		if response.status >= 400:
+			self.log.error("Authorize: Non-2xx response ("+str(response.status)+")")
 			# Non 2xx response, failed
 			return False
 
@@ -95,7 +102,7 @@ class vwid:
 		form['email'] = self.username
 		response = await self.session.post(LOGIN_HANDLER_BASE+action, data=form)
 		if response.status >= 400:
-			self.log.error("Email fail")
+			self.log.error("Email: Non-2xx response")
 			return False
 			
 		# Fill form with password
@@ -111,8 +118,8 @@ class vwid:
 				# Get terms and conditions page
 				url = LOGIN_HANDLER_BASE + url
 				response = await self.session.get(url, data=form, allow_redirects=False)
-
 				(form, action) = self.form_from_response(await response.read())
+
 				url = LOGIN_HANDLER_BASE + action
 				response = await self.session.post(url, data=form, allow_redirects=False)
 
@@ -153,7 +160,7 @@ class vwid:
 		}
 		response = await self.session.post(LOGIN_BASE + '/login/v1', json=payload)
 		if response.status >= 400:
-			self.log.error("Login failed")
+			self.log.error("Login: Non-2xx response")
 			# Non 2xx response, failed
 			return False
 		self.tokens = await response.json()
@@ -182,22 +189,26 @@ class vwid:
 		return True
 
 	async def get_status(self):
-		response = await self.session.get(API_BASE + "/vehicles/" + self.vin + "/status", headers=self.headers)
+		status_url = API_BASE + "/vehicles/" + self.vin + "/selectivestatus?jobs=" + self.jobs_string
+		response = await self.session.get(status_url, headers=self.headers)
 
 		# If first attempt fails, try to refresh tokens
 		if response.status >= 400:
 			self.log.debug("Refreshing tokens")
 			if await self.refresh_tokens():
-				response = await self.session.get(API_BASE + "/vehicles/" + self.vin + "/status", headers=self.headers)
+				response = await self.session.get(status_url, headers=self.headers)
 			
 		# If refreshing tokens failed, try a full reconnect
 		if response.status >= 400:
 			self.log.info("Reconnecting")
 			if await self.reconnect():
-				response = await self.session.get(API_BASE + "/vehicles/" + self.vin + "/status", headers=self.headers)
+				response = await self.session.get(status_url, headers=self.headers)
+			else:
+				self.log.error("Reconnect failed")
+				return {}
 			
 		if response.status >= 400:
 			self.log.error("Get status failed")
 			return {}
-			
+
 		return (await response.json())

@@ -1,9 +1,24 @@
 #!/bin/bash
+
+# -- start user pi enforcement
+# normally the soc module runs as user pi
+# When LP Configuration is stored, it is run as user www-data
+# This leads to various permission problems
+# if actual user is not pi, this section restarts the script as user pi
+usr=`id -nu`
+if [ "$usr" != "pi" ]
+then
+	sudo -u pi -c bash "$0 $*"
+	exit $?
+fi
+# -- ending user pi enforcement
+
 OPENWBBASEDIR=$(cd `dirname $0`/../../ && pwd)
 RAMDISKDIR="$OPENWBBASEDIR/ramdisk"
 MODULEDIR=$(cd `dirname $0` && pwd)
 DMOD="EVSOC"
 CHARGEPOINT=$1
+export OPENWBBASEDIR RAMDISKDIR MODULEDIR
 
 # check if config file is already in env
 if [[ -z "$debug" ]]; then
@@ -66,7 +81,7 @@ incrementTimer(){
 }
 
 getAndWriteSoc(){
-	openwbDebugLog ${DMOD} 0 "Lp$CHARGEPOINT: Requesting SoC"
+	openwbDebugLog ${DMOD} 2 "Lp$CHARGEPOINT: Requesting SoC"
 	echo 0 > $soctimerfile
 	#Prepare for secrets used in soc module libvwid in Python
 	if ! python3 -c "import secrets" &> /dev/null ; then
@@ -75,11 +90,11 @@ getAndWriteSoc(){
 			ln -s $MODULEDIR/_secrets.py $MODULEDIR/secrets.py
 		fi
 	fi
-	answer=$($MODULEDIR/soc_vwid.py --user "$username" --password "$password" --vin "$vin" 2>&1)
+	answer=$($MODULEDIR/soc_vwid.py --user "$username" --password "$password" --vin "$vin" --chargepoint "$CHARGEPOINT" 2>>$RAMDISKDIR/soc.log)
 	if [ $? -eq 0 ]; then
 		# we got a valid answer
 		echo $answer > $socfile
-		openwbDebugLog ${DMOD} 0 "Lp$CHARGEPOINT: SoC: $answer"
+		openwbDebugLog ${DMOD} 2 "Lp$CHARGEPOINT: SoC: $answer"
 	else
 		# we have a problem
 		openwbDebugLog ${DMOD} 0 "Lp$CHARGEPOINT: Error from soc_vwid: $answer"
@@ -89,14 +104,14 @@ getAndWriteSoc(){
 soctimer=$(<$soctimerfile)
 if (( ladeleistung > 500 )); then
 	if (( soctimer < intervallladen )); then
-		openwbDebugLog ${DMOD} 0 "Lp$CHARGEPOINT: Charging, but nothing to do yet. Incrementing timer."
+		openwbDebugLog ${DMOD} 2 "Lp$CHARGEPOINT: Charging, but nothing to do yet. Incrementing timer."
 		incrementTimer
 	else
 		getAndWriteSoc
 	fi
 else
 	if (( soctimer < intervall )); then
-		openwbDebugLog ${DMOD} 0 "Lp$CHARGEPOINT: Nothing to do yet. Incrementing timer."
+		openwbDebugLog ${DMOD} 2 "Lp$CHARGEPOINT: Nothing to do yet. Incrementing timer."
 		incrementTimer
 
 	else

@@ -8,8 +8,8 @@
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<title>openWB Einstellungen</title>
-		<meta name="description" content="Control your charge" />
-		<meta name="author" content="Michael Ortenstein" />
+		<meta name="description" content="Control your charge">
+		<meta name="author" content="Michael Ortenstein">
 		<!-- Favicons (created with http://realfavicongenerator.net/)-->
 		<link rel="apple-touch-icon" sizes="57x57" href="img/favicons/apple-touch-icon-57x57.png">
 		<link rel="apple-touch-icon" sizes="60x60" href="img/favicons/apple-touch-icon-60x60.png">
@@ -82,7 +82,9 @@
 										<option <?php if($evseconold == "extopenwb") echo "selected" ?> value="extopenwb">externe openWB</option>
 										<option <?php if($evseconold == "owbpro") echo "selected" ?> value="owbpro">openWB Pro</option>
 										<option <?php if($evseconold == "masterethframer") echo "selected" ?> value="masterethframer">Ladepunkt in Verbindung mit Standalone</option>
-										<option <?php if($evseconold == "ipevse") echo "selected" ?> value="ipevse">Satellit </option>
+										<?php $ipevseconv2 = ($evseconold == "ipevse" && $evseidlp1old == "1" && $ladeleistungmodulold == "mpm3pmlllp1" && $mpmlp1ipold == $evseiplp1old)?>
+										<option <?php if($evseconold == "ipevse" && !$ipevseconv2) echo "selected" ?> value="ipevse" data-id="openwb satellite v1">Satellit</option>
+										<option <?php if($evseconold == "ipevse" && $ipevseconv2) echo "selected" ?> value="ipevse" data-id="openwb satellite v2">Satellit V2</option>
 									</optgroup>
 									<optgroup label="andere Ladepunkte">
 										<option <?php if($evseconold == "goe") echo "selected" ?> value="goe">Go-e</option>
@@ -269,12 +271,12 @@
 								</div>
 							</div>
 						</div>
-						<div id="evseconipevse" class="hide">
+						<div id="evseconipevseV1" class="hide">
 							<div class="form-group">
 								<div class="form-row mb-1">
 									<label for="evseiplp1" class="col-md-4 col-form-label">IP Adresse</label>
 									<div class="col">
-										<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="evseiplp1" id="evseiplp1" value="<?php echo $evseiplp1old ?>">
+										<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="evseiplp1" value="<?php echo $evseiplp1old ?>">
 										<span class="form-text small">
 											Gültige Werte IP Adresse im Format: 192.168.0.12<br>
 											Aufgedruckt auf dem Label der openWB.
@@ -289,6 +291,29 @@
 									</div>
 								</div>
 							</div>
+						</div>
+						<div id="evseconipevseV2" class="hide">
+							<div class="form-group">
+								<div class="form-row mb-1">
+									<label for="evseiplp1" class="col-md-4 col-form-label">IP Adresse</label>
+									<div class="col">
+										<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="evseiplp1" id="evseiplp1" value="<?php echo $evseiplp1old ?>">
+										<span class="form-text small">
+											Gültige Werte IP Adresse im Format: 192.168.0.12<br>
+											Aufgedruckt auf dem Label der openWB.
+										</span>
+									</div>
+								</div>
+							</div>
+							<input type="hidden" name="evseidlp1" value="1">
+							<input type="hidden" name="ladeleistungmodul" value="mpm3pmlllp1">
+							<input type="hidden" name="mpmlp1ip" id="evseiplllp1" value="<?php echo $evseiplp1old ?>">
+							<input type="hidden" name="mpmlp1id" value="105">
+							<script>
+								$('#evseiplp1').on("change", function(){
+									$('#evseiplllp1').val($(this).val());
+								});
+							</script>
 						</div>
 						<div id="evseconkeba" class="hide">
 							<input type="hidden" name="ladeleistungmodul" value="keballlp1">
@@ -388,7 +413,7 @@
 									visibility_twcmanagerlp1_connection();
 								});
 
-	       							visibility_twcmanagerlp1_connection();
+									visibility_twcmanagerlp1_connection();
 							});
 						</script>
 
@@ -734,17 +759,15 @@
 										<option <?php if($socmodulold == "soc_i3") echo "selected" ?> value="soc_i3">BMW &amp; Mini</option>
 										<option <?php if($socmodulold == "soc_kia") echo "selected" ?> value="soc_kia">Kia / Hyundai</option>
 										<option <?php if($socmodulold == "soc_eq") echo "selected" ?> value="soc_eq">Mercedes EQ</option>
-										<option <?php if($socmodulold == "soc_myopel") echo "selected" ?> value="soc_myopel">MyOpel</option>
-										<option <?php if($socmodulold == "soc_mypeugeot") echo "selected" ?> value="soc_mypeugeot">MyPeugeot</option>
 										<option <?php if($socmodulold == "soc_myrenault") echo "selected" ?> value="soc_myrenault">MyRenault</option>
-										<option <?php if($socmodulold == "soc_leaf") echo "selected" ?> value="soc_leaf">Nissan Leaf</option>
+										<option <?php if($socmodulold == "soc_leaf") echo "selected" ?> value="soc_leaf">Nissan</option>
 										<option <?php if($socmodulold == "soc_psa") echo "selected" ?> value="soc_psa">PSA (Peugeot/Citroen/DS/Opel/Vauxhall)</option>
 										<option <?php if($socmodulold == "soc_zoe") echo "selected" ?> value="soc_zoe">Renault Zoe (alt)</option>
+										<option <?php if($socmodulold == "soc_ovms") echo "selected" ?> value="soc_ovms">OVMS</option>
 										<option <?php if($socmodulold == "soc_tesla") echo "selected" ?> value="soc_tesla">Tesla</option>
 										<option <?php if($socmodulold == "soc_vag") echo "selected" ?> value="soc_vag">VAG</option>
 										<option <?php if($socmodulold == "soc_volvo") echo "selected" ?> value="soc_volvo">Volvo</option>
 										<option <?php if($socmodulold == "soc_carnet") echo "selected" ?> value="soc_carnet">VW Carnet</option>
-										<option <?php if($socmodulold == "soc_id") echo "selected" ?> value="soc_id">VW ID-alt</option>
 										<option <?php if($socmodulold == "soc_vwid") echo "selected" ?> value="soc_vwid">VW ID</option>
 										<option <?php if($socmodulold == "soc_zerong") echo "selected" ?> value="soc_zerong">Zero NG</option>
 									</optgroup>
@@ -834,7 +857,7 @@
 										</div>
 									</div>
 									<div class="form-row mb-1">
-										<label for="soc_tesla_login_btn" class="col-md-4 col-form-label">Anmeldedaten prüfen</label>
+										<label class="col-md-4 col-form-label">Anmeldedaten prüfen</label>
 										<div class="col">
 											<button type="button" class="btn btn-success soc-tesla-login-btn" data-email="#soc_tesla_username" value="1">Bei Tesla anmelden</button>
 											<button type="button" class="btn btn-danger soc-tesla-clear-btn" value="1">Anmeldedaten entfernen</button>
@@ -1000,7 +1023,7 @@
 									</div>
 									<div id="kia_abrp_enablediv" class="hide">
 										<div class="form-row mb-1">
-											<label for="kia_abrp_token" class="col-md-4 col-form-label">ABRP Token</label>
+											<label for="kia_abrp_token_text" class="col-md-4 col-form-label">ABRP Token</label>
 											<div class="col">
 												<input class="form-control" type="text" name="kia_abrp_token" id="kia_abrp_token_text" value="<?php echo $kia_abrp_tokenold ?>">
 												<span class="form-text small">
@@ -1145,48 +1168,48 @@
 								</div>
 							</div>
 							<div id="socaiways" class="hide">
-                                <div class="form-group">
-                                    <div class="alert alert-info">
-                                        Anmeldedaten fuer den Aiways U5
-                                    </div>
-                                    <div class="form-row mb-1">
-                                        <label for="soc_aiways_user" class="col-md-4 col-form-label">Benutzername</label>
-                                        <div class="col">
-                                            <input class="form-control" type="text" name="soc_aiways_user" id="soc_aiways_user" value="<?php echo $soc_aiways_userold ?>">
-                                            <span class="form-text small">
-                                                Aiways Account Name (nicht die E-Mail-Adresse)
-                                            </span>
-                                        </div>
-                                    </div>
-                                    <div class="form-row mb-1">
-                                        <label for="soc_aiways_pass" class="col-md-4 col-form-label">Passwort</label>
-                                        <div class="col">
-											<input class="form-control" type="password" name="soc_aiways_pass" id="soc_aiways_pass" value="<?php echo $soc_aiways_passold ?>">
-                                            <span class="form-text small">
-                                                Aiways Passwort
-                                            </span>
-                                        </div>
-                                    </div>
+								<div class="form-group">
+									<div class="alert alert-info">
+										Anmeldedaten fuer den Aiways U5
+									</div>
 									<div class="form-row mb-1">
-                                        <label for="soc_aiways_vin" class="col-md-4 col-form-label">VIN</label>
-                                        <div class="col">
-                                            <input class="form-control" type="text" name="soc_aiways_vin" id="soc_aiways_vin" value="<?php echo $soc_aiways_vinold ?>">
-                                            <span class="form-text small">
-                                                 VIN des Fahrzeugs
-                                            </span>
-                                        </div>
-                                    </div>
-                                    <div class="form-row mb-1">
-                                        <label for="soc_aiways_intervall" class="col-md-4 col-form-label">Verkürztes Intervall beim Laden</label>
-                                        <div class="col">
+										<label for="soc_aiways_user" class="col-md-4 col-form-label">Benutzername</label>
+										<div class="col">
+											<input class="form-control" type="text" name="soc_aiways_user" id="soc_aiways_user" value="<?php echo $soc_aiways_userold ?>">
+											<span class="form-text small">
+												Aiways Account Name (nicht die E-Mail-Adresse)
+											</span>
+										</div>
+									</div>
+									<div class="form-row mb-1">
+										<label for="soc_aiways_pass" class="col-md-4 col-form-label">Passwort</label>
+										<div class="col">
+											<input class="form-control" type="password" name="soc_aiways_pass" id="soc_aiways_pass" value="<?php echo $soc_aiways_passold ?>">
+											<span class="form-text small">
+												Aiways Passwort
+											</span>
+										</div>
+									</div>
+									<div class="form-row mb-1">
+										<label for="soc_aiways_vin" class="col-md-4 col-form-label">VIN</label>
+										<div class="col">
+											<input class="form-control" type="text" name="soc_aiways_vin" id="soc_aiways_vin" value="<?php echo $soc_aiways_vinold ?>">
+											<span class="form-text small">
+												VIN des Fahrzeugs
+											</span>
+										</div>
+									</div>
+									<div class="form-row mb-1">
+										<label for="soc_aiways_intervall" class="col-md-4 col-form-label">Verkürztes Intervall beim Laden</label>
+										<div class="col">
 											<input class="form-control" type="text" name="soc_aiways_intervall" id="soc_aiways_intervall" value="<?php echo $soc_aiways_intervallold ?>">
-                                            <span class="form-text small">
-                                                Verkürzt das Abfrageintervall beim Laden auf xx Minuten
-                                            </span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>						
+											<span class="form-text small">
+												Verkürzt das Abfrageintervall beim Laden auf xx Minuten
+											</span>
+										</div>
+									</div>
+								</div>
+							</div>						
 							<div id="socmaudi" class="hide">
 								<div class="form-group">
 									<div class="form-row mb-1">
@@ -1216,41 +1239,6 @@
 											</span>
 										</div>
 									</div>
-								</div>
-							</div>
-							<div id="socmid" class="hide">
-								<div class="form-group">
-									<div class="alert alert-info">
-										Dieses ID Modul ist redundant und wird in zukünftigen Versionen entfernt. Bitte das VAG Modul auswählen.
-									</div>
-									<div class="form-row mb-1">
-										<label for="soc_id_username" class="col-md-4 col-form-label">Benutzername</label>
-										<div class="col">
-											<input class="form-control" type="email" name="soc_id_username" id="soc_id_username" value="<?php echo $soc_id_usernameold ?>">
-											<span class="form-text small">
-												Email Adresse des Logins.
-											</span>
-										</div>
-									</div>
-									<div class="form-row mb-1">
-										<label for="soc_id_passwort" class="col-md-4 col-form-label">Passwort</label>
-										<div class="col">
-											<input class="form-control" type="password" name="soc_id_passwort" id="soc_id_passwort" value="<?php echo $soc_id_passwortold ?>">
-											<span class="form-text small">
-												Password des Logins.
-											</span>
-										</div>
-									</div>
-									<div class="form-row mb-1">
-										<label for="soc_id_vin" class="col-md-4 col-form-label">VIN</label>
-										<div class="col">
-											<input class="form-control" type="text" name="soc_id_vin" id="soc_id_vin" value="<?php echo $soc_id_vinold ?>">
-											<span class="form-text small">
-												Vollständige VIN des Fahrzeugs.
-											</span>
-										</div>
-									</div>
-
 								</div>
 							</div>
 							<div id="socmvwid" class="hide">
@@ -1300,6 +1288,69 @@
 										<label for="soc_id_intervallladen" class="col-md-4 col-form-label">Abfrageintervall Ladevorgang</label>
 										<div class="col">
 											<input class="form-control" type="number" min="0" step="1" name="soc_id_intervallladen" id="soc_id_intervallladen" value="<?php echo $soc_id_intervallladenold ?>">
+											<span class="form-text small">
+												Wie oft das Fahrzeug abgefragt wird, wenn geladen wird. Angabe in Minuten.
+											</span>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div id="socmovms" class="hide">
+								<div class="form-group">
+									<div class="alert alert-info">
+										Für Fahrzeuge mit OVMS Modul. Es wird benötigt:<br>
+										- OVMS Account in z.B. dexters-web.de<br>
+									</div>
+									<div class="form-row mb-1">
+										<label for="soc_ovms_server" class="col-md-4 col-form-label">Server URL</label>
+										<div class="col">
+											<input class="form-control" type="text" name="soc_ovms_server" id="soc_ovms_server" value="<?php echo $soc_ovms_serverold ?>">
+											<span class="form-text small">
+												URL des OVMS Servers incl. Port.<br>
+												z.B. https://ovms.dexters-web.de:6869<br>
+											</span>
+										</div>
+									</div>
+									<div class="form-row mb-1">
+										<label for="soc_ovms_username" class="col-md-4 col-form-label">Benutzername</label>
+										<div class="col">
+											<input class="form-control" type="text" name="soc_ovms_username" id="soc_ovms_username" value="<?php echo $soc_ovms_usernameold ?>">
+											<span class="form-text small">
+												User Name des Accounts in z.B. dexters-web.de.
+											</span>
+										</div>
+									</div>
+									<div class="form-row mb-1">
+										<label for="soc_ovms_passwort" class="col-md-4 col-form-label">Passwort</label>
+										<div class="col">
+											<input class="form-control" type="password" name="soc_ovms_passwort" id="soc_ovms_passwort" value="<?php echo $soc_ovms_passwortold ?>">
+											<span class="form-text small">
+												Password des Accounts.
+											</span>
+										</div>
+									</div>
+									<div class="form-row mb-1">
+										<label for="soc_ovms_vehicleid" class="col-md-4 col-form-label">Vehicle Id</label>
+										<div class="col">
+											<input class="form-control" type="text" name="soc_ovms_vehicleid" id="soc_ovms_vehicleid" value="<?php echo $soc_ovms_vehicleidold ?>">
+											<span class="form-text small">
+												OVMS vehicleId des Fahrzeugs.
+											</span>
+										</div>
+									</div>
+									<div class="form-row mb-1">
+										<label for="soc_ovms_intervall" class="col-md-4 col-form-label">Abfrageintervall Standby</label>
+										<div class="col">
+											<input class="form-control" type="number" min="0" step="1" name="soc_ovms_intervall" id="soc_ovms_intervall" value="<?php echo $soc_ovms_intervallold ?>">
+											<span class="form-text small">
+												Wie oft das Fahrzeug abgefragt wird, wenn nicht geladen wird. Angabe in Minuten.
+											</span>
+										</div>
+									</div>
+									<div class="form-row mb-1">
+										<label for="soc_ovms_intervallladen" class="col-md-4 col-form-label">Abfrageintervall Ladevorgang</label>
+										<div class="col">
+											<input class="form-control" type="number" min="0" step="1" name="soc_ovms_intervallladen" id="soc_ovms_intervallladen" value="<?php echo $soc_ovms_intervallladenold ?>">
 											<span class="form-text small">
 												Wie oft das Fahrzeug abgefragt wird, wenn geladen wird. Angabe in Minuten.
 											</span>
@@ -1384,7 +1435,7 @@
 														<i class="fas fa-sync"></i>
 													</div>
 												</div>
-												<select id="soc_evcc_select_vehicle_lp1" class="form-control" readonly>
+												<select id="soc_evcc_select_vehicle_lp1" class="form-control">
 													<option value="">-- Bitte aktualisieren --</option>
 												</select>
 											</div>
@@ -1394,7 +1445,7 @@
 										</div>
 									</div>
 									<div class="form-row mb-1">
-										<label for="soc_evcc_vehicle_id_lp1" class="col-md-4 col-form-label">Fahrzeug Typ</label>
+										<label for="soc_evcc_type_lp1" class="col-md-4 col-form-label">Fahrzeug Typ</label>
 										<div class="col">
 											<div class="input-group">
 												<div class="input-group-prepend">
@@ -1436,6 +1487,17 @@
 											</span>
 										</div>
 									</div>
+									<div id="socevccpinlp1" class="hide">
+										<div class="form-row mb-1">
+											<label for="soc_evcc_pin_lp1" class="col-md-4 col-form-label">PIN</label>
+											<div class="col">
+												<input class="form-control" type="text" name="soc_evcc_pin_lp1" id="soc_evcc_pin_lp1" value="<?php echo $soc_evcc_pin_lp1old ?>">
+												<span class="form-text small">
+													Sicherheits-PIN der App des Fahrzeugs
+												</span>
+											</div>
+										</div>
+									</div>
 									<div class="form-row mb-1">
 										<label for="soc_evcc_token_lp1" class="col-md-4 col-form-label">Token</label>
 										<div class="col">
@@ -1465,8 +1527,21 @@
 									</div>
 								</div>
 								<script>
+									function visibility_socevccpinlp1() {
+										if($('#soc_evcc_type_lp1').val() == 'fiat') {
+											showSection('#socevccpinlp1');
+										} else {
+											hideSection('#socevccpinlp1');
+										}
+									}
+
+									$(function() {
+										visibility_socevccpinlp1();
+									});
+
 									$('#soc_evcc_select_vehicle_lp1').change(function(){
 										$('#soc_evcc_type_lp1').val($(this).val());
+										visibility_socevccpinlp1();
 									});
 
 									$('#soc_evcc_load_vehicles_lp1').click(function(){
@@ -1732,15 +1807,96 @@
 										</div>
 									</div>
 									<div class="form-row mb-1">
-										<label for="soci3intervall" class="col-md-4 col-form-label">Verkürztes Intervall beim Laden</label>
+										<label for="i3captcha_token" class="col-md-4 col-form-label">Captcha-Token</label>
 										<div class="col">
-											<input class="form-control" type="text" name="soci3intervall" id="soci3intervall" value="<?php echo $soci3intervallold ?>">
+											<input class="form-control" type="text" name="i3captcha_token" id="i3captcha_token" value="<?php echo $i3captcha_tokenold ?>">
 											<span class="form-text small">
-												Verkürzt das Abfrageintervall beim Laden auf xx Minuten
+												Zum erstmaligen Login z.B. nach einem Neustart ist ein <b>aktuelles Captcha-Token</b> notwendig.<br>
+												Dazu bitte folgende Schritte durchführen:<br>
+												1. in einem neuen Browser-Tab auf diese Seite gehen:<br>
+											</span>
+											<a target="_blank" rel="noopener noreferrer" href="https://bimmer-connected.readthedocs.io/en/stable/captcha/rest_of_world.html">Captcha Page</a>
+											<span class="form-text small">
+												(https://bimmer-connected.readthedocs.io/en/latest/captcha/rest_of_world.html)<br>
+												2. Dort falls angefragt das Captcha lösen und/oder "Ich bin ein Mensch" und dann Submit anclicken.<br>
+												Als Ergebnis wird ein sehr langer String angezeigt. <br>
+												3. Diesen String komplett mit <b>Copy&Paste</b> in das Feld Captcha-Token eingeben.<br>
+												4. Die Konfiguration speichern.<br>
+												5. <b>Fertig.</b> Ab jetzt wird das sog. Refresh-Token verwendet.<br>
+												Das erneute Abrufen des Captcha-Token sollte nur notwendig werden wenn die Datei mit dem Refresh-Token verloren wird, z.B. nach SD-Kartentausch.<br>
+												<b>Achtung: Das Captcha-Token kann nur einmal verwendet werden und gilt nur kurze Zeit!</b>
 											</span>
 										</div>
 									</div>
+									<div class="form-row mb-1">
+										<label for="soci3intervall" class="col-md-4 col-form-label">Abfrageintervall</label>
+										<div class="col">
+											<input class="form-control" type="text" name="soci3intervall" id="soci3intervall" value="<?php echo $soci3intervallold ?>">
+											<span class="form-text small">
+												Abfrageintervall in Minuten
+											</span>
+										</div>
+									</div>
+									<div class="form-row mb-1">
+										<label class="col-md-4 col-form-label">Kombiniere SoC Modul und manuelle Berechnung</label>
+										<div class="col">
+											<div class="btn-group btn-group-toggle btn-block" data-toggle="buttons">
+												<label class="btn btn-outline-info<?php if($i3_soccalclp1old == 0) echo " active" ?>">
+													<input type="radio" name="i3_soccalclp1" id="i3_soccalclp1Off" value="0"<?php if($i3_soccalclp1old == 0) echo " checked=\"checked\"" ?>>Nein
+												</label>
+												<label class="btn btn-outline-info<?php if($i3_soccalclp1old == 1) echo " active" ?>">
+													<input type="radio" name="i3_soccalclp1" id="i3_soccalclp1On" value="1"<?php if($i3_soccalclp1old == 1) echo " checked=\"checked\"" ?>>Ja
+												</label>
+											</div>
+											<span class="form-text small">
+												Wenn Ja gewählt wird, wird der SoC regelmäßig über die API abgerufen. Während des Ladens wird der SoC dann anhand des Zählerstands im Ladepunkt berechnet.<br>
+												Bei Nein wird immer der SoC über die API abgefragt.
+											</span>
+										</div>
+									</div>
+									<div id="i3manualcalcdiv" class="hide">
+										<div class="form-row mb-1">
+											<label for="i3_akkuglp1" class="col-md-4 col-form-label">Akkugröße in kWh bei manueller Berechnung</label>
+											<div class="col">
+												<input class="form-control" type="number" min="1" step="1" name="akkuglp1" id="i3_akkuglp1" value="<?php echo $akkuglp1old ?>">
+												<span class="form-text small">
+													Angabe der Netto-Kapazität der Fahrzeugbatterie in kWh. Dient zur Berechnung des manuellen SoC.<br>
+												</span>
+											</div>
+										</div>
+										<div class="form-row mb-1">
+											<label for="i3_wirkungsgradlp1" class="col-md-4 col-form-label">Wirkungsgrad Ladeelektronik bei manueller Berechnung</label>
+											<div class="col">
+												<input class="form-control" type="number" min="1" step="1" max="100" name="wirkungsgradlp1" id="i3_wirkungsgradlp1" value="<?php echo $wirkungsgradlp1old ?>">
+												<span class="form-text small">
+													Wert in Prozent, der den gemittelten Wirkungsgrad der Ladeelektronik angibt.<br>
+													Durch Verluste in der Ladeelektronik (z. B. Umwandlung Wechselspannung in Gleichspannung) gelangt nicht die komplette Energie, welche durch den Zähler in der Wallbox gemesen wird, im Akku des Fahrzeugs.
+													Der anzugebende Wert liegt bei gängigen Fahrzeugen im Bereich 90-95%.<br>
+													Liegen die Angaben der Wallbox und des Fahrzeugs nach der Ladung mehrere Prozent auseinander, dann kann mit dieser Einstellung eine Feinabstimmung erfolgen:<br>
+													SoC an der Wallbox zu hoch: Wirkungsgrad um ein paar Prozent reduzieren<br>
+													SoC an der Wallbox zu gering: Wirkungsgrad um ein paar Prozent erhöhen
+												</span>
+											</div>
+										</div>
+									</div>
 								</div>
+								<script>
+									$(function() {
+										function visibility_i3_soccalclp1() {
+											if($('#i3_soccalclp1Off').prop("checked")) {
+												hideSection('#i3manualcalcdiv');
+											} else {
+												showSection('#i3manualcalcdiv');
+											}
+										}
+
+										$('input[type=radio][name=i3_soccalclp1]').change(function(){
+											visibility_i3_soccalclp1();
+										});
+
+										visibility_i3_soccalclp1();
+									});
+								</script>
 							</div>
 							<div id="soccarnet" class="hide">
 								<div class="form-group">
@@ -1775,195 +1931,6 @@
 										</div>
 									</div>
 								</div>
-							</div>
-							<div id="socmypeugeot" class="hide">
-								<div class="form-group">
-									<div class="card-text alert alert-info">
-										Die notwendige <a href="https://developer.groupe-psa.io/webapi/b2c/quickstart/connect/#connect-your-app" target="_blank" rel="noopener noreferrer">API</a> ist derzeit von PSA noch nicht freigegeben, daher funktionieren über den dokumentierten Weg erstellte Client-IDs und Client-Secrets leider noch nicht.<br>
-										Auf eigenes Risiko kann diese Anleitung genutzt werden, dies hat bisher zu guten Ergebnissen geführt und wird durch die openWB Community (nicht openWB selbst) gepflegt. <a href="https://github.com/snaptec/openWB/wiki/Fahrzeugspezifische-Konfigurationen#welches-soc-modul-kann-verwendet-werden" target="_blank" rel="noopener noreferrer">https://github.com/snaptec/openWB/wiki/Fahrzeugspezifische-Konfigurationen#welches-soc-modul-kann-verwendet-werden</a><br> 
-										Weitere Diskussion zu diesem Thema findet sich <a href="https://openwb.de/forum/viewtopic.php?f=5&t=1206" target="_blank" rel="noopener noreferrer">im Forum.</a>
-									</div>
-									<div class="form-row mb-1">
-										<label for="mypeugeot_userlp1" class="col-md-4 col-form-label">Benutzername</label>
-										<div class="col">
-											<input class="form-control" type="text" name="mypeugeot_userlp1" id="mypeugeot_userlp1" value="<?php echo $mypeugeot_userlp1old ?>">
-										</div>
-									</div>
-									<div class="form-row mb-1">
-										<label for="mypeugeot_passlp1" class="col-md-4 col-form-label">Passwort</label>
-										<div class="col">
-											<input class="form-control" type="password" name="mypeugeot_passlp1" id="mypeugeot_passlp1" value="<?php echo $mypeugeot_passlp1old ?>">
-										</div>
-									</div>
-									<div class="form-row mb-1">
-										<label for="mypeugeot_clientidlp1" class="col-md-4 col-form-label">Client-ID</label>
-										<div class="col">
-											<input class="form-control" type="text" name="mypeugeot_clientidlp1" id="mypeugeot_clientidlp1" value="<?php echo $mypeugeot_clientidlp1old ?>">
-										</div>
-									</div>
-									<div class="form-row mb-1">
-										<label for="mypeugeot_clientsecretlp1" class="col-md-4 col-form-label">Client-Secret</label>
-										<div class="col">
-											<input class="form-control" type="text" name="mypeugeot_clientsecretlp1" id="mypeugeot_clientsecretlp1" value="<?php echo $mypeugeot_clientsecretlp1old ?>">
-										</div>
-									</div>
-									<div class="form-row mb-1">
-									<label class="col-md-4 col-form-label">Kombiniere Peugeot SoC Modul und manuelle Berechnung</label>
-										<div class="col">
-											<div class="btn-group btn-group-toggle btn-block" data-toggle="buttons">
-												<label class="btn btn-outline-info<?php if($mypeugeot_soccalclp1old == 0) echo " active" ?>">
-													<input type="radio" name="mypeugeot_soccalclp1" id="mypeugeot_soccalclp1Off" value="0"<?php if($mypeugeot_soccalclp1old == 0) echo " checked=\"checked\"" ?>>Nein
-												</label>
-												<label class="btn btn-outline-info<?php if($mypeugeot_soccalclp1old == 1) echo " active" ?>">
-													<input type="radio" name="mypeugeot_soccalclp1" id="mypeugeot_soccalclp1On" value="1"<?php if($mypeugeot_soccalclp1old == 1) echo " checked=\"checked\"" ?>>Ja
-												</label>
-											</div>
-											<span class="form-text small">
-												Aktuell liefert die Peugeot API keine SoC Aktualisierung während des Ladevorgangs.<br>
-												Wenn Ja gewählt wird, wird der SoC vor dem Laden über die API abgerufen. Während des Ladens wird der SoC dann anhand des Zählerstands im Ladepunkt berechnet. Dies erlaubt eine SoC-gesteuerte Ladung.<br>
-												Bei Nein wird immer der SoC über die API abgefragt. SoC gesteuerte Ladung ist erst möglich nachdem PSA den SoC auch während des Ladens übermittelt.
-											</span>
-										</div>
-										<div id="peugeotmanualcalcdiv" class="hide">
-											<div class="form-row mb-1">
-												<label for="peugeot_akkuglp1" class="col-md-4 col-form-label">Akkugröße in kWh bei manueller Berechnung</label>
-												<div class="col">
-													<input class="form-control" type="number" min="1" step="1" name="akkuglp1" id="peugeot_akkuglp1" value="<?php echo $akkuglp1old ?>">
-													<span class="form-text small">
-														Angabe der Netto-Kapazität der Fahrzeugbatterie in kWh. Dient zur Berechnung des manuellen SoC.<br>Für Peugeot e208 und e2008: 45-46kWh
-													</span>
-												</div>
-											</div>
-											<div class="form-row mb-1">
-												<label for="peugeot_wirkungsgradlp1" class="col-md-4 col-form-label">Wirkungsgrad Ladeelektronik bei manueller Berechnung</label>
-												<div class="col">
-													<input class="form-control" type="number" min="1" step="1" max="100" name="wirkungsgradlp1" id="peugeot_wirkungsgradlp1" value="<?php echo $wirkungsgradlp1old ?>">
-													<span class="form-text small">
-														Wert in Prozent, der den gemittelten Wirkungsgrad der Ladeelektronik angibt.<br>
-														Für Peugeot e208 und e2008: 96-98 Prozent<br>
-														Durch Verluste in der Ladeelektronik (z. B. Umwandlung Wechselspannung in Gleichspannung) gelangt nicht die komplette Energie, welche durch den Zähler in der Wallbox gemesen wird, im Akku des Fahrzeugs.
-														Der anzugebende Wert liegt bei gängigen Fahrzeugen im Bereich 90-95%. Eine Ausnahme stellt der Zoe dar, dessen Chameleonlader je nach Modellversion und freigegebener Leistung der Wallbox teilweise nur auf ca. 50% kommt.<br>
-														Liegen die Angaben der Wallbox und des Fahrzeugs nach der Ladung mehrere Prozent auseinander, dann kann mit dieser Einstellung eine Feinabstimmung erfolgen:<br>
-														SoC an der Wallbox zu hoch: Wirkungsgrad um ein paar Prozent reduzieren<br>
-														SoC an der Wallbox zu gering: Wirkungsgrad um ein paar Prozent erhöhen
-													</span>
-												</div>
-											</div>
-										</div>
-									</div>
-								</div>
-								<script>
-								$(function() {
-									function visibility_mypeugeot_soccalclp1() {
-										if($('#mypeugeot_soccalclp1Off').prop("checked")) {
-											hideSection('#peugeotmanualcalcdiv');
-										} else {
-											showSection('#peugeotmanualcalcdiv');
-										}
-									}
-
-									$('input[type=radio][name=mypeugeot_soccalclp1]').change(function(){
-										visibility_mypeugeot_soccalclp1();
-									});
-
-									visibility_mypeugeot_soccalclp1();
-								});
-								</script>
-							</div>
-							<div id="socmyopel" class="hide">
-								<div class="form-group">
-									<div class="card-text alert alert-info">
-										Die notwendige <a href="https://developer.groupe-psa.io/webapi/b2c/quickstart/connect/#connect-your-app" target="_blank" rel="noopener noreferrer">API</a> ist derzeit von PSA noch nicht freigegeben, daher funktionieren über den dokumentierten Weg erstellte Client-IDs und Client-Secrets leider noch nicht.<br>
-										Auf eigenes Risiko kann diese Anleitung genutzt werden, dies hat bisher zu guten Ergebnissen geführt und wird durch die openWB Community (nicht openWB selbst) gepflegt. <a href="https://github.com/snaptec/openWB/wiki/Fahrzeugspezifische-Konfigurationen#welches-soc-modul-kann-verwendet-werden" target="_blank" rel="noopener noreferrer">https://github.com/snaptec/openWB/wiki/Fahrzeugspezifische-Konfigurationen#welches-soc-modul-kann-verwendet-werden</a><br> 
-										Weitere Diskussion zu diesem Thema findet sich <a href="https://openwb.de/forum/viewtopic.php?f=5&t=1206" target="_blank" rel="noopener noreferrer">im Forum.</a>
-									</div>
-									<div class="form-row mb-1">
-										<label for="myopel_userlp1" class="col-md-4 col-form-label">Benutzername</label>
-										<div class="col">
-											<input class="form-control" type="text" name="myopel_userlp1" id="myopel_userlp1" value="<?php echo $myopel_userlp1old ?>">
-										</div>
-									</div>
-									<div class="form-row mb-1">
-										<label for="myopel_passlp1" class="col-md-4 col-form-label">Passwort</label>
-										<div class="col">
-											<input class="form-control" type="password" name="myopel_passlp1" id="myopel_passlp1" value="<?php echo $myopel_passlp1old ?>">
-										</div>
-									</div>
-									<div class="form-row mb-1">
-										<label for="myopel_clientidlp1" class="col-md-4 col-form-label">Client-ID</label>
-										<div class="col">
-											<input class="form-control" type="text" name="myopel_clientidlp1" id="myopel_clientidlp1" value="<?php echo $myopel_clientidlp1old ?>">
-										</div>
-									</div>
-									<div class="form-row mb-1">
-										<label for="myopel_clientsecretlp1" class="col-md-4 col-form-label">Client-Secret</label>
-										<div class="col">
-											<input class="form-control" type="text" name="myopel_clientsecretlp1" id="myopel_clientsecretlp1" value="<?php echo $myopel_clientsecretlp1old ?>">
-										</div>
-									</div>
-									<div class="form-row mb-1">
-									<label class="col-md-4 col-form-label">Kombiniere MyOpel SoC Modul und manuelle Berechnung</label>
-										<div class="col">
-											<div class="btn-group btn-group-toggle btn-block" data-toggle="buttons">
-												<label class="btn btn-outline-info<?php if($myopel_soccalclp1old == 0) echo " active" ?>">
-													<input type="radio" name="myopel_soccalclp1" id="myopel_soccalclp1Off" value="0"<?php if($myopel_soccalclp1old == 0) echo " checked=\"checked\"" ?>>Nein
-												</label>
-												<label class="btn btn-outline-info<?php if($myopel_soccalclp1old == 1) echo " active" ?>">
-													<input type="radio" name="myopel_soccalclp1" id="myopel_soccalclp1On" value="1"<?php if($myopel_soccalclp1old == 1) echo " checked=\"checked\"" ?>>Ja
-												</label>
-											</div>
-											<span class="form-text small">
-												Aktuell liefert die Opel API keine SoC Aktualisierung während des Ladevorgangs.<br>
-												Wenn Ja gewählt wird, wird der SoC vor dem Laden über die API abgerufen. Während des Ladens wird der SoC dann anhand des Zählerstands im Ladepunkt berechnet. Dies erlaubt eine SoC-gesteuerte Ladung.<br>
-												Bei Nein wird immer der SoC über die API abgefragt. SoC gesteuerte Ladung ist erst möglich nachdem Opel/PSA den SoC auch während des Ladens übermittelt.
-											</span>
-										</div>
-										<div id="opelmanualcalclp1div" class="hide">
-											<div class="form-row mb-1">
-												<label for="opel_akkuglp1" class="col-md-4 col-form-label">Akkugröße in kWh bei manueller Berechnung</label>
-												<div class="col">
-													<input class="form-control" type="number" min="1" step="1" name="akkuglp1" id="opel_akkuglp1" value="<?php echo $akkuglp1old ?>">
-													<span class="form-text small">
-														Angabe der Netto-Kapazität der Fahrzeugbatterie in kWh. Dient zur Berechnung des manuellen SoC.<br>
-														Für Corsa-e: 45-46kWh
-													</span>
-												</div>
-											</div>
-											<div class="form-row mb-1">
-												<label for="opel_wirkungsgradlp1" class="col-md-4 col-form-label">Wirkungsgrad Ladeelektronik bei manueller Berechnung</label>
-												<div class="col">
-													<input class="form-control" type="number" min="1" step="1" max="100" name="wirkungsgradlp1" id="opel_wirkungsgradlp1" value="<?php echo $wirkungsgradlp1old ?>">
-													<span class="form-text small">
-														Wert in Prozent, der den gemittelten Wirkungsgrad der Ladeelektronik angibt.<br>
-														Für Corsa-e: 96-98 Prozent<br>
-														Durch Verluste in der Ladeelektronik (z. B. Umwandlung Wechselspannung in Gleichspannung) gelangt nicht die komplette Energie, welche durch den Zähler in der Wallbox gemesen wird, im Akku des Fahrzeugs.
-														Der anzugebende Wert liegt bei gängigen Fahrzeugen im Bereich 90-95%. Eine Ausnahme stellt der Zoe dar, dessen Chameleonlader je nach Modellversion und freigegebener Leistung der Wallbox teilweise nur auf ca. 50% kommt.<br>
-														Liegen die Angaben der Wallbox und des Fahrzeugs nach der Ladung mehrere Prozent auseinander, dann kann mit dieser Einstellung eine Feinabstimmung erfolgen:<br>
-														SoC an der Wallbox zu hoch: Wirkungsgrad um ein paar Prozent reduzieren<br>
-														SoC an der Wallbox zu gering: Wirkungsgrad um ein paar Prozent erhöhen
-													</span>
-												</div>
-											</div>
-										</div>
-									</div>
-								</div>
-								<script>
-								$(function() {
-									function visibility_myopel_soccalclp1() {
-										if($('#myopel_soccalclp1Off').prop("checked")) {
-											hideSection('#opelmanualcalclp1div');
-										} else {
-											showSection('#opelmanualcalclp1div');
-										}
-									}
-
-									$('input[type=radio][name=myopel_soccalclp1]').change(function(){
-										visibility_myopel_soccalclp1();
-									});
-
-									visibility_myopel_soccalclp1();
-								});
-								</script>
 							</div>
 							<div id="socpsa" class="hide">
 								<div class="form-group">
@@ -2006,6 +1973,15 @@
 										<label for="psa_clientsecretlp1" class="col-md-4 col-form-label">Client-Secret</label>
 										<div class="col">
 											<input class="form-control" type="text" name="psa_clientsecretlp1" id="psa_clientsecretlp1" value="<?php echo $psa_clientsecretlp1old ?>">
+										</div>
+									</div>
+									<div class="form-row mb-1">
+										<label for="psa_vinlp1" class="col-md-4 col-form-label">VIN</label>
+										<div class="col">
+											<input class="form-control" type="text" name="psa_vinlp1" id="psa_vinlp1" value="<?php echo $psa_vinlp1old ?>">
+											<span class="form-text small">
+												VIN des gewünschten Fahrzeugs. Wird keine VIN angegeben, wird das erste Fahrzeug aus dem Account verwendet.
+											</span>
 										</div>
 									</div>
 									<div class="form-row mb-1">
@@ -2087,7 +2063,7 @@
 										<label class="col-md-4 col-form-label"></label>
 										<div class="col">
 											<span class="form-text small font-weight-bold">
-												Das Mercedes EQ SoC Modul basiert auf der Electric Vehicle Status API des Mercedes Developer Programms. Um die API zu nutzen, muss ein eigener Developer Zugang bei Mercedes beantragt werden. <br/>
+												Das Mercedes EQ SoC Modul basiert auf der Electric Vehicle Status API des Mercedes Developer Programms. Um die API zu nutzen, muss ein eigener Developer Zugang bei Mercedes beantragt werden. <br>
 												<a href="https://github.com/snaptec/openWB/wiki/EV-SoC-Modul-Mercedes-EQ" target="_blank" rel="noopener noreferrer">Eine Step-by-Step Anleitung findet ihr hier</a>
 											</span>
 										</div>
@@ -2121,7 +2097,7 @@
 										<div class="col">
 											<span class="form-text small">
 												<b>Wichtig: Nach dem Eintragen der Werte müssen diese gespeichert werden und danach einmalig der folgende Link aufgerufen werden:
-												<a href="<?php echo "https://id.mercedes-benz.com/as/authorization.oauth2?response_type=code&state=lp1&client_id=" . $soc_eq_client_id_lp1old . "&redirect_uri=" . $soc_eq_cb_lp1old . "&scope=mb:vehicle:mbdata:evstatus%20offline_access"?>" target="_blank" rel="noopener noreferrer">HIER bei Mercedes Me anmelden</a></b>
+												<a href="<?php echo "https://ssoalpha.dvb.corpinter.net/v1/auth?response_type=code&state=lp1&client_id=" . $soc_eq_client_id_lp1old . "&redirect_uri=" . $soc_eq_cb_lp1old . "&scope=mb:vehicle:mbdata:evstatus%20offline_access%20openid"?>" target="_blank" rel="noopener noreferrer">HIER bei Mercedes Me anmelden</a></b>
 											</span>
 										</div>
 									</div>
@@ -2131,7 +2107,7 @@
 								<div class="form-group">
 									<div class="form-row mb-1">
 										<div class="alert alert-info">
-											Für dieses Modul wird ein Konto bei <a href="https://www.tronity.io/" target="_blank" rel="noopener noreferrer">TRONITY</a> benötigt. Über <a href="https://app.tronity.io/signup/7e_-r_uXh" target="_blank" rel="noopener noreferrer">diesen Empfehlungs-Link</a> wird der kostenlose Testzeitraum auf 4 Wochen verlängert. Wie man an die benötigten Zugangsdaten für die openWB kommt, ist <a href="https://help.tronity.io/hc/de-de/articles/360020836760" target="_blank" rel="noopener noreferrer">hier erklärt</a>.
+											Für dieses Modul wird ein Konto bei <a href="https://www.tronity.io" target="_blank" rel="noopener noreferrer">TRONITY</a> benötigt. Über <a href="https://app.tronity.io/signup/7e_-r_uXh" target="_blank" rel="noopener noreferrer">diesen Empfehlungs-Link</a> wird der kostenlose Testzeitraum auf 4 Wochen verlängert. Wie man an die benötigten Zugangsdaten für die openWB kommt, ist <a href="https://help.tronity.io/hc/de-de/articles/360020836760" target="_blank" rel="noopener noreferrer">hier erklärt</a>.
 										</div>
 									</div>
 									<div class="form-row mb-1">
@@ -2155,7 +2131,7 @@
 														<i class="fas fa-sync"></i>
 													</div>
 												</div>
-												<select id="soc_tronity_select_vehicle_lp1" class="form-control" readonly>
+												<select id="soc_tronity_select_vehicle_lp1" class="form-control">
 													<option value="">Bitte aktualisieren</option>
 												</select>
 											</div>
@@ -2209,7 +2185,7 @@
 											$("#soc_tronity_select_vehicle_lp1").empty();
 											$.ajax({
 												type: "POST",
-												url: "https://api-eu.TRONITY.io/oauth/authentication",
+												url: "https://api.tronity.tech/authentication",
 												data: JSON.stringify( { "client_id": $('#soc_tronity_client_id_lp1').val(), "client_secret": $('#soc_tronity_client_secret_lp1').val(), "grant_type": "app" } ),
 												contentType: "application/json",
 												dataType: "json",
@@ -2217,7 +2193,7 @@
 													$('#soc_tronity_load_vehicles_lp1').addClass("bg-warning");
 													$.ajax({
 														type: "GET",
-														url: "https://api-eu.TRONITY.io/v1/vehicles",
+														url: "https://api.tronity.tech/tronity/vehicles",
 														headers: {
 															Authorization: 'Bearer '+authdata.access_token
 														},
@@ -2270,7 +2246,8 @@
 							hideSection('#openwb12v2mid');
 							hideSection('#evseconhttp');
 							hideSection('#evsecontwcmanager');
-							hideSection('#evseconipevse');
+							hideSection('#evseconipevseV1');
+							hideSection('#evseconipevseV2');
 							hideSection('#openwbbuchse');
 							hideSection('#openwbdaemon');
 							hideSection('#evseconextopenwb');
@@ -2298,9 +2275,16 @@
 								}
 							}
 							if($('#evsecon').val() == 'ipevse') {
-								showSection('#evseconipevse');
-								showSection('#llmodullp1');
-								display_llmp1();
+								switch( $("#evsecon option:selected").attr('data-id') ){
+									case "openwb satellite v1":
+										showSection('#evseconipevseV1');
+										showSection('#llmodullp1');
+										display_llmp1();
+									break;
+									case "openwb satellite v2":
+										showSection('#evseconipevseV2');
+									break;
+								}
 							}
 							if($('#evsecon').val() == 'extopenwb') {
 								showSection('#evseconextopenwb');
@@ -2420,6 +2404,7 @@
 							hideSection('#socmaudi');
 							hideSection('#socmid');
 							hideSection('#socmvwid');
+							hideSection('#socmovms');
 							hideSection('#socvag');
 							hideSection('#socevcc');
 							hideSection('#socmqtt');
@@ -2427,8 +2412,6 @@
 							hideSection('#socmuser');
 							hideSection('#socmpass');
 							hideSection('#socmyrenault');
-							hideSection('#socmypeugeot');
-							hideSection('#socmyopel');
 							hideSection('#socpsa');
 							hideSection('#socmanual');
 							hideSection('#soctronity');
@@ -2451,14 +2434,15 @@
 								showSection('#socsupportinfo');
 								showSection('#socmqtt');
 							}
-							if($('#socmodul').val() == 'soc_id') {
-								showSection('#socoldevccwarning');
-								showSection('#socmid');
-							}
 							if($('#socmodul').val() == 'soc_vwid') {
-								$('#socsuportlink').attr('href', 'https://openwb.de/forum/viewtopic.php?f=12&p=58178')
+								$('#socsuportlink').attr('href', 'https://openwb.de/forum/viewtopic.php?f=12&t=4803')
 								showSection('#socsupportinfo');
 								showSection('#socmvwid');
+							}
+							if($('#socmodul').val() == 'soc_ovms') {
+								$('#socsuportlink').attr('href', 'https://forum.openwb.de/viewtopic.php?t=9278')
+								showSection('#socsupportinfo');
+								showSection('#socmovms');
 							}
 							if($('#socmodul').val() == 'soc_vag') {
 								showSection('#socoldevccwarning');
@@ -2475,8 +2459,8 @@
 								showSection('#socmkia');
 							}
 							if($('#socmodul').val() == 'soc_aiways') {
-                                showSection('#socaiways');
-                            }
+								showSection('#socaiways');
+							}
 							if($('#socmodul').val() == 'soc_audi') {
 								showSection('#socoldevccwarning');
 								showSection('#socmaudi');
@@ -2518,12 +2502,6 @@
 							}
 							if($('#socmodul').val() == 'soc_carnet') {
 								showSection('#soccarnet');
-							}
-							if($('#socmodul').val() == 'soc_mypeugeot') {
-								showSection('#socmypeugeot');
-							}
-							if($('#socmodul').val() == 'soc_myopel') {
-								showSection('#socmyopel');
 							}
 							if($('#socmodul').val() == 'soc_psa') {
 								showSection('#socpsa');
@@ -2600,7 +2578,9 @@
 										<option <?php if($evsecons1old == "extopenwb") echo "selected" ?> value="extopenwb">externe openWB</option>
 										<option <?php if($evsecons1old == "daemon") echo "selected" ?> value="daemon">openWB Duo Daemon </option>
 										<option <?php if($evsecons1old == "slaveeth") echo "selected" ?> value="slaveeth">Slave</option>
-										<option <?php if($evsecons1old == "ipevse") echo "selected" ?> value="ipevse">Satellit</option>
+										<?php $ipevsecons1v2 = ($evsecons1old == "ipevse" && $evseidlp2old == "1" && $ladeleistungs1modulold == "mpm3pmlllp2" && $mpmlp2ipold == $evseiplp2old)?>
+										<option <?php if($evsecons1old == "ipevse" && !$ipevsecons1v2) echo "selected" ?> value="ipevse" data-id="openwb satellite v1">Satellit</option>
+										<option <?php if($evsecons1old == "ipevse" && $ipevsecons1v2) echo "selected" ?> value="ipevse" data-id="openwb satellite v2">Satellit V2</option>
 									</optgroup>
 									<optgroup label="andere Ladepunkte">
 										<option <?php if($evsecons1old == "goe") echo "selected" ?> value="goe">Go-e</option>
@@ -2661,12 +2641,12 @@
 								Dies ist die richtige Option für eine fertige openWB Duo und bietet eine optimale und schnelle Auslesung.
 							</div>
 						</div>
-						<div id="evseconipevselp2" class="hide">
+						<div id="evseconipevselp2V1" class="hide">
 							<div class="form-group">
 								<div class="form-row mb-1">
-									<label for="evseiplp2" class="col-md-4 col-form-label">IP Adresse</label>
+									<label class="col-md-4 col-form-label">IP Adresse</label>
 									<div class="col">
-										<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="evseiplp2" id="evseiplp2" value="<?php echo $evseiplp2old ?>">
+										<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="evseiplp2" value="<?php echo $evseiplp2old ?>">
 										<span class="form-text small">
 											Gültige Werte IP Adresse im Format: 192.168.0.12<br>
 											Aufgedruckt auf dem Label der openWB.
@@ -2681,6 +2661,29 @@
 									</div>
 								</div>
 							</div>
+						</div>
+						<div id="evseconipevselp2V2" class="hide">
+							<div class="form-group">
+								<div class="form-row mb-1">
+									<label class="col-md-4 col-form-label">IP Adresse</label>
+									<div class="col">
+										<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" id="evseiplp2" name="evseiplp2" value="<?php echo $evseiplp2old ?>">
+										<span class="form-text small">
+											Gültige Werte IP Adresse im Format: 192.168.0.12<br>
+											Aufgedruckt auf dem Label der openWB.
+										</span>
+									</div>
+								</div>
+							</div>
+							<input type="hidden" name="evseidlp2" value="1">
+							<input type="hidden" name="ladeleistungs1modul" value="mpm3pmlllp2">
+							<input type="hidden" name="mpmlp2ip" id="evseiplllp2" value="<?php echo $evseiplp2old ?>">
+							<input type="hidden" name="mpmlp2id" value="105">
+							<script>
+								$('#evseiplp2').on("change", function(){
+									$('#evseiplllp2').val($(this).val());
+								});
+							</script>
 						</div>
 						<div id="openwb12s1v1" class="hide">
 							<input type="hidden" name="evseids1" value="1">
@@ -3100,7 +3103,7 @@
 									<optgroup label="universelle Module">
 										<option <?php if($socmodul1old == "soc_evcclp2") echo "selected" ?> value="soc_evcclp2">EVCC</option>
 										<option <?php if($socmodul1old == "soc_evnotifys1") echo "selected" ?> value="soc_evnotifys1">EVNotify</option>
-										<option <?php if($socmodul1old == "soc_http1") echo "selected" ?> value="soc_http1">HTTP</option>
+										<option <?php if($socmodul1old == "soc_httplp2") echo "selected" ?> value="soc_httplp2">HTTP</option>
 										<option <?php if($socmodul1old == "soc_manuallp2") echo "selected" ?> value="soc_manuallp2">Manuell + Berechnung</option>
 										<option <?php if($socmodul1old == "soc_mqtt") echo "selected" ?> value="soc_mqtt">MQTT</option>
 										<option <?php if($socmodul1old == "soc_tronitylp2") echo "selected" ?> value="soc_tronitylp2">Tronity</option>
@@ -3111,17 +3114,15 @@
 										<option <?php if($socmodul1old == "soc_i3s1") echo "selected" ?> value="soc_i3s1">BMW &amp; Mini</option>
 										<option <?php if($socmodul1old == "soc_kialp2") echo "selected" ?> value="soc_kialp2">Kia / Hyundai</option>
 										<option <?php if($socmodul1old == "soc_eqlp2") echo "selected" ?> value="soc_eqlp2">Mercedes EQ</option>
-										<option <?php if($socmodul1old == "soc_myopellp2") echo "selected" ?> value="soc_myopellp2">MyOpel</option>
-										<option <?php if($socmodul1old == "soc_mypeugeotlp2") echo "selected" ?> value="soc_mypeugeotlp2">MyPeugeot</option>
 										<option <?php if($socmodul1old == "soc_myrenaultlp2") echo "selected" ?> value="soc_myrenaultlp2">MyRenault</option>
-										<option <?php if($socmodul1old == "soc_leafs1") echo "selected" ?> value="soc_leafs1">Nissan Leaf</option>
+										<option <?php if($socmodul1old == "soc_leafs1") echo "selected" ?> value="soc_leafs1">Nissan</option>
 										<option <?php if($socmodul1old == "soc_psalp2") echo "selected" ?> value="soc_psalp2">PSA (Peugeot/Citroen/DS/Opel/Vauxhall)</option>
 										<option <?php if($socmodul1old == "soc_zoelp2") echo "selected" ?> value="soc_zoelp2">Renault Zoe alt</option>
+										<option <?php if($socmodul1old == "soc_ovmslp2") echo "selected" ?> value="soc_ovmslp2">OVMS</option>
 										<option <?php if($socmodul1old == "soc_teslalp2") echo "selected" ?> value="soc_teslalp2">Tesla</option>
 										<option <?php if($socmodul1old == "soc_vaglp2") echo "selected" ?> value="soc_vaglp2">VAG</option>
 										<option <?php if($socmodul1old == "soc_volvolp2") echo "selected" ?> value="soc_volvolp2">Volvo</option>
 										<option <?php if($socmodul1old == "soc_carnetlp2") echo "selected" ?> value="soc_carnetlp2">VW Carnet</option>
-										<option <?php if($socmodul1old == "soc_idlp2") echo "selected" ?> value="soc_idlp2">VW ID-alt</option>
 										<option <?php if($socmodul1old == "soc_vwidlp2") echo "selected" ?> value="soc_vwidlp2">VW ID</option>
 										<option <?php if($socmodul1old == "soc_zeronglp2") echo "selected" ?> value="soc_zeronglp2">Zero NG</option>
 									</optgroup>
@@ -3167,6 +3168,10 @@
 								Für VW Fahrzeuge. Es wird benötigt:<br>
 								- We Connect (ID) Account aktiv<br>
 								- We Connect ID App eingerichtet - auch für nicht-ID!<br>
+							</div>
+							<div id="socmovmsinfolp2" class="mt-1 alert alert-info hide">
+								Für Fahrzeuge mit OVMS Modul. Es wird benötigt:<br>
+								- OVMS Account in z.B. dexters-web.de<br>
 							</div>
 							<div id="socmuser2" class="hide">
 								<div class="form-group">
@@ -3278,7 +3283,7 @@
 										</div>
 									</div>
 									<div class="form-row mb-1">
-										<label for="soc_tesla_login_btn" class="col-md-4 col-form-label">Anmeldedaten prüfen</label>
+										<label class="col-md-4 col-form-label">Anmeldedaten prüfen</label>
 										<div class="col">
 											<button type="button" class="btn btn-success soc-tesla-login-btn" data-email="#soc_teslalp2_username" value="2">Bei Tesla anmelden</button>
 											<button type="button" class="btn btn-danger soc-tesla-clear-btn" value="2">Anmeldedaten entfernen</button>
@@ -3317,16 +3322,16 @@
 								</div>
 							</div>
 							<div id="socaiwayslp2" class="hide">
-                                <div class="form-group">
-                                    <div class="form-row mb-1">
-                                        <label for="soc_aiwayslp2_user" class="col-md-4 col-form-label">Account</label>
-                                        <div class="col">
-                                            <input class="form-control" type="text" name="soc_aiwayslp2_user" id="soc_aiwayslp2_user" value="<?php echo $soc_aiwayslp2_userold ?>">
-                                            <span class="form-text small">
-                                                Aiways Account Name (nicht die E-Mail-Adresse)
-                                            </span>
-                                        </div>
-                                    </div>
+								<div class="form-group">
+									<div class="form-row mb-1">
+										<label for="soc_aiwayslp2_user" class="col-md-4 col-form-label">Account</label>
+										<div class="col">
+											<input class="form-control" type="text" name="soc_aiwayslp2_user" id="soc_aiwayslp2_user" value="<?php echo $soc_aiwayslp2_userold ?>">
+											<span class="form-text small">
+												Aiways Account Name (nicht die E-Mail-Adresse)
+											</span>
+										</div>
+									</div>
 									<div class="form-row mb-1">
 										<label for="soc_aiwayslp2_pass" class="col-md-4 col-form-label">Passwort</label>
 										<div class="col">
@@ -3355,7 +3360,7 @@
 										</div>
 									</div>
 								</div>
-                            </div>
+							</div>
 							<div id="soccarnetlp2" class="hide">
 								<div class="form-group">
 									<div class="form-row mb-1">
@@ -3577,15 +3582,96 @@
 										</div>
 									</div>
 									<div class="form-row mb-1">
-										<label for="soci3intervall1" class="col-md-4 col-form-label">Verkürztes Intervall beim Laden</label>
+										<label for="i3captcha_tokens1" class="col-md-4 col-form-label">Captcha-Token</label>
 										<div class="col">
-											<input class="form-control" type="text" name="soci3intervall1" id="soci3intervall1" value="<?php echo $soci3intervall1old ?>">
+											<input class="form-control" type="text" name="i3captcha_tokens1" id="i3captcha_tokens1" value="<?php echo $i3captcha_tokens1old ?>">
 											<span class="form-text small">
-												Verkürzt das Abfrageintervall beim Laden auf xx Minuten
+												Zum erstmaligen Login z.B. nach einem Neustart ist ein <b>aktuelles Captcha-Token</b> notwendig.<br>
+												Dazu bitte folgende Schritte durchführen:<br>
+												1. in einem neuen Browser-Tab auf diese Seite gehen:<br>
+											</span>
+											<a target="_blank" rel="noopener noreferrer" href="https://bimmer-connected.readthedocs.io/en/stable/captcha/rest_of_world.html">Captcha Page</a>
+											<span class="form-text small">
+												(https://bimmer-connected.readthedocs.io/en/latest/captcha/rest_of_world.html)<br>
+												2. Dort falls angefragt das Captcha lösen und/oder "Ich bin ein Mensch" und dann Submit anclicken.<br>
+												Als Ergebnis wird ein sehr langer String angezeigt. <br>
+												3. Diesen String komplett mit <b>Copy&Paste</b> in das Feld Captcha-Token eingeben.<br>
+												4. Die Konfiguration speichern.<br>
+												5. <b>Fertig.</b> Ab jetzt wird das sog. Refresh-Token verwendet.<br>
+												Das erneute Abrufen des Captcha-Token sollte nur notwendig werden wenn die Datei mit dem Refresh-Token verloren wird, z.B. nach SD-Kartentausch.<br>
+												<b>Achtung: Das Captcha-Token kann nur einmal verwendet werden und gilt nur kurze Zeit!</b>
 											</span>
 										</div>
 									</div>
+									<div class="form-row mb-1">
+										<label for="soci3intervall1" class="col-md-4 col-form-label">Abfrageintervall</label>
+										<div class="col">
+											<input class="form-control" type="text" name="soci3intervall1" id="soci3intervall1" value="<?php echo $soci3intervall1old ?>">
+											<span class="form-text small">
+												Abfrageintervall in Minuten
+											</span>
+										</div>
+									</div>
+									<div class="form-row mb-1">
+										<label class="col-md-4 col-form-label">Kombiniere SoC Modul und manuelle Berechnung</label>
+										<div class="col">
+											<div class="btn-group btn-group-toggle btn-block" data-toggle="buttons">
+												<label class="btn btn-outline-info<?php if($i3_soccalclp2old == 0) echo " active" ?>">
+													<input type="radio" name="i3_soccalclp2" id="i3_soccalclp2Off" value="0"<?php if($i3_soccalclp2old == 0) echo " checked=\"checked\"" ?>>Nein
+												</label>
+												<label class="btn btn-outline-info<?php if($i3_soccalclp2old == 1) echo " active" ?>">
+													<input type="radio" name="i3_soccalclp2" id="i3_soccalclp2On" value="1"<?php if($i3_soccalclp2old == 1) echo " checked=\"checked\"" ?>>Ja
+												</label>
+											</div>
+											<span class="form-text small">
+												Wenn Ja gewählt wird, wird der SoC regelmäßig über die API abgerufen. Während des Ladens wird der SoC dann anhand des Zählerstands im Ladepunkt berechnet.<br>
+												Bei Nein wird immer der SoC über die API abgefragt.
+											</span>
+										</div>
+									</div>
+									<div id="i3manualcalclp2div" class="hide">
+										<div class="form-row mb-1">
+											<label for="i3_akkuglp2" class="col-md-4 col-form-label">Akkugröße in kWh bei manueller Berechnung</label>
+											<div class="col">
+												<input class="form-control" type="number" min="1" step="1" name="akkuglp2" id="i3_akkuglp2" value="<?php echo $akkuglp2old ?>">
+												<span class="form-text small">
+													Angabe der Netto-Kapazität der Fahrzeugbatterie in kWh. Dient zur Berechnung des manuellen SoC.<br>
+												</span>
+											</div>
+										</div>
+										<div class="form-row mb-1">
+											<label for="i3_wirkungsgradlp2" class="col-md-4 col-form-label">Wirkungsgrad Ladeelektronik bei manueller Berechnung</label>
+											<div class="col">
+												<input class="form-control" type="number" min="1" step="1" max="100" name="wirkungsgradlp2" id="i3_wirkungsgradlp2" value="<?php echo $wirkungsgradlp2old ?>">
+												<span class="form-text small">
+													Wert in Prozent, der den gemittelten Wirkungsgrad der Ladeelektronik angibt.<br>
+													Durch Verluste in der Ladeelektronik (z. B. Umwandlung Wechselspannung in Gleichspannung) gelangt nicht die komplette Energie, welche durch den Zähler in der Wallbox gemesen wird, im Akku des Fahrzeugs.
+													Der anzugebende Wert liegt bei gängigen Fahrzeugen im Bereich 90-95%.<br>
+													Liegen die Angaben der Wallbox und des Fahrzeugs nach der Ladung mehrere Prozent auseinander, dann kann mit dieser Einstellung eine Feinabstimmung erfolgen:<br>
+													SoC an der Wallbox zu hoch: Wirkungsgrad um ein paar Prozent reduzieren<br>
+													SoC an der Wallbox zu gering: Wirkungsgrad um ein paar Prozent erhöhen
+												</span>
+											</div>
+										</div>
+									</div>
 								</div>
+								<script>
+								$(function() {
+									function visibility_i3_soccalclp2() {
+										if($('#i3_soccalclp2Off').prop("checked")) {
+											hideSection('#i3manualcalclp2div');
+										} else {
+											showSection('#i3manualcalclp2div');
+										}
+									}
+
+									$('input[type=radio][name=i3_soccalclp2]').change(function(){
+										visibility_i3_soccalclp2();
+									});
+
+									visibility_i3_soccalclp2();
+								});
+								</script>
 							</div>
 							<div id="socmpin2" class="hide">
 								<div class="form-group">
@@ -3594,7 +3680,35 @@
 										<div class="col">
 											<input class="form-control" type="password" name="soc2pin" id="soc2pin" value="<?php echo $soc2pinold ?>">
 											<span class="form-text small">
-												PIN des Accounts.
+												PIN des Accounts.<br>
+												Bei Smart EQ kommt die PIN (OTP Code) via Email.<br>
+											</span>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div id="socmserver2" class="hide">
+								<div class="form-group">
+									<div class="form-row mb-1">
+										<label for="soc2server" class="col-md-4 col-form-label">Server URL</label>
+										<div class="col">
+											<input class="form-control" type="text" name="soc2server" id="soc2server" value="<?php echo $soc2serverold ?>">
+											<span class="form-text small">
+												URL des OVMS Servers incl. Port.<br>
+												z.B. https://ovms.dexters-web.de:6869<br>
+											</span>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div id="socmvehicleid2" class="hide">
+								<div class="form-group">
+									<div class="form-row mb-1">
+										<label for="soc2vehicleid" class="col-md-4 col-form-label">Vehicle Id</label>
+										<div class="col">
+											<input class="form-control" type="text" name="soc2vehicleid" id="soc2vehicleid" value="<?php echo $soc2vehicleidold ?>">
+											<span class="form-text small">
+												OVMS vehicleId des Fahrzeugs.
 											</span>
 										</div>
 									</div>
@@ -3612,196 +3726,6 @@
 										</div>
 									</div>
 								</div>
-							</div>
-							<div id="socmypeugeotlp2" class="hide">
-								<div class="form-group">
-									<div class="card-text alert alert-info">
-										Die notwendige <a href="https://developer.groupe-psa.io/webapi/b2c/quickstart/connect/#connect-your-app" target="_blank" rel="noopener noreferrer">API</a> ist derzeit von PSA noch nicht freigegeben, daher funktionieren über den dokumentierten Weg erstellte Client-IDs und Client-Secrets leider noch nicht.<br>
-										Auf eigenes Risiko kann diese Anleitung genutzt werden, dies hat bisher zu guten Ergebnissen geführt und wird durch die openWB Community (nicht openWB selbst) gepflegt. <a href="https://github.com/snaptec/openWB/wiki/Fahrzeugspezifische-Konfigurationen#welches-soc-modul-kann-verwendet-werden" target="_blank" rel="noopener noreferrer">https://github.com/snaptec/openWB/wiki/Fahrzeugspezifische-Konfigurationen#welches-soc-modul-kann-verwendet-werden</a><br> 
-										Weitere Diskussion zu diesem Thema findet sich <a href="https://openwb.de/forum/viewtopic.php?f=5&t=1206" target="_blank" rel="noopener noreferrer">im Forum.</a>
-									</div>
-									<div class="form-row mb-1">
-										<label for="mypeugeot_userlp2" class="col-md-4 col-form-label">Benutzername</label>
-										<div class="col">
-											<input class="form-control" type="text" name="mypeugeot_userlp2" id="mypeugeot_userlp2" value="<?php echo $mypeugeot_userlp2old ?>">
-										</div>
-									</div>
-									<div class="form-row mb-1">
-										<label for="mypeugeot_passlp2" class="col-md-4 col-form-label">Passwort</label>
-										<div class="col">
-											<input class="form-control" type="password" name="mypeugeot_passlp2" id="mypeugeot_passlp2" value="<?php echo $mypeugeot_passlp2old ?>">
-										</div>
-									</div>
-									<div class="form-row mb-1">
-										<label for="mypeugeot_clientidlp2" class="col-md-4 col-form-label">Client-ID</label>
-										<div class="col">
-											<input class="form-control" type="text" name="mypeugeot_clientidlp2" id="mypeugeot_clientidlp2" value="<?php echo $mypeugeot_clientidlp2old ?>">
-										</div>
-									</div>
-									<div class="form-row mb-1">
-										<label for="mypeugeot_clientsecretlp2" class="col-md-4 col-form-label">Client-Secret</label>
-										<div class="col">
-											<input class="form-control" type="text" name="mypeugeot_clientsecretlp2" id="mypeugeot_clientsecretlp2" value="<?php echo $mypeugeot_clientsecretlp2old ?>">
-										</div>
-									</div>
-									<div class="form-row mb-1">
-									<label class="col-md-4 col-form-label">Kombiniere Peugeot SoC Modul und manuelle Berechnung</label>
-										<div class="col">
-											<div class="btn-group btn-group-toggle btn-block" data-toggle="buttons">
-												<label class="btn btn-outline-info<?php if($mypeugeot_soccalclp2old == 0) echo " active" ?>">
-													<input type="radio" name="mypeugeot_soccalclp2" id="mypeugeot_soccalclp2Off" value="0"<?php if($mypeugeot_soccalclp2old == 0) echo " checked=\"checked\"" ?>>Nein
-												</label>
-												<label class="btn btn-outline-info<?php if($mypeugeot_soccalclp2old == 1) echo " active" ?>">
-													<input type="radio" name="mypeugeot_soccalclp2" id="mypeugeot_soccalclp2On" value="1"<?php if($mypeugeot_soccalclp2old == 1) echo " checked=\"checked\"" ?>>Ja
-												</label>
-											</div>
-											<span class="form-text small">
-												Aktuell liefert die Peugeot API keine SoC Aktualisierung während des Ladevorgangs.<br>
-												Wenn Ja gewählt wird, wird der SoC vor dem Laden über die API abgerufen. Während des Ladens wird der SoC dann anhand des Zählerstands im Ladepunkt berechnet. Dies erlaubt eine SoC-gesteuerte Ladung.<br>
-												Bei Nein wird immer der SoC über die API abgefragt. SoC gesteuerte Ladung ist erst möglich nachdem PSA den SoC auch während des Ladens übermittelt.
-											</span>
-										</div>
-										<div id="peugeotmanualcalclp2div" class="hide">
-											<div class="form-row mb-1">
-												<label for="peugeot_akkuglp2" class="col-md-4 col-form-label">Akkugröße in kWh bei manueller Berechnung</label>
-												<div class="col">
-													<input class="form-control" type="number" min="1" step="1" name="akkuglp2" id="peugeot_akkuglp2" value="<?php echo $akkuglp2old ?>">
-													<span class="form-text small">
-														Angabe der Netto-Kapazität der Fahrzeugbatterie in kWh. Dient zur Berechnung des manuellen SoC.<br>
-														Für Peugeot e208 und e2008: 46kWh
-													</span>
-												</div>
-											</div>
-											<div class="form-row mb-1">
-												<label for="peugeot_wirkungsgradlp2" class="col-md-4 col-form-label">Wirkungsgrad Ladeelektronik bei manueller Berechnung</label>
-												<div class="col">
-													<input class="form-control" type="number" min="1" step="1" max="100" name="wirkungsgradlp2" id="peugeot_wirkungsgradlp2" value="<?php echo $wirkungsgradlp2old ?>">
-													<span class="form-text small">
-														Wert in Prozent, der den gemittelten Wirkungsgrad der Ladeelektronik angibt.<br>
-														Für Peugeot e208 und e2008: 94-96 Prozent
-														Durch Verluste in der Ladeelektronik (z. B. Umwandlung Wechselspannung in Gleichspannung) gelangt nicht die komplette Energie, welche durch den Zähler in der Wallbox gemesen wird, im Akku des Fahrzeugs.
-														Der anzugebende Wert liegt bei gängigen Fahrzeugen im Bereich 90-95%. Eine Ausnahme stellt der Zoe dar, dessen Chameleonlader je nach Modellversion und freigegebener Leistung der Wallbox teilweise nur auf ca. 50% kommt.<br>
-														Liegen die Angaben der Wallbox und des Fahrzeugs nach der Ladung mehrere Prozent auseinander, dann kann mit dieser Einstellung eine Feinabstimmung erfolgen:<br>
-														SoC an der Wallbox zu hoch: Wirkungsgrad um ein paar Prozent reduzieren<br>
-														SoC an der Wallbox zu gering: Wirkungsgrad um ein paar Prozent erhöhen
-													</span>
-												</div>
-											</div>
-										</div>
-									</div>
-								</div>
-								<script>
-								$(function() {
-									function visibility_mypeugeot_soccalclp2() {
-										if($('#mypeugeot_soccalclp2Off').prop("checked")) {
-											hideSection('#peugeotmanualcalclp2div');
-										} else {
-											showSection('#peugeotmanualcalclp2div');
-										}
-									}
-
-									$('input[type=radio][name=mypeugeot_soccalclp2]').change(function(){
-										visibility_mypeugeot_soccalclp2();
-									});
-
-									visibility_mypeugeot_soccalclp2();
-								});
-								</script>
-							</div>
-							<div id="socmyopellp2" class="hide">
-								<div class="form-group">
-									<div class="card-text alert alert-info">
-										Die notwendige <a href="https://developer.groupe-psa.io/webapi/b2c/quickstart/connect/#connect-your-app" target="_blank" rel="noopener noreferrer">API</a> ist derzeit von PSA noch nicht freigegeben, daher funktionieren über den dokumentierten Weg erstellte Client-IDs und Client-Secrets leider noch nicht.<br>
-										Auf eigenes Risiko kann diese Anleitung genutzt werden, dies hat bisher zu guten Ergebnissen geführt und wird durch die openWB Community (nicht openWB selbst) gepflegt. <a href="https://github.com/snaptec/openWB/wiki/Fahrzeugspezifische-Konfigurationen#welches-soc-modul-kann-verwendet-werden" target="_blank" rel="noopener noreferrer">https://github.com/snaptec/openWB/wiki/Fahrzeugspezifische-Konfigurationen#welches-soc-modul-kann-verwendet-werden</a><br> 
-										Weitere Diskussion zu diesem Thema findet sich <a href="https://openwb.de/forum/viewtopic.php?f=5&t=1206" target="_blank" rel="noopener noreferrer">im Forum.</a>
-									</div>
-									<div class="form-row mb-1">
-										<label for="myopel_userlp2" class="col-md-4 col-form-label">Benutzername</label>
-										<div class="col">
-											<input class="form-control" type="text" name="myopel_userlp2" id="myopel_userlp2" value="<?php echo $myopel_userlp2old ?>">
-										</div>
-									</div>
-									<div class="form-row mb-1">
-										<label for="myopel_passlp2" class="col-md-4 col-form-label">Passwort</label>
-										<div class="col">
-											<input class="form-control" type="password" name="myopel_passlp2" id="myopel_passlp2" value="<?php echo $myopel_passlp2old ?>">
-										</div>
-									</div>
-									<div class="form-row mb-1">
-										<label for="myopel_clientidlp2" class="col-md-4 col-form-label">Client-ID</label>
-										<div class="col">
-											<input class="form-control" type="text" name="myopel_clientidlp2" id="myopel_clientidlp2" value="<?php echo $myopel_clientidlp2old ?>">
-										</div>
-									</div>
-									<div class="form-row mb-1">
-										<label for="myopel_clientsecretlp2" class="col-md-4 col-form-label">Client-Secret</label>
-										<div class="col">
-											<input class="form-control" type="text" name="myopel_clientsecretlp2" id="myopel_clientsecretlp2" value="<?php echo $myopel_clientsecretlp2old ?>">
-										</div>
-									</div>
-									<div class="form-row mb-1">
-									<label class="col-md-4 col-form-label">Kombiniere MyOpel SoC Modul und manuelle Berechnung</label>
-										<div class="col">
-											<div class="btn-group btn-group-toggle btn-block" data-toggle="buttons">
-												<label class="btn btn-outline-info<?php if($myopel_soccalclp2old == 0) echo " active" ?>">
-													<input type="radio" name="myopel_soccalclp2" id="myopel_soccalclp2Off" value="0"<?php if($myopel_soccalclp2old == 0) echo " checked=\"checked\"" ?>>Nein
-												</label>
-												<label class="btn btn-outline-info<?php if($myopel_soccalclp2old == 1) echo " active" ?>">
-													<input type="radio" name="myopel_soccalclp2" id="myopel_soccalclp2On" value="1"<?php if($myopel_soccalclp2old == 1) echo " checked=\"checked\"" ?>>Ja
-												</label>
-											</div>
-											<span class="form-text small">
-												Aktuell liefert die Opel API keine SoC Aktualisierung während des Ladevorgangs.<br>
-												Wenn Ja gewählt wird, wird der SoC vor dem Laden über die API abgerufen. Während des Ladens wird der SoC dann anhand des Zählerstands im Ladepunkt berechnet. Dies erlaubt eine SoC-gesteuerte Ladung.<br>
-												Bei Nein wird immer der SoC über die API abgefragt. SoC gesteuerte Ladung ist erst möglich nachdem Opel/PSA den SoC auch während des Ladens übermittelt.
-											</span>
-										</div>
-										<div id="opelmanualcalclp2div" class="hide">
-											<div class="form-row mb-1">
-												<label for="opel_akkuglp2" class="col-md-4 col-form-label">Akkugröße in kWh bei manueller Berechnung</label>
-												<div class="col">
-													<input class="form-control" type="number" min="1" step="1" name="akkuglp2" id="opel_akkuglp2" value="<?php echo $akkuglp2old ?>">
-													<span class="form-text small">
-														Angabe der Netto-Kapazität der Fahrzeugbatterie in kWh. Dient zur Berechnung des manuellen SoC.<br>
-														Für Corsa-e: 46kWh
-													</span>
-												</div>
-											</div>
-											<div class="form-row mb-1">
-												<label for="opel_wirkungsgradlp2" class="col-md-4 col-form-label">Wirkungsgrad Ladeelektronik bei manueller Berechnung</label>
-												<div class="col">
-													<input class="form-control" type="number" min="1" step="1" max="100" name="wirkungsgradlp2" id="opel_wirkungsgradlp2" value="<?php echo $wirkungsgradlp2old ?>">
-													<span class="form-text small">
-														Wert in Prozent, der den gemittelten Wirkungsgrad der Ladeelektronik angibt.<br>
-														Für Corsa-e: 94-96 Prozent<br>
-														Durch Verluste in der Ladeelektronik (z. B. Umwandlung Wechselspannung in Gleichspannung) gelangt nicht die komplette Energie, welche durch den Zähler in der Wallbox gemesen wird, im Akku des Fahrzeugs.
-														Der anzugebende Wert liegt bei gängigen Fahrzeugen im Bereich 90-95%. Eine Ausnahme stellt der Zoe dar, dessen Chameleonlader je nach Modellversion und freigegebener Leistung der Wallbox teilweise nur auf ca. 50% kommt.<br>
-														Liegen die Angaben der Wallbox und des Fahrzeugs nach der Ladung mehrere Prozent auseinander, dann kann mit dieser Einstellung eine Feinabstimmung erfolgen:<br>
-														SoC an der Wallbox zu hoch: Wirkungsgrad um ein paar Prozent reduzieren<br>
-														SoC an der Wallbox zu gering: Wirkungsgrad um ein paar Prozent erhöhen
-													</span>
-												</div>
-											</div>
-										</div>
-									</div>
-								</div>
-								<script>
-								$(function() {
-									function visibility_myopel_soccalclp2() {
-										if($('#myopel_soccalclp2Off').prop("checked")) {
-											hideSection('#opelmanualcalclp2div');
-										} else {
-											showSection('#opelmanualcalclp2div');
-										}
-									}
-
-									$('input[type=radio][name=myopel_soccalclp2]').change(function(){
-										visibility_myopel_soccalclp2();
-									});
-
-									visibility_myopel_soccalclp2();
-								});
-								</script>
 							</div>
 							<div id="socpsalp2" class="hide">
 								<div class="form-group">
@@ -3844,6 +3768,15 @@
 										<label for="psa_clientsecretlp2" class="col-md-4 col-form-label">Client-Secret</label>
 										<div class="col">
 											<input class="form-control" type="text" name="psa_clientsecretlp2" id="psa_clientsecretlp2" value="<?php echo $psa_clientsecretlp2old ?>">
+										</div>
+									</div>
+									<div class="form-row mb-1">
+										<label for="psa_vinlp2" class="col-md-4 col-form-label">VIN</label>
+										<div class="col">
+											<input class="form-control" type="text" name="psa_vinlp2" id="psa_vinlp2" value="<?php echo $psa_vinlp2old ?>">
+											<span class="form-text small">
+												VIN des gewünschten Fahrzeugs. Wird keine VIN angegeben, wird das erste Fahrzeug aus dem Account verwendet.
+											</span>
 										</div>
 									</div>
 									<div class="form-row mb-1">
@@ -3925,7 +3858,7 @@
 										<label class="col-md-4 col-form-label"></label>
 										<div class="col">
 											<span class="form-text small font-weight-bold">
-												Das Mercedes EQ SoC Modul basiert auf der Electric Vehicle Status API des Mercedes Developer Programms. Um die API zu nutzen, muss ein eigener Developer Zugang bei Mercedes beantragt werden. <br/>
+												Das Mercedes EQ SoC Modul basiert auf der Electric Vehicle Status API des Mercedes Developer Programms. Um die API zu nutzen, muss ein eigener Developer Zugang bei Mercedes beantragt werden. <br>
 												<a href="https://github.com/snaptec/openWB/wiki/EV-SoC-Modul-Mercedes-EQ" target="_blank" rel="noopener noreferrer">Eine Step-by-Step Anleitung findet ihr hier</a>
 											</span>
 										</div>
@@ -3957,8 +3890,8 @@
 									<div class="form-row mb-1">
 										<label class="col-md-4 col-form-label"></label>
 										<div class="col">
-											<span class="form-text small"><b>Wichtig: Nach dem Eintragen der Werte müssen diese gespeichert werden und danach einmalig der folgende Link aufgerufen werden<br/>
-											<a href="<?php echo "https://id.mercedes-benz.com/as/authorization.oauth2?response_type=code&state=lp2&client_id=" . $soc_eq_client_id_lp2old . "&redirect_uri=" . $soc_eq_cb_lp2old . "&scope=mb:vehicle:mbdata:evstatus%20offline_access"?>" target="_blank" rel="noopener noreferrer">HIER bei Mercedes Me anmelden</a></b>
+											<span class="form-text small"><b>Wichtig: Nach dem Eintragen der Werte müssen diese gespeichert werden und danach einmalig der folgende Link aufgerufen werden<br>
+											<a href="<?php echo "https://ssoalpha.dvb.corpinter.net/v1/auth?response_type=code&state=lp2&client_id=" . $soc_eq_client_id_lp2old . "&redirect_uri=" . $soc_eq_cb_lp2old . "&scope=mb:vehicle:mbdata:evstatus%20offline_access%20openid"?>" target="_blank" rel="noopener noreferrer">HIER bei Mercedes Me anmelden</a></b>
 											</span>
 										</div>
 									</div>
@@ -3973,7 +3906,7 @@
 												<label class="btn btn-outline-info<?php if($kia_soccalclp2old == 0) echo " active" ?>">
 													<input type="radio" name="kia_soccalclp2" id="kia_soccalclp2Off" value="0"<?php if($kia_soccalclp2old == 0) echo " checked=\"checked\"" ?>>Nein
 												</label>
-												<label class="btn btn-outline-info<?php if($kia_soccalclp1old == 1) echo " active" ?>">
+												<label class="btn btn-outline-info<?php if($kia_soccalclp2old == 1) echo " active" ?>">
 													<input type="radio" name="kia_soccalclp2" id="kia_soccalclp2On" value="1"<?php if($kia_soccalclp2old == 1) echo " checked=\"checked\"" ?>>Ja
 												</label>
 											</div>
@@ -4027,7 +3960,7 @@
 									</div>
 									<div id="kia_abrp_enable_2div" class="hide">
 										<div class="form-row mb-1">
-											<label for="kia_abrp_token_2" class="col-md-4 col-form-label">ABRP Token</label>
+											<label for="kia_abrp_token_2_text" class="col-md-4 col-form-label">ABRP Token</label>
 											<div class="col">
 												<input class="form-control" type="text" name="kia_abrp_token_2" id="kia_abrp_token_2_text" value="<?php echo $kia_abrp_token_2old ?>">
 												<span class="form-text small">
@@ -4159,7 +4092,7 @@
 														<i class="fas fa-sync"></i>
 													</div>
 												</div>
-												<select id="soc_tronity_select_vehicle_lp2" class="form-control" readonly>
+												<select id="soc_tronity_select_vehicle_lp2" class="form-control">
 													<option value="">Bitte aktualisieren</option>
 												</select>
 											</div>
@@ -4247,7 +4180,7 @@
 														<i class="fas fa-sync"></i>
 													</div>
 												</div>
-												<select id="soc_evcc_select_vehicle_lp2" class="form-control" readonly>
+												<select id="soc_evcc_select_vehicle_lp2" class="form-control">
 													<option value="">-- Bitte aktualisieren --</option>
 												</select>
 											</div>
@@ -4257,7 +4190,7 @@
 										</div>
 									</div>
 									<div class="form-row mb-1">
-										<label for="soc_evcc_vehicle_id_lp2" class="col-md-4 col-form-label">Fahrzeug Typ</label>
+										<label for="soc_evcc_type_lp2" class="col-md-4 col-form-label">Fahrzeug Typ</label>
 										<div class="col">
 											<div class="input-group">
 												<div class="input-group-prepend">
@@ -4299,6 +4232,17 @@
 											</span>
 										</div>
 									</div>
+									<div id="socevccpinlp2" class="hide">
+										<div class="form-row mb-1">
+											<label for="soc_evcc_pin_lp2" class="col-md-4 col-form-label">PIN</label>
+											<div class="col">
+												<input class="form-control" type="text" name="soc_evcc_pin_lp2" id="soc_evcc_pin_lp2" value="<?php echo $soc_evcc_pin_lp2old ?>">
+												<span class="form-text small">
+													Sicherheits-PIN der App des Fahrzeugs
+												</span>
+											</div>
+										</div>
+									</div>
 									<div class="form-row mb-1">
 										<label for="soc_evcc_token_lp2" class="col-md-4 col-form-label">Token</label>
 										<div class="col">
@@ -4310,8 +4254,20 @@
 									</div>
 								</div>
 								<script>
+									function visibility_socevccpinlp2() {
+										if($('#soc_evcc_type_lp2').val() == 'fiat') {
+											showSection('#socevccpinlp2');
+										} else {
+											hideSection('#socevccpinlp2');
+										}
+									}
+
+									$(function() {
+										visibility_socevccpinlp2();
+									});
 									$('#soc_evcc_select_vehicle_lp2').change(function(){
 										$('#soc_evcc_type_lp2').val($(this).val());
+										visibility_socevccpinlp2();
 									});
 
 									$('#soc_evcc_load_vehicles_lp2').click(function(){
@@ -4392,7 +4348,8 @@
 							hideSection('#evseconextopenwblp2');
 							hideSection('#evseconowbprolp2');
 							hideSection('#evsecondaemonlp2');
-							hideSection('#evseconipevselp2');
+							hideSection('#evseconipevselp2V1');
+							hideSection('#evseconipevselp2V2');
 							hideSection('#evseconmqtts1');
 							hideSection('#evsecontwcmanagers1');
 
@@ -4404,16 +4361,23 @@
 									case "openwb series1/2 duo v2":
 										showSection('#openwb12s1v2');
 									break;
-						       			default:
+										default:
 										showSection('#evseconmbs1');
 										showSection('#llmodullp2');
 										display_llmp2();
 								}
 							}
 							if($('#evsecons1').val() == 'ipevse') {
-								showSection('#evseconipevselp2');
-								showSection('#llmodullp2');
-								display_llmp2();
+								switch( $("#evsecons1 option:selected").attr('data-id') ){
+									case "openwb satellite v1":
+										showSection('#evseconipevselp2V1');
+										showSection('#llmodullp2');
+										display_llmp2();
+									break;
+									case "openwb satellite v2":
+										showSection('#evseconipevselp2V2');
+									break;
+								}
 							}
 							if($('#evsecons1').val() == 'dac') {
 								showSection('#evsecondacs1');
@@ -4496,6 +4460,7 @@
 							hideSection('#socmodullp2');
 							hideSection('#socmqtt1');
 							hideSection('#socmtype2');
+							hideSection('#socmserver2');
 							hideSection('#socmuser2');
 							hideSection('#socmpass2');
 							hideSection('#socmpin2');
@@ -4510,10 +4475,9 @@
 							hideSection('#socmyrenaultlp2');
 							hideSection('#soccarnetlp2');
 							hideSection('#socmzeronglp2');
-							hideSection('#socmypeugeotlp2');
-							hideSection('#socmyopellp2');
 							hideSection('#socpsalp2');
 							hideSection('#socmvin2');
+							hideSection('#socmvehicleid2');
 							hideSection('#socmintervall2');
 							hideSection('#socmintervallladen2');
 							hideSection('#socmanuallp2');
@@ -4522,6 +4486,7 @@
 							hideSection('#socmkialp2');
 							hideSection('#socoldevccwarninglp2');
 							hideSection('#socmvwidinfolp2');
+							hideSection('#socmovmsinfolp2');
 							hideSection('#socsupportinfolp2');
 							hideSection('#socnosupportinfolp2');
 
@@ -4535,7 +4500,7 @@
 								showSection('#socsupportinfolp2');
 								showSection('#socmqtt1');
 							}
-							if($('#socmodul1').val() == 'soc_http1') {
+							if($('#socmodul1').val() == 'soc_httplp2') {
 								$('#socsuportlinklp2').attr('href', 'https://openwb.de/forum/viewtopic.php?f=12&t=3143')
 								showSection('#socsupportinfolp2');
 								showSection('#socmhttp1');
@@ -4543,8 +4508,8 @@
 								showSection('#socmintervallladen2');
 							}
 							if($('#socmodul1').val() == 'soc_aiwayslp2') {
-                                showSection('#socaiwayslp2');
-                            }
+								showSection('#socaiwayslp2');
+							}
 							if($('#socmodul1').val() == 'soc_audilp2') {
 								showSection('#socoldevccwarninglp2');
 								showSection('#socmuser2');
@@ -4561,12 +4526,6 @@
 								showSection('#socmintervall2');
 								showSection('#socmkialp2');
 							}
-							if($('#socmodul1').val() == 'soc_idlp2') {
-								showSection('#socoldevccwarninglp2');
-								showSection('#socmuser2');
-								showSection('#socmpass2');
-								showSection('#socmvin2');
-							}
 							if($('#socmodul1').val() == 'soc_vwidlp2') {
 								$('#socsuportlinklp2').attr('href', 'https://openwb.de/forum/viewtopic.php?f=12&p=58178')
 								showSection('#socsupportinfolp2');
@@ -4574,6 +4533,17 @@
 								showSection('#socmuser2');
 								showSection('#socmpass2');
 								showSection('#socmvin2');
+								showSection('#socmintervall2');
+								showSection('#socmintervallladen2');
+							}
+							if($('#socmodul1').val() == 'soc_ovmslp2') {
+								$('#socsuportlinklp2').attr('href', 'https://forum.openwb.de/viewtopic.php?t=9278')
+								showSection('#socsupportinfolp2');
+								showSection('#socmovmsinfolp2');
+								showSection('#socmserver2');
+								showSection('#socmuser2');
+								showSection('#socmpass2');
+								showSection('#socmvehicleid2');
 								showSection('#socmintervall2');
 								showSection('#socmintervallladen2');
 							}
@@ -4625,12 +4595,6 @@
 							}
 							if($('#socmodul1').val() == 'soc_zeronglp2') {
 								showSection('#socmzeronglp2');
-							}
-							if($('#socmodul1').val() == 'soc_mypeugeotlp2') {
-								showSection('#socmypeugeotlp2');
-							}
-							if($('#socmodul1').val() == 'soc_myopellp2') {
-								showSection('#socmyopellp2');
 							}
 							if($('#socmodul1').val() == 'soc_psalp2') {
 								showSection('#socpsalp2');
@@ -4727,7 +4691,9 @@
 										<option <?php if($evsecons2old == "extopenwb") echo "selected" ?> value="extopenwb">externe openWB</option>
 										<option <?php if($evsecons2old == "owbpro") echo "selected" ?> value="owbpro">openWB Pro</option>
 										<option <?php if($evsecons2old == "thirdeth") echo "selected" ?> value="thirdeth">dritter Ladepunkt</option>
-										<option <?php if($evsecons2old == "ipevse") echo "selected" ?> value="ipevse">Satellit</option>
+										<?php $ipevsecons2v2 = ($evsecons2old == "ipevse" && $evseidlp3old == "1" && $ladeleistungs2modulold == "mpm3pmlllp3" && $mpmlp3ipold == $evseiplp3old)?>
+										<option <?php if($evsecons2old == "ipevse" && !$ipevsecons2v2) echo "selected" ?> value="ipevse" data-id="openwb satellite v1">Satellit</option>
+										<option <?php if($evsecons2old == "ipevse" && $ipevsecons2v2) echo "selected" ?> value="ipevse" data-id="openwb satellite v2">Satellit V2</option>
 									</optgroup>
 									<optgroup label="andere Ladepunkte">
 										<option <?php if($evsecons2old == "goe") echo "selected" ?> value="goe">Go-e</option>
@@ -4784,12 +4750,12 @@
 							</div>
 						</div>
 
-						<div id="evseconipevselp3" class="hide">
+						<div id="evseconipevselp3V1" class="hide">
 							<div class="form-group">
 								<div class="form-row mb-1">
-									<label for="evseiplp3" class="col-md-4 col-form-label">IP Adresse</label>
+									<label class="col-md-4 col-form-label">IP Adresse</label>
 									<div class="col">
-										<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="evseiplp3" id="evseiplp3" value="<?php echo $evseiplp3old ?>">
+										<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="evseiplp3" value="<?php echo $evseiplp3old ?>">
 										<span class="form-text small">
 											Gültige Werte IP Adresse im Format: 192.168.0.12<br>
 											Aufgedruckt auf dem Label der openWB.
@@ -4804,6 +4770,29 @@
 									</div>
 								</div>
 							</div>
+						</div>
+						<div id="evseconipevselp3V2" class="hide">
+							<div class="form-group">
+								<div class="form-row mb-1">
+									<label for="evseiplp3" class="col-md-4 col-form-label">IP Adresse</label>
+									<div class="col">
+										<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="evseiplp3" id="evseiplp3" value="<?php echo $evseiplp3old ?>">
+										<span class="form-text small">
+											Gültige Werte IP Adresse im Format: 192.168.0.12<br>
+											Aufgedruckt auf dem Label der openWB.
+										</span>
+									</div>
+								</div>
+							</div>
+							<input type="hidden" name="evseidlp3" value="1">
+							<input type="hidden" name="ladeleistungs2modul" value="mpm3pmlllp3">
+							<input type="hidden" name="mpmlp3ip" id="evseiplllp3" value="<?php echo $evseiplp3old ?>">
+							<input type="hidden" name="mpmlp3id" value="105">
+							<script>
+								$('#evseiplp3').on("change", function(){
+									$('#evseiplllp3').val($(this).val());
+								});
+							</script>
 						</div>
 						<div id="evseconmbs2" class="hide">
 							<div class="form-group">
@@ -5084,7 +5073,8 @@
 							hideSection('#evseconswifis2');
 							hideSection('#llmodullp3');
 							hideSection('#evsecongoes2');
-							hideSection('#evseconipevselp3');
+							hideSection('#evseconipevselp3V1');
+							hideSection('#evseconipevselp3V2');
 							hideSection('#evseconextopenwblp3');
 							hideSection('#evseconowbprolp3');
 							hideSection('#evseconthirdeth');
@@ -5121,9 +5111,16 @@
 								showSection('#evsecongoes2');
 							}
 							if($('#evsecons2').val() == 'ipevse') {
-								showSection('#evseconipevselp3');
-								showSection('#llmodullp3');
-								display_llmp3();
+								switch( $("#evsecons2 option:selected").attr('data-id') ){
+									case "openwb satellite v1":
+										showSection('#evseconipevselp3V1');
+										showSection('#llmodullp3');
+										display_llmp3();
+									break;
+									case "openwb satellite v2":
+										showSection('#evseconipevselp3V2');
+									break;
+								}
 							}
 						}
 
@@ -5218,7 +5215,9 @@
 										<optgroup label="openWB">
 											<option <?php if(${'evseconlp'.$chargepointNum.'old'} == "extopenwb") echo "selected" ?> value="extopenwb">externe openWB</option>
 											<option <?php if(${'evseconlp'.$chargepointNum.'old'} == "owbpro") echo "selected" ?> value="owbpro">openWB Pro</option>
-											<option <?php if(${'evseconlp'.$chargepointNum.'old'} == "ipevse") echo "selected" ?> value="ipevse">Satellit</option>
+											<?php ${'ipevseconlp'.$chargepointNum.'v2'} = (${'evseconlp'.$chargepointNum.'old'} == "ipevse" && ${'evseidlp'.$chargepointNum.'old'} == "1" && ${'mpmlp'.$chargepointNum.'ipold'} == ${'evseiplp'.$chargepointNum.'old'})?>
+											<option <?php if(${'evseconlp'.$chargepointNum.'old'} == "ipevse" && !${'ipevseconlp'.$chargepointNum.'v2'}) echo "selected" ?> value="ipevse" data-id="openwb satellite v1">Satellit</option>
+											<option <?php if(${'evseconlp'.$chargepointNum.'old'} == "ipevse" && ${'ipevseconlp'.$chargepointNum.'v2'}) echo "selected" ?> value="ipevse" data-id="openwb satellite v2">Satellit V2</option>
 										</optgroup>
 									</select>
 								</div>
@@ -5258,12 +5257,12 @@
 								</div>
 							</div>
 
-							<div id="evseconipevselp<?php echo $chargepointNum; ?>" class="hide">
+							<div id="evseconipevselp<?php echo $chargepointNum; ?>V1" class="hide">
 								<div class="form-group">
 									<div class="form-row mb-1">
-										<label for="evseiplp<?php echo $chargepointNum; ?>" class="col-md-4 col-form-label">EVSE IP Adresse</label>
+										<label class="col-md-4 col-form-label">EVSE IP Adresse</label>
 										<div class="col">
-											<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="evseiplp<?php echo $chargepointNum; ?>" id="evseiplp<?php echo $chargepointNum; ?>" value="<?php echo ${'evseiplp'.$chargepointNum.'old'} ?>">
+											<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="evseiplp<?php echo $chargepointNum; ?>" value="<?php echo ${'evseiplp'.$chargepointNum.'old'} ?>">
 											<span class="form-text small">
 												Gültige Werte IP Adresse im Format: 192.168.0.12
 											</span>
@@ -5294,10 +5293,32 @@
 									</div>
 								</div>
 							</div>
+							<div id="evseconipevselp<?php echo $chargepointNum; ?>V2" class="hide">
+								<div class="form-group">
+									<div class="form-row mb-1">
+										<label for="evseiplp<?php echo $chargepointNum; ?>" class="col-md-4 col-form-label">EVSE IP Adresse</label>
+										<div class="col">
+											<input class="form-control" type="text" pattern="^((\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.){3}(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$" name="evseiplp<?php echo $chargepointNum; ?>" id="evseiplp<?php echo $chargepointNum; ?>" value="<?php echo ${'evseiplp'.$chargepointNum.'old'} ?>">
+											<span class="form-text small">
+												Gültige Werte IP Adresse im Format: 192.168.0.12
+											</span>
+										</div>
+									</div>
+								</div>
+								<input type="hidden" name="evseidlp<?php echo $chargepointNum; ?>" value="1">
+								<input type="hidden" name="mpmlp<?php echo $chargepointNum; ?>ip" id="evseiplllp<?php echo $chargepointNum; ?>" value="<?php echo ${'mpmlp'.$chargepointNum.'ipold'} ?>">
+								<input type="hidden" name="mpmlp<?php echo $chargepointNum; ?>id" value="105">
+								<script>
+									$('#evseiplp<?php echo $chargepointNum; ?>').on("change", function(){
+										$('#evseiplllp<?php echo $chargepointNum; ?>').val($(this).val());
+									});
+								</script>
+							</div>
 						</div>
 						<script>
 							function display_lp<?php echo $chargepointNum; ?> () {
-								hideSection('#evseconipevselp<?php echo $chargepointNum; ?>');
+								hideSection('#evseconipevselp<?php echo $chargepointNum; ?>V1');
+								hideSection('#evseconipevselp<?php echo $chargepointNum; ?>V2');
 								hideSection('#evseconextopenwblp<?php echo $chargepointNum; ?>');
 								hideSection('#evseconowbprolp<?php echo $chargepointNum; ?>');
 								if($('#evseconlp<?php echo $chargepointNum; ?>').val() == 'owbpro') {
@@ -5307,7 +5328,14 @@
 									showSection('#evseconextopenwblp<?php echo $chargepointNum; ?>');
 								}
 								if($('#evseconlp<?php echo $chargepointNum; ?>').val() == 'ipevse') {
-									showSection('#evseconipevselp<?php echo $chargepointNum; ?>');
+									switch( $("#evseconlp<?php echo $chargepointNum; ?> option:selected").attr('data-id') ){
+										case "openwb satellite v1":
+											showSection('#evseconipevselp<?php echo $chargepointNum; ?>V1');
+										break;
+										case "openwb satellite v2":
+											showSection('#evseconipevselp<?php echo $chargepointNum; ?>V2');
+										break;
+									}
 								}
 							}
 
@@ -5358,7 +5386,7 @@
 
 		<footer class="footer bg-dark text-light font-small">
 			<div class="container text-center">
-			  <small>Sie befinden sich hier: Einstellungen/Modulkonfiguration</small>
+				<small>Sie befinden sich hier: Einstellungen/Modulkonfiguration</small>
 			</div>
 		</footer>
 
